@@ -1,0 +1,48 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+<div id="content-main">
+<h1>Périodes de formation</h1>
+<table>
+<tr><th>Semestre 1</th><th text-align="right">{{tot1.sem1__sum}}h.</th></tr>
+{% for s in sem1 %}
+<tr><td>{{s}}</td><td>{{s.sem1}} h.</td></tr>
+{% endfor %}
+<tr><th>Semestre 2</th><th text-align="right">{{tot2.sem2__sum}}h.</th></tr>
+{% for s in sem2 %}
+<tr><td>{{s}}</td><td>{{s.sem2}} h.</td></tr>
+{% endfor %}
+<tr><th>Semestre 3</th><th text-align="right">{{tot3.sem3__sum}}h.</th></tr>
+{% for s in sem3 %}
+<tr><td>{{s}}</td><td>{{s.sem3}} h.</td></tr>
+{% endfor %}
+<tr><th>Semestre 4</th><th text-align="right">{{tot4.sem4__sum}}h.</th></tr>
+{% for s in sem4 %}
+<tr><td>{{s}}</td><td>{{s.sem4}} h.</td></tr>
+{% endfor %}
+<tr><th>Semestre 5</th><th text-align="right">{{tot5.sem5__sum}}h.</th></tr>
+{% for s in sem5 %}
+<tr><td>{{s}}</td><td>{{s.sem5}} h.</td></tr>
+{% endfor %}
+<tr><th>Semestre 6</th><th text-align="right">{{tot6.sem6__sum}}h.</th></tr>
+{% for s in sem6 %}
+<tr><td>{{s}}</td><td>{{s.sem6}} h.</td></tr>
+{% endfor %}
+</table>
+{{tot.tot__sum}}
+
+</div>
+{% endblock %}
+
+

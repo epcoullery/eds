@@ -1,0 +1,38 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block content %}
+
+<div id="content-main">
+<h1>{{object}}</h1>
+<table>
+<tr><th>Domaine</th><td>{{object.processus.domaine.url|safe}}</td></tr>
+<tr><th>Processus</th><td>{{object.processus.url|safe}}</td></tr>
+<tr><th>Situation emblématique</th><td>{{object.situation}}</td></tr>
+<tr><th>Compétences visées</th><td><p>L'éducateur social, l'éducatrice sociale</p>
+{% for c in object.competences.all %}- {{c.libelle}} ({{c.code}})<br />{% endfor %}</td></tr>
+<tr><th>Ressources</th><td>{% for c in object.ressource_set.all %}- {{c}}<br />{% endfor %}</td></tr>
+<tr><th>Objectifs</th><td>{% for c in object.objectif_set.all %}- {{c}}<br />{% endfor %}</td></tr>
+<tr><th>Contenu</th><td>{{object.contenu}}</td></tr>
+<tr><th>Evaluation</th><td>{{object.evaluation}}</td></tr>
+<tr><th>Type</th><td>{{object.type}}</td></tr>
+<tr><th>Semestre</th><td>{{object.semestre}}</td></tr>
+{% if object.periode_presentiel > 0 %}
+<tr><th>Présentiel</th><td>{{object.periode_presentiel}} heures</td></tr>
+{% endif %}
+{% if object.pratique_prof > 0 %}
+<tr><th>Pratique prof.</th><td>{{object.pratique_prof}} heures</td></tr>
+{% endif %}
+{% if object.travail_perso > 0 %}
+<tr><th>Travail perso.</th><td>{{object.travail_perso}} heures</td></tr>
+{% endif %}
+<tr><th>Responsable</th><td>{{object.processus.domaine.responsable}} ({{object.processus.domaine.responsable.email}})</td></tr>
+</table>
+
+
+</div>
+{% endblock %}
+
+
