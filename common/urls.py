@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
+    url(r'^plan_pdf/$', views.HomwPDFView.as_view(), name='plan-pdf'),
     url(r'^admin/', admin.site.urls),
     url(r'^domaine/(?P<pk>\d+)$', views.DomaineDetailView.as_view(), name='domaine-detail'),
     url(r'^domaines/$', views.DomaineListView.as_view(), name='domaine-list'),
@@ -28,7 +29,10 @@ urlpatterns = [
     url(r'^processus/$', views.ProcessusListView.as_view(), name='processus-list'),
     url(r'^module/(?P<pk>\d+)$', views.ModuleDetailView.as_view(), name='module-detail'),
     url(r'^modules/$', views.ModuleListView.as_view(), name='module-list'),
-    url(r'^periode$', views.PeriodeView.as_view(), name='periode'),
+    url(r'^periodes$', views.PeriodeView.as_view(), name='periodes'),
+    url(r'^periodes_pdf$', views.PeriodePDFView.as_view(), name='periodes-pdf'),
     url(r'^upload$', views.AddDoc, name='upload'), 
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),  
+    url(r'^calendrier/$', views.pdf_view, name='pdf-view'), 
+    url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

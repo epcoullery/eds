@@ -5,8 +5,22 @@ Created on 17 nov. 2012
 @author: alzo
 '''
 from django.db import models
+from django.http.response import HttpResponse
+from django.conf import settings
 
-
+from reportlab.platypus import SimpleDocTemplate
+from reportlab.platypus import Paragraph, Spacer, PageBreak, Table, TableStyle, Image
+from reportlab.graphics.shapes import Line
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.units import cm
+from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib import colors
+from reportlab.lib.styles import ParagraphStyle as PS
+style_8_c = PS(name='CORPS', fontName='Helvetica', fontSize=6, alignment = TA_CENTER)
+style_normal = PS(name='CORPS', fontName='Helvetica', fontSize=8, alignment = TA_LEFT)
+style_bold = PS(name='CORPS', fontName='Helvetica-Bold', fontSize=10, alignment = TA_LEFT)
+style_title = PS(name='CORPS', fontName='Helvetica', fontSize=12, alignment = TA_LEFT)
+style_adress = PS(name='CORPS', fontName='Helvetica', fontSize=10, alignment = TA_LEFT, leftIndent=300)
 # Create your models here.
 
 CHOIX_TYPE_SAVOIR =  (
@@ -31,6 +45,9 @@ class Enseignant(models.Model):
         
     def __str__(self):
         return '{0} {1}'.format(self.nom, self.prenom)
+    
+    def descr(self):
+        return '{0} ({1})'.format(self.__str__(), self.email)
     
 
 class Domaine(models.Model):
@@ -102,7 +119,7 @@ class Module(models.Model):
         return "<a href='/module/{0}'>{1}</a>".format(self.id, self.__str__())
     
     def url_code(self):
-        return "<a href='/module/{0}'>{1}</a>".format(self.id, self.code)
+        return "<a href='/module/{0}' title='{2}'>{1}</a>".format(self.id, self.code, self.nom)
     
     
 class Competence(models.Model):
@@ -143,7 +160,6 @@ class Ressource(models.Model):
     
 class Objectif(models.Model):
     libelle = models.CharField(max_length=200, blank=False)
-    #type = models.CharField(max_length=30, choices = CHOIX_TYPE_SAVOIR)
     module=models.ForeignKey(Module, null=True, default=None)
 
     def __str__(self):
@@ -155,10 +171,61 @@ class Document(models.Model):
 
 
  
-
+class PDFResponse(HttpResponse):
     
+    def __init__(self, filename, title=''):
+        HttpResponse.__init__(self, content_type='application/pdf')
+        self['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+        self['Content-Type'] = 'charset=utf-8'
+        self.story = []
+        image = Image(settings.MEDIA_ROOT + '/media/header.gif', width=350, height=40)
+        image.hAlign = 0
+        
+        self.story.append(image)
+        self.story.append(Spacer(0,1*cm))
+        
+        data = [['Filières EDS', title]]
+        t =  Table(data, colWidths=[8*cm,8*cm])
+        t.setStyle(TableStyle([ ('ALIGN',(0,0),(0,0),'LEFT'),
+                                ('ALIGN',(1,0),(-1,-1),'RIGHT'),
+                                ('LINEABOVE', (0,0) ,(-1,-1), 0.5, colors.black),
+                                ('LINEBELOW', (0,-1),(-1,-1), 0.5, colors.black),
+                            ]))
+        t.hAlign = 0
+        self.story.append(t)
+        
     
-
+class MyDocTemplate(SimpleDocTemplate):
+    
+    def __init__(self, name):
+        
+        #BaseDocTemplate.__init__(self,name, pagesize=A4, topMargin=0.5*cm)
+        SimpleDocTemplate.__init__(self, name, pagesize=A4, topMargin=0.5*cm)
+        self.fileName = name
+        
+        
+    def beforePage(self):
+        # page number
+        self.canv.saveState()
+        self.canv.setFontSize(8)
+        #self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
+        self.canv.restoreState()
+        
+        
+    
+class MyDocTemplateLandscape(SimpleDocTemplate):
+    
+    def __init__(self, name):
+        SimpleDocTemplate.__init__(self, name, pagesize=landscape(A4), topMargin=0.5*cm)
+        self.fileName = name
+        
+    def beforePage(self):
+        # page number
+        self.canv.saveState()
+        self.canv.setFontSize(8)
+        #self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
+        self.canv.restoreState()
+    
     
 
        

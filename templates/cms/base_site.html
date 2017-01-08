@@ -2,8 +2,17 @@
 
 {% block title %}EDS{% endblock %}
 
-{% block branding %}<h1 id="site-name"><a href="{% url 'admin:index' %}">Formation EDS</a></h1>{% endblock %}
-{% block usertools %}<div id="user-tools"><a href="{% url 'admin:index' %}">Admin</a></div>{% endblock %}
+{% block branding %}<h1 id="site-name"><a href="{% url 'home' %}">Formation en Education sociale ES</a></h1>{% endblock %}
+{% block usertools %}
+<div id="user-tools">
+{% if user.is_authenticated %}
+{% block welcome-msg %}Bienvenue <strong>{% firstof user.username %}</strong>.{% endblock %}
+<a href="http://localhost:8000">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
+{% else %}
+<a href="{% url 'admin:index' %}">Admin</a>
+{% endif %}
+</div>
+{% endblock %}
 {% block nav-global %}{% endblock %}
 {% block breadcrumbs %}
 <div class="breadcrumbs">
@@ -12,7 +21,8 @@
 <li><a href="{% url 'domaine-list' %}">Domaines</a>&nbsp;&nbsp;</li>
 <li><a href="{% url 'processus-list' %}">Processus</a>&nbsp;&nbsp;</li>
 <li><a href="{% url 'module-list' %}">Modules</a>&nbsp;&nbsp;</li>
-<li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
+<li><a href="{% url 'periodes' %}">Périodes</a>&nbsp;&nbsp;</li>
+<!--  <li><a href="{% url 'pdf-view' %}">Calendrier</a>&nbsp;&nbsp;</li>-->
 {% if has_permission %}
 <li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
 {% endif %}

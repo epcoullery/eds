@@ -31,12 +31,11 @@
 
 #plan  {
 	border-collapse: separate;
-	border-spacing: 5px 10px;
-	
+	border-spacing: 5px 6px;
 }
 
 table th {
-	font-size:120%;
+	font-size:110%;
 }
 
 ul, ul li {
@@ -49,11 +48,16 @@ ul li {
 	list-style-type:none;
 	*/
 }
-
 .liste-table {
+	margin-left:10px;
+	padding-left:0px;
+	
+}
+
+.liste-table li{
 	list-style-type:square;
-	margin-left:0px;
-	padding:0px;
+	margin-left:3px;
+	padding:0px 10px;;
 }
 .clear-booth {
 	float:none;
