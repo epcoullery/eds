@@ -12,15 +12,15 @@
 <tr><th>Processus</th><td>{{object.processus.url|safe}}</td></tr>
 <tr><th>Situation emblématique</th><td>{{object.situation|linebreaksbr}}</td></tr>
 <tr><th>Compétences visées</th><td><p>L'éducateur social, l'éducatrice sociale:</p>
-{% for c in object.competences.all %}- {{c.libelle}} ({{c.code}})<br />
+{% for c in object.competence_set.all %}- {{c.nom}} ({{c.code}})<br />
 {% if user.is_authenticated %}
-{% for sc in c.souscompetence_set.all %}&nbsp;&nbsp;&nbsp; - {{sc.libelle}} <br />{%endfor %}{% endif %}{% endfor %}</td></tr>
+{% for sc in c.souscompetence_set.all %}&nbsp;&nbsp;&nbsp; -- {{sc.nom}} <br />{%endfor %}{% endif %}{% endfor %}</td></tr>
 <tr><th>Ressources à acquérir</th><td>{% for c in object.ressource_set.all %}- {{c}}<br />{% endfor %}</td></tr>
 <tr><th>Objectifs à atteindre</th><td>{% for c in object.objectif_set.all %}- {{c}}<br />{% endfor %}</td></tr>
 <tr><th>Contenu</th><td>{{object.contenu|linebreaksbr}}</td></tr>
 <tr><th>Evaluation</th><td>{{object.evaluation|linebreaksbr}}</td></tr>
-<tr><th>Type</th><td>{{object.type}}</td></tr>
-<tr><th>Semestre</th><td>{{object.semestre}}</td></tr>
+<tr><th>Type</th><td>{{object.type}}, obligatoire</td></tr>
+<tr><th>Semestre</th><td>Sem. {{object.semestre}}</td></tr>
 {% if object.periode_presentiel > 0 %}
 <tr><th>Présentiel</th><td>{{object.periode_presentiel}} heures</td></tr>
 {% endif %}

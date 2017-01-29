@@ -48,7 +48,7 @@ class HomwPDFView(TemplateView):
     
     def render_to_response(self, context, **response_kwargs):
         
-        response = PDFResponse('PlanFormation.pdf' ,'Plan de formation')
+        response = PDFResponse('PlanFormation.pdf' ,'Plan de formation', portrait=False)
         d = Domaine.objects.all().order_by('code')
         p = Processus.objects.all().order_by('code')
 
@@ -181,19 +181,19 @@ class ModulePDF(DetailView):
        
         
         str_comp = ''
-        for c in m.competences.all():
-            str_comp += '- {0} ({1})\n'.format(c.libelle, c.code)
+        for c in m.competence_set.all():
+            str_comp += '- {0} ({1})\n'.format(c.nom, c.code)
             if self.request.user.is_authenticated:
                 for sc in c.souscompetence_set.all():
-                    str_comp += '    -- {0}\n'.format(sc.libelle)
+                    str_comp += '    -- {0}\n'.format(sc.nom)
                     
         str_res = ''
         for c in m.ressource_set.all():
-            str_res += '- {0}\n'.format(c.libelle)
+            str_res += '- {0}\n'.format(c.nom)
             
         str_obj = ''
         for c in m.objectif_set.all():
-            str_obj += '- {0}\n'.format(c.libelle)
+            str_obj += '- {0}\n'.format(c.nom)
             
         lines = m.contenu.split('\n')
         str_con = ''
@@ -211,8 +211,8 @@ class ModulePDF(DetailView):
                 [Preformatted_left('Objectifs à atteindre'), Preformatted_right(str_obj)],
                 [Preformatted_left('Contenu'), Preformatted_right(str_con)],
                 [Preformatted_left('Evaluation'), Preformatted_right(m.evaluation)],
-                [Preformatted_left('Type'), Preformatted_right(m.type)],
-                [Preformatted_left('Semestre'), Preformatted_right(m.semestre)],
+                [Preformatted_left('Type'), Preformatted_right('{0}, obligatoire'.format(m.type))],
+                [Preformatted_left('Semestre'), Preformatted_right('Sem. {0}'.format(m.semestre))],
                 [Preformatted_left('Présentiel'), Preformatted_right('{0} heures'.format(m.periode_presentiel))],
                 [Preformatted_left('Travail personnel'), Preformatted_right('{0} heures'.format(m.travail_perso))],
                 [Preformatted_left('Responsable'), Preformatted_right(m.processus.domaine.responsable.descr())],
@@ -237,7 +237,8 @@ Calcul du nombre de périodes de formation
 """    
 def get_context(context):
     liste = Module.objects.exclude(periode_presentiel = 0)
-    context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
+    #context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
+
     context['sem1'] = liste.exclude(sem1 = 0)
     context['tot1'] = liste.aggregate(Sum(F('sem1')))
     context['sem2'] = liste.exclude(sem2 = 0)
@@ -249,7 +250,10 @@ def get_context(context):
     context['sem5'] = liste.exclude(sem5 = 0)
     context['tot5'] = liste.aggregate(Sum(F('sem5')))
     context['sem6'] = liste.exclude(sem6 = 0)
-    context['tot6'] = liste.aggregate(Sum(F('sem6')))  
+    context['tot6'] = liste.aggregate(Sum(F('sem6'))) 
+    context['tot'] = context['tot1']['sem1__sum'] + context['tot2']['sem2__sum'] + context['tot3']['sem3__sum'] + \
+                    context['tot4']['sem4__sum'] + context['tot5']['sem5__sum'] + context['tot6']['sem6__sum'] 
+    
     return context
     
     
@@ -269,30 +273,30 @@ class PeriodePDFView(TemplateView):
         response = PDFResponse('Périodes.pdf' ,'Périodes de formation')
         context = get_context(context)
         
-        data = [['Semestre 1', '{0} h.'.format(context['tot1']['sem1__sum']),'', 'Semestre 2', '{0} h.'.format(context['tot2']['sem2__sum'])],
+        data = [['Semestre 1', '{0} h.'.format(context['tot1']['sem1__sum']),'', 'Semestre 2', '{0} h.'.format(context['tot2']['sem2__sum'])],               
                 [context['sem1'][0], '{0} h.'.format(context['sem1'][0].sem1),'', context['sem2'][0], '{0} h.'.format(context['sem2'][0].sem2) ],
                 [context['sem1'][1], '{0} h.'.format(context['sem1'][1].sem1),'', context['sem2'][1], '{0} h.'.format(context['sem2'][1].sem2) ],
                 [context['sem1'][2], '{0} h.'.format(context['sem1'][2].sem1),'', context['sem2'][2], '{0} h.'.format(context['sem2'][2].sem2) ],
                 [context['sem1'][3], '{0} h.'.format(context['sem1'][3].sem1),'', context['sem2'][3], '{0} h.'.format(context['sem2'][3].sem2) ],
                 [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', context['sem2'][4], '{0} h.'.format(context['sem2'][4].sem2) ],
-                [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', '','' ],
-                [context['sem1'][6], '{0} h.'.format(context['sem1'][6].sem1),'', '','' ],
+                [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', '', ''],
+                
+                
                 ['Semestre 3', '{0} h.'.format(context['tot3']['sem3__sum']),'', 'Semestre 4', '{0} h.'.format(context['tot4']['sem4__sum'])],
                 [context['sem3'][0], '{0} h.'.format(context['sem3'][0].sem3),'', context['sem4'][0], '{0} h.'.format(context['sem4'][0].sem4) ],
                 [context['sem3'][1], '{0} h.'.format(context['sem3'][1].sem3),'', context['sem4'][1], '{0} h.'.format(context['sem4'][1].sem4) ],
                 [context['sem3'][2], '{0} h.'.format(context['sem3'][2].sem3),'', context['sem4'][2], '{0} h.'.format(context['sem4'][2].sem4) ],
                 [context['sem3'][3], '{0} h.'.format(context['sem3'][3].sem3),'', context['sem4'][3], '{0} h.'.format(context['sem4'][3].sem4) ],
                 [context['sem3'][4], '{0} h.'.format(context['sem3'][4].sem3),'', context['sem4'][4], '{0} h.'.format(context['sem4'][4].sem4) ],
-                [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', context['sem4'][5], '{0} h.'.format(context['sem4'][5].sem4) ],
-                ['','', '',context['sem4'][6], '{0} h.'.format(context['sem4'][6].sem4) ],
+                [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', '' ],
+                
                 ['Semestre 5', '{0} h.'.format(context['tot5']['sem5__sum']),'', 'Semestre 6', '{0} h.'.format(context['tot6']['sem6__sum'])],
                 [context['sem5'][0], '{0} h.'.format(context['sem5'][0].sem5),'', context['sem6'][0], '{0} h.'.format(context['sem6'][0].sem6) ],
                 [context['sem5'][1], '{0} h.'.format(context['sem5'][1].sem5),'', context['sem6'][1], '{0} h.'.format(context['sem6'][1].sem6) ],
                 [context['sem5'][2], '{0} h.'.format(context['sem5'][2].sem5),'', context['sem6'][2], '{0} h.'.format(context['sem6'][2].sem6) ],
                 [context['sem5'][3], '{0} h.'.format(context['sem5'][3].sem5),'', context['sem6'][3], '{0} h.'.format(context['sem6'][3].sem6) ],
-                [context['sem5'][4], '{0} h.'.format(context['sem5'][4].sem5),'', context['sem6'][4], '{0} h.'.format(context['sem6'][4].sem6) ],
-                [context['sem5'][5], '{0} h.'.format(context['sem5'][5].sem5),'', '','' ],
-                [context['sem5'][6], '{0} h.'.format(context['sem5'][6].sem5),'', '','' ],
+                [context['sem5'][4], '{0} h.'.format(context['sem5'][4].sem5),'', '', '' ],
+                [context['sem5'][5], '{0} h.'.format(context['sem5'][5].sem5),'', '', '' ],
                  ]
         
         t = Table(data, colWidths=[6.5*cm,1*cm, 1*cm, 6.5*cm, 1*cm], spaceBefore=2*cm, spaceAfter=1.5*cm)
@@ -305,18 +309,21 @@ class PeriodePDFView(TemplateView):
                                 ('LINEBELOW', (0,0), (1,0), 1, colors.black),
                                 ('LINEBELOW', (3,0), (-1,0), 1, colors.black),
                                
-                                ('TOPPADDING', (0,8), (-1,8), 15),
-                                ('LINEBELOW', (0,8), (1,8), 1, colors.black),
-                                ('LINEBELOW', (3,8), (-1,8), 1, colors.black),
-                                ('TOPPADDING', (0,16), (-1,16), 15),
-                                ('LINEBELOW', (0,16), (1,16), 1, colors.black),
-                                ('LINEBELOW', (3,16), (-1,16), 1, colors.black),
+                                ('TOPPADDING', (0,7), (-1,7), 15),
+                                ('LINEBELOW', (0,7), (1,7), 1, colors.black),
+                                ('LINEBELOW', (3,7), (-1,7), 1, colors.black),
+                                ('TOPPADDING', (0,14), (-1,14), 15),
+                                ('LINEBELOW', (0,14), (1,14), 1, colors.black),
+                                ('LINEBELOW', (3,14), (-1,14), 1, colors.black),
+                                ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                ('FONT', (0, 7), (-1, 7), 'Helvetica-Bold'),
+                                ('FONT', (0, 14), (-1, 14), 'Helvetica-Bold'),
                             ]))
         
         t.hAlign = 0
         response.story.append(t)
         
-        response.story.append(Paragraph('Total des heures de cours: {0} h.'.format(context['tot']['periode_presentiel__sum']), style_normal))
+        response.story.append(Paragraph('Total des heures de cours: {0} h.'.format(context['tot']), style_normal))
         doc = MyDocTemplate(response)  
         doc.build(response.story)
         
@@ -349,5 +356,25 @@ def pdf_view(request):
         response = HttpResponse(pdf.read().decode('latin-1') , content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=some_file.pdf'
         return response
-    pdf.closed      
+    pdf.closed  
     
+    
+def import_xls_file(request):
+    import xlrd
+    
+    if request.method == 'POST':
+        xlspath = '/home/alzo/Export_CLOEE_FE.xls'
+        with xlrd.open_workbook(xlspath) as book:
+            sheet = book.sheet_by_index(0)
+            print(sheet.ncols)
+            print(sheet.nrows)
+        
+        
+    if request.method == 'GET':
+        xlspath = '/home/alzo/Export_CLOEE_FE.xls'
+        with xlrd.open_workbook(xlspath) as book:
+            sheet = book.sheet_by_index(0)
+            for rownum in range(1,sheet.nrows): 
+                print(int(sheet.row_values(rownum)[0]))
+                
+

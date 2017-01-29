@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),  
     url(r'^calendrier/$', views.pdf_view, name='pdf-view'), 
     url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'), 
+    url(r'^import/$', views.import_xls_file), 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

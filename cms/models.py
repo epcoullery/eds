@@ -52,14 +52,14 @@ class Enseignant(models.Model):
 
 class Domaine(models.Model):
     code = models.CharField(max_length=20, blank=True)
-    libelle = models.CharField(max_length=200, blank=False)
+    nom = models.CharField(max_length=200, blank=False)
     responsable = models.ForeignKey(Enseignant, null=True, default=None)
 
     class Meta:
         ordering = ('code',)
         
     def __str__(self):
-        return '{0} - {1}'.format(self.code, self.libelle)
+        return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
         return "<a href='/domaine/{0}'>{1}</a>".format(self.id, self.__str__())
@@ -67,7 +67,7 @@ class Domaine(models.Model):
 
 class Processus(models.Model):
     code = models.CharField(max_length=20, blank=True)
-    libelle = models.CharField(max_length=200, blank=False)
+    nom = models.CharField(max_length=200, blank=False)
     domaine = models.ForeignKey(Domaine, null=False)
     description = models.TextField(default='')
     
@@ -77,7 +77,7 @@ class Processus(models.Model):
         verbose_name_plural = 'processus'
         
     def __str__(self):
-        return '{0} - {1}'.format(self.code, self.libelle)
+        return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
         return "<a href='/processus/{0}'>{1}</a>".format(self.id, self.__str__())
@@ -87,17 +87,15 @@ class Module(models.Model):
               
     code = models.CharField(max_length=10, blank=False, default='Code')
     nom = models.CharField(max_length=100, blank=False, default='Nom du module')
-    description = models.TextField()
     type = models.CharField(max_length=20, choices= CHOIX_TYPE_MODULE)
-    competences = models.ManyToManyField('Competence')
     situation = models.TextField()
     evaluation = models.TextField()
     contenu = models.TextField()
     periode_presentiel = models.IntegerField()
     travail_perso = models.IntegerField()
     pratique_prof = models.IntegerField(default=0)
-    didactique = models.TextField(default='')
-    evaluation = models.TextField(default='')
+    didactique = models.TextField()
+    evaluation = models.TextField()
     sem1 = models.IntegerField(default=0)
     sem2 = models.IntegerField(default=0)
     sem3 = models.IntegerField(default=0)
@@ -124,22 +122,22 @@ class Module(models.Model):
     
 class Competence(models.Model):
     code = models.CharField(max_length=20, blank=True)
-    libelle = models.CharField(max_length=250, blank=False)
+    nom = models.CharField(max_length=250, blank=False)
     type = models.CharField(max_length=35, blank=True, default='')
-    processus = models.ForeignKey(Processus, null=True, default=None)
+    module = models.ForeignKey(Module, null=True, default=None)
     
     class Meta:
         ordering = ('code',)
         verbose_name = 'compétence'
         
     def __str__(self):
-        return '{0} - {1}'.format(self.code, self.libelle)
+        return '{0} - {1}'.format(self.code, self.nom)
     
 
     
 class SousCompetence(models.Model):
     code = models.CharField(max_length=20, blank=True)
-    libelle = models.CharField(max_length=250, blank=False)
+    nom = models.CharField(max_length=250, blank=False)
     competence = models.ForeignKey(Competence, null=False)
     
     class Meta:
@@ -147,23 +145,23 @@ class SousCompetence(models.Model):
         verbose_name = 'sous-compétence'
         
     def __str__(self):
-        return '{0} - {1}'.format(self.code, self.libelle)
+        return '{0} - {1}'.format(self.code, self.nom)
 
     
 class Ressource(models.Model):
-    libelle = models.CharField(max_length=200, blank=False)
+    nom = models.CharField(max_length=200, blank=False)
     type = models.CharField(max_length=30, choices = CHOIX_TYPE_SAVOIR, default='Savoir')
     module=models.ForeignKey(Module, null=True, default=None)
     
     def __str__(self):
-        return '{0}'.format(self.libelle)
+        return '{0}'.format(self.nom)
     
 class Objectif(models.Model):
-    libelle = models.CharField(max_length=200, blank=False)
+    nom = models.CharField(max_length=200, blank=False)
     module=models.ForeignKey(Module, null=True, default=None)
 
     def __str__(self):
-        return '{0}'.format(self.libelle)
+        return '{0}'.format(self.nom)
  
     
 class Document(models.Model):
@@ -173,19 +171,23 @@ class Document(models.Model):
  
 class PDFResponse(HttpResponse):
     
-    def __init__(self, filename, title=''):
+    def __init__(self, filename, title='', portrait=True):
         HttpResponse.__init__(self, content_type='application/pdf')
         self['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
         self['Content-Type'] = 'charset=utf-8'
         self.story = []
-        image = Image(settings.MEDIA_ROOT + '/media/header.gif', width=350, height=40)
+        image = Image(settings.MEDIA_ROOT + '/media/header.png', width=499, height=99)
         image.hAlign = 0
+        
         
         self.story.append(image)
         self.story.append(Spacer(0,1*cm))
         
         data = [['Filières EDS', title]]
-        t =  Table(data, colWidths=[8*cm,8*cm])
+        if portrait:
+            t =  Table(data, colWidths=[8*cm,8*cm])
+        else:
+            t =  Table(data, colWidths=[11*cm,11*cm])
         t.setStyle(TableStyle([ ('ALIGN',(0,0),(0,0),'LEFT'),
                                 ('ALIGN',(1,0),(-1,-1),'RIGHT'),
                                 ('LINEABOVE', (0,0) ,(-1,-1), 0.5, colors.black),
@@ -194,21 +196,24 @@ class PDFResponse(HttpResponse):
         t.hAlign = 0
         self.story.append(t)
         
+        
     
 class MyDocTemplate(SimpleDocTemplate):
     
     def __init__(self, name):
-        
-        #BaseDocTemplate.__init__(self,name, pagesize=A4, topMargin=0.5*cm)
         SimpleDocTemplate.__init__(self, name, pagesize=A4, topMargin=0.5*cm)
         self.fileName = name
+        self.PAGE_WIDTH = A4[0]
+        self.PAGE_HEIGHT = A4[1]
+        self.CENTRE_WIDTH = self.PAGE_WIDTH/2.0
+        self.CENTRE_HEIGHT = self.PAGE_HEIGHT/2.0
         
         
     def beforePage(self):
         # page number
         self.canv.saveState()
         self.canv.setFontSize(8)
-        #self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
+        self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
         self.canv.restoreState()
         
         
@@ -218,12 +223,16 @@ class MyDocTemplateLandscape(SimpleDocTemplate):
     def __init__(self, name):
         SimpleDocTemplate.__init__(self, name, pagesize=landscape(A4), topMargin=0.5*cm)
         self.fileName = name
+        self.PAGE_WIDTH = A4[1]
+        self.PAGE_HEIGHT = A4[0]
+        self.CENTRE_WIDTH = self.PAGE_WIDTH/2.0
+        self.CENTRE_HEIGHT = self.PAGE_HEIGHT/2.0
         
     def beforePage(self):
         # page number
         self.canv.saveState()
         self.canv.setFontSize(8)
-        #self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
+        self.canv.drawCentredString(self.CENTRE_WIDTH,1*cm,"Page : " + str(self.canv.getPageNumber()))
         self.canv.restoreState()
     
     
