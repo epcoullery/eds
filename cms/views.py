@@ -70,7 +70,7 @@ class HomwPDFView(TemplateView):
                 [Preformatted(d[7].__str__(), style_normal, maxLineLength=40), Preformatted(p[10].__str__(), style_normal, maxLineLength=60) , 'Macc'    , ''    ,''    , ''  , ''  , ''  ],
             ]
         
-        t = Table(data, colWidths=[5.5*cm, 8*cm, 1.5*cm, 1.5*cm,1.5*cm, 1.5*cm,1.5*cm,1.5*cm], spaceBefore=1*cm, spaceAfter=1*cm)
+        t = Table(data, colWidths=[5.5*cm, 8*cm, 1.5*cm, 1.5*cm,1.5*cm, 1.5*cm,1.5*cm,1.5*cm], spaceBefore=0.5*cm, spaceAfter=1*cm)
         t.setStyle(TableStyle([
             ('SIZE', (0,0), (-1,-1), 8),
             ('FONT', (0,0), (-1,0), 'Helvetica-Bold'),
@@ -323,7 +323,7 @@ class PeriodePDFView(TemplateView):
         t.hAlign = 0
         response.story.append(t)
         
-        response.story.append(Paragraph('Total des heures de cours: {0} h.'.format(context['tot']), style_normal))
+        response.story.append(Paragraph('Total des heures de cours: {0} heures'.format(context['tot']), style_normal))
         doc = MyDocTemplate(response)  
         doc.build(response.story)
         

@@ -176,12 +176,12 @@ class PDFResponse(HttpResponse):
         self['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
         self['Content-Type'] = 'charset=utf-8'
         self.story = []
-        image = Image(settings.MEDIA_ROOT + '/media/header.png', width=499, height=99)
+        image = Image(settings.MEDIA_ROOT + '/media/header.png', width=480, height=80)
         image.hAlign = 0
         
         
         self.story.append(image)
-        self.story.append(Spacer(0,1*cm))
+        #self.story.append(Spacer(0,1*cm))
         
         data = [['Filières EDS', title]]
         if portrait:
