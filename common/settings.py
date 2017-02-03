@@ -129,6 +129,8 @@ STUDENT_IMPORT_MAPPING = {
     
 }
 
+DOMAINE_COULEURS = {'D1':'#fcaf3e', 'D2': '#cc0000', 'D3': '#ef896b', 'D4': '#ad7fa8', 'D5': '#729fcf', 'D6':'#73d216', 'D7':'#ffffff', 'D8':'#babdb6' }
+
 from .local_settings import *
 
 

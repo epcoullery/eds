@@ -48,13 +48,31 @@ class Enseignant(models.Model):
     
     def descr(self):
         return '{0} ({1})'.format(self.__str__(), self.email)
+ 
     
-
+class SVG_Domaine:
+    compteur = 0
+    x = 30
+    y = 10
+    width = 200
+    svg = '<rect x="20" y="{0}" rx="5" ry="5" width="60" height="{1}" fill="{3}" stroke="black" stroke-width="2" />'
+    txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:12;">{1}</text>'
+    
+    def get_svg(self):
+        return '{0}{1}'.format(self.svg, self.txt)
+    
+    def __init__(self, domaine):
+        SVG_Domaine.compteur += 1
+        self.svg = self.svg.format(20, 100, settings.DOMAINE_COULEUR[domaine.code])
+        self.txt = self.txt.format(20, domaine.__str__())
+        
+    
+    
 class Domaine(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
     responsable = models.ForeignKey(Enseignant, null=True, default=None)
-
+    
     class Meta:
         ordering = ('code',)
         
@@ -63,6 +81,14 @@ class Domaine(models.Model):
     
     def url(self):
         return "<a href='/domaine/{0}'>{1}</a>".format(self.id, self.__str__())
+
+    def svg(self):
+        svg = '<rect x="20" y="{0}" rx="5" ry="5" width="200" height="{1}" fill="{2}" stroke="black" stroke-width="1" />'
+        txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:10;">{1}</text>'
+        
+        return svg.format(20, 100, settings.DOMAINE_COULEURS[self.code]) + txt.format(50, self.__str__())
+        
+    
 
 
 class Processus(models.Model):
@@ -177,8 +203,7 @@ class PDFResponse(HttpResponse):
         self['Content-Type'] = 'charset=utf-8'
         self.story = []
         image = Image(settings.MEDIA_ROOT + '/media/header.png', width=480, height=80)
-        image.hAlign = 0
-        
+        image.hAlign = TA_LEFT
         
         self.story.append(image)
         #self.story.append(Spacer(0,1*cm))
@@ -193,7 +218,7 @@ class PDFResponse(HttpResponse):
                                 ('LINEABOVE', (0,0) ,(-1,-1), 0.5, colors.black),
                                 ('LINEBELOW', (0,-1),(-1,-1), 0.5, colors.black),
                             ]))
-        t.hAlign = 0
+        t.hAlign = TA_LEFT
         self.story.append(t)
         
         
@@ -201,7 +226,7 @@ class PDFResponse(HttpResponse):
 class MyDocTemplate(SimpleDocTemplate):
     
     def __init__(self, name):
-        SimpleDocTemplate.__init__(self, name, pagesize=A4, topMargin=0.5*cm)
+        SimpleDocTemplate.__init__(self, name, pagesize=A4, topMargin=0*cm)
         self.fileName = name
         self.PAGE_WIDTH = A4[0]
         self.PAGE_HEIGHT = A4[1]
@@ -221,7 +246,7 @@ class MyDocTemplate(SimpleDocTemplate):
 class MyDocTemplateLandscape(SimpleDocTemplate):
     
     def __init__(self, name):
-        SimpleDocTemplate.__init__(self, name, pagesize=landscape(A4), topMargin=0.5*cm)
+        SimpleDocTemplate.__init__(self, name, pagesize=landscape(A4), topMargin=0*cm, leftMargin=2*cm)
         self.fileName = name
         self.PAGE_WIDTH = A4[1]
         self.PAGE_HEIGHT = A4[0]

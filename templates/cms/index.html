@@ -30,7 +30,7 @@
 </tr>	
 <tr>
 	<td rowspan="2" class="l1 p">{{P02.url|safe}}</td>
-	<td></td><td class="l1 m">{{M03.url_code|safe}}</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+	<td></td><td>&nbsp;</td><td>&nbsp;</td><td class="l1 m">{{M03.url_code|safe}}</td><td>&nbsp;</td><td>&nbsp;</td>
 </tr>
 <tr>
 	
@@ -87,7 +87,9 @@
 <tr>
 	<td class="l7 d">{{D7.url|safe}}</td>
 	<td class="l7 p">{{P10.url|safe}}</td>
-	<td colspan="2" class="l7 m">{{M17_1.url_code|safe}}</td><td colspan="2" class="l7 m">{{M17_2.url_code|safe}}</td><td colspan="2" class="l7 m">{{M17_3.url_code|safe}}</td>
+	<td colspan="2" class="l7 m">{{M17_1.url_code|safe}}</td>
+	<td colspan="2" class="l7 m">{{M17_2.url_code|safe}}</td>
+	<td colspan="2" class="l7 m">{{M17_3.url_code|safe}}</td>
 </tr>
 
 <!-- Ligne 8 -->
@@ -100,6 +102,9 @@
 <br/>
 <a href="{% url 'plan-pdf' %}">Imprimer en PDF</a>
 </div>
+<svg xmlns="http://www.w3.org/2000/svg">
+{{D1.svg|safe}}
+</svg>
 {% endblock %}
 
 

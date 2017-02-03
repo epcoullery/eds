@@ -56,7 +56,7 @@ class HomwPDFView(TemplateView):
         data = [['Domaines','Processus', 'Sem1', 'Sem2', 'Sem3','Sem4','Sem5','Sem6'],
                 [Preformatted(d[0].__str__(), style_normal, maxLineLength=40), Preformatted(p[0].__str__(), style_normal, maxLineLength=60) , 'M01' , ''    ,''    , ''  , ''  ,''   ],
                 [''  , ''    , 'M02' , ''    ,''    , ''  , ''  ,''   ],
-                [''  , Preformatted(p[1].__str__(), style_normal, maxLineLength=60) , ''    , 'M03' ,''    , ''  , ''  , ''  ],
+                [''  , Preformatted(p[1].__str__(), style_normal, maxLineLength=60) , ''    , '' ,''    , 'M03'  , ''  , ''  ],
                 [''  , ''    , ''    , 'M04' ,''    , ''  , ''  , ''  ],
                 [Preformatted(d[1].__str__(), style_normal, maxLineLength=40), Preformatted(p[2].__str__(), style_normal, maxLineLength=60) , 'M05' , ''    ,'M06' , ''  , ''  , ''  ],
                 [''  , Preformatted(p[3].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,''    , 'M07'  , ''  , 'M09'  ],
@@ -79,13 +79,12 @@ class HomwPDFView(TemplateView):
 
             #('BOX',(0,0),(-1,-1), 0.25, colors.black),
             ('GRID',(0,0),(-1,-1), 0.25, colors.black),
-            ('SPAN',(0,1), (0,4)),
+            ('SPAN',(0,1), (0,4)), #Domaine 1
             ('SPAN',(1,1), (1,2)),
             ('SPAN',(1,3), (1,4)),
-            ('SPAN',(0,5), (0,7)),
+            ('SPAN',(0,5), (0,7)), #Domaine 2
             ('SPAN',(1,6), (1,7)),
-            ('SPAN',(0,8), (0,9)),
-            ('SPAN',(0,8), (0,9)),
+            ('SPAN',(0,8), (0,9)), #Domaine 3
             ('SPAN',(5,8), (6,8)),
             ('SPAN',(5,9), (6,9)),
             ('SPAN',(2,11), (-1,11)),
@@ -98,7 +97,8 @@ class HomwPDFView(TemplateView):
             ('SPAN',(2,14), (-1,14)),
             ('BACKGROUND',(0,1), (1,4), colors.orange),
             ('BACKGROUND',(2,1), (2,2), colors.orange),
-            ('BACKGROUND',(3,3), (3,4), colors.orange),
+            ('BACKGROUND',(5,3), (5,3), colors.orange),
+            ('BACKGROUND',(3,4), (3,4), colors.orange),
             ('BACKGROUND',(0,5), (1,7), colors.red),
             ('BACKGROUND',(2,5), (2,5), colors.red),
             ('BACKGROUND',(4,5), (4,5), colors.red),
@@ -278,7 +278,7 @@ class PeriodePDFView(TemplateView):
                 [context['sem1'][1], '{0} h.'.format(context['sem1'][1].sem1),'', context['sem2'][1], '{0} h.'.format(context['sem2'][1].sem2) ],
                 [context['sem1'][2], '{0} h.'.format(context['sem1'][2].sem1),'', context['sem2'][2], '{0} h.'.format(context['sem2'][2].sem2) ],
                 [context['sem1'][3], '{0} h.'.format(context['sem1'][3].sem1),'', context['sem2'][3], '{0} h.'.format(context['sem2'][3].sem2) ],
-                [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', context['sem2'][4], '{0} h.'.format(context['sem2'][4].sem2) ],
+                [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', '', ''],
                 [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', '', ''],
                 
                 
@@ -288,7 +288,7 @@ class PeriodePDFView(TemplateView):
                 [context['sem3'][2], '{0} h.'.format(context['sem3'][2].sem3),'', context['sem4'][2], '{0} h.'.format(context['sem4'][2].sem4) ],
                 [context['sem3'][3], '{0} h.'.format(context['sem3'][3].sem3),'', context['sem4'][3], '{0} h.'.format(context['sem4'][3].sem4) ],
                 [context['sem3'][4], '{0} h.'.format(context['sem3'][4].sem3),'', context['sem4'][4], '{0} h.'.format(context['sem4'][4].sem4) ],
-                [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', '' ],
+                [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', context['sem4'][5], '{0} h.'.format(context['sem4'][5].sem4) ],
                 
                 ['Semestre 5', '{0} h.'.format(context['tot5']['sem5__sum']),'', 'Semestre 6', '{0} h.'.format(context['tot6']['sem6__sum'])],
                 [context['sem5'][0], '{0} h.'.format(context['sem5'][0].sem5),'', context['sem6'][0], '{0} h.'.format(context['sem6'][0].sem6) ],
