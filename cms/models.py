@@ -47,7 +47,7 @@ class Enseignant(models.Model):
         return '{0} {1}'.format(self.nom, self.prenom)
     
     def descr(self):
-        return '{0} ({1})'.format(self.__str__(), self.email)
+        return '{0} (<A HREF="{1}">{3}</A>)'.format(self.__str__(), self.email, self.email)
  
     
 class SVG_Domaine:
