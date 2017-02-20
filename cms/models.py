@@ -47,7 +47,29 @@ class Enseignant(models.Model):
         return '{0} {1}'.format(self.nom, self.prenom)
     
     def descr(self):
+<<<<<<< HEAD
         return '{0} ({1})'.format(self.__str__(), self.email)     
+=======
+        return '{0} (<A HREF="{1}">{3}</A>)'.format(self.__str__(), self.email, self.email)
+ 
+    
+class SVG_Domaine:
+    compteur = 0
+    x = 30
+    y = 10
+    width = 200
+    svg = '<rect x="20" y="{0}" rx="5" ry="5" width="60" height="{1}" fill="{3}" stroke="black" stroke-width="2" />'
+    txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:12;">{1}</text>'
+    
+    def get_svg(self):
+        return '{0}{1}'.format(self.svg, self.txt)
+    
+    def __init__(self, domaine):
+        SVG_Domaine.compteur += 1
+        self.svg = self.svg.format(20, 100, settings.DOMAINE_COULEUR[domaine.code])
+        self.txt = self.txt.format(20, domaine.__str__())
+        
+>>>>>>> 52cca0ce67c3fff10578bd13d8a9d4f1c0b77de5
     
     
 class Domaine(models.Model):
