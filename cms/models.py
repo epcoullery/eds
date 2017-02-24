@@ -48,7 +48,7 @@ class Enseignant(models.Model):
     
     def descr(self):
 
-        return '{0} (<A HREF="{1}">{2}</A>)'.format(self.__str__(), self.email, self.email)
+        return '{0} (<a href="mailto:{1}">{2}</A>)'.format(self.__str__(), self.email, self.email)
 
     
     
