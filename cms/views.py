@@ -103,7 +103,7 @@ class HomwPDFView(TemplateView):
             ('BACKGROUND',(2,5), (2,5), colors.red),
             ('BACKGROUND',(4,5), (4,5), colors.red),
             ('BACKGROUND',(5,6), (5,6), colors.red),
-            ('BACKGROUND',(7,6), (7,6), colors.red),
+            ('BACKGROperiodesUND',(7,6), (7,6), colors.red),
             ('BACKGROUND',(5,7), (5,7), colors.red),
             ('BACKGROUND',(0,8), (1,9), colors.pink),
             ('BACKGROUND',(5,8), (-1,8), colors.pink),
@@ -328,6 +328,25 @@ class PeriodePDFView(TemplateView):
         doc.build(response.story)
         
         return response
+
+
+class AddDocument(TemplateView):
+    template_name = 'cms/upload.html'
+    
+    def post(self, request):
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc.save()
+        
+        return HttpResponseRedirect('')
+    
+    def get(self, request):
+        form = DocumentForm()
+        return render (request, 'cms/upload.html', {'form': form})
+
+
+
 
 def AddDoc(request):
     if request.method == 'POST':
