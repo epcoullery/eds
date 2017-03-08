@@ -4,7 +4,7 @@ Created on 17 nov. 2012
 
 @author: alzo
 '''
-from .models import Processus, Module, Domaine
+from .models import Processus, Module, Domaine, Competence, SousCompetence
 from django import forms
 
 from django.contrib import admin
@@ -14,7 +14,8 @@ from _collections_abc import __all__
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(label='Selectionner un fichier', help_text='Taille max.: 42 megabytes')
-    
+
+   
 class ProcessusAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):
@@ -25,7 +26,8 @@ class ProcessusAdminForm(forms.ModelForm):
         model = Processus
         fields = ('code', 'nom', 'domaine', 'description')
         widgets = {
-            'nom': forms.Textarea(attrs={'cols': 75, 'rows':2}),
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            'description': forms.Textarea(attrs={'cols': 125, 'rows':8}),
             } 
         
 class DomaineAdminForm(forms.ModelForm):
@@ -37,9 +39,89 @@ class DomaineAdminForm(forms.ModelForm):
         model = Domaine
         fields = ('code', 'nom', 'responsable')
         widgets = {
-            'nom': forms.Textarea(attrs={'cols': 75, 'rows':2}),
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
             } 
-       
+
+class CompetenceAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(CompetenceAdminForm, self).__init__(*args, **kwargs)
+        
+    class Meta:
+        model = Competence
+        fields = ('__all__')
+        widgets = {
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            } 
+        
+
+class SousCompetenceAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(SousCompetenceAdminForm, self).__init__(*args, **kwargs)
+        
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            } 
+        
+                
+class CompetenceInlineAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(CompetenceInlineAdminForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'code': forms.Textarea(attrs={'cols': 5, 'rows':1}),
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            } 
+                
+                
+class SousCompetenceInlineAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(SousCompetenceInlineAdminForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'code': forms.Textarea(attrs={'cols': 5, 'rows':1}),
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':1}),
+            } 
+
+
+class ObjectifAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(ObjectifAdminForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            }  
+
+
+class RessourceAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(RessourceAdminForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':3}),
+            }  
+
+         
 class ModuleAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -50,11 +132,11 @@ class ModuleAdminForm(forms.ModelForm):
         model = Module
         fields = ('__all__')
         widgets = {
-            'nom': forms.Textarea(attrs={'cols': 73, 'rows':2}),
-            'description': forms.Textarea(attrs={'cols': 73, 'rows':4}),
-            'situation': forms.Textarea(attrs={'cols': 73, 'rows':6}),
-            'contenu': forms.Textarea(attrs={'cols': 73, 'rows':4}),
-            'didactique': forms.Textarea(attrs={'cols': 73, 'rows':4}),
-            'evaluation': forms.Textarea(attrs={'cols': 73, 'rows':2}),
+            'nom': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            'description': forms.Textarea(attrs={'cols': 125, 'rows':4}),
+            'situation': forms.Textarea(attrs={'cols': 125, 'rows':6}),
+            'contenu': forms.Textarea(attrs={'cols': 125, 'rows':4}),
+            'didactique': forms.Textarea(attrs={'cols': 125, 'rows':2}),
+            'evaluation': forms.Textarea(attrs={'cols': 125, 'rows':2}),
             } 
         
