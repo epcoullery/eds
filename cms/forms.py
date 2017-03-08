@@ -96,6 +96,20 @@ class SousCompetenceInlineAdminForm(forms.ModelForm):
             } 
 
 
+class ProcessusInlineAdminForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(ProcessusInlineAdminForm, self).__init__(*args, **kwargs)
+    
+    class Meta:
+        model = SousCompetence
+        fields = ('__all__')
+        widgets = {
+            'code': forms.Textarea(attrs={'cols': 5, 'rows':1}),
+            'nom': forms.Textarea(attrs={'cols': 75, 'rows':4}),
+            'description': forms.Textarea(attrs={'cols': 95, 'rows':6}),
+            } 
+
 class ObjectifAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):

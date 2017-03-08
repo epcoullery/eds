@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (Enseignant, Domaine, Competence, SousCompetence, Objectif,
         Ressource, Module, Processus)
-from .forms import (ProcessusAdminForm, ModuleAdminForm, DomaineAdminForm, CompetenceAdminForm, 
+from .forms import (ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm, DomaineAdminForm, CompetenceAdminForm, 
 SousCompetenceInlineAdminForm, CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
 SousCompetenceAdminForm)
 # Register your models here.
@@ -42,7 +42,8 @@ class ObjectifAdmin(admin.ModelAdmin):
     form = ObjectifAdminForm
     
     
-class ProcessusAdminInline(admin.TabularInline):
+class ProcessusInlineAdmin(admin.TabularInline):
+    form = ProcessusInlineAdminForm
     model = Processus
     extra=0
     
@@ -57,7 +58,7 @@ class CompetenceAdmin(admin.ModelAdmin):
 class DomaineAdmin(admin.ModelAdmin):
     list_display = ('nom', 'responsable',)
     form = DomaineAdminForm
-    inlines = [ProcessusAdminInline,]
+    inlines = [ProcessusInlineAdmin,]
     
     
 admin.site.register(Enseignant)
