@@ -17,7 +17,7 @@
 {% for m in object.module_set.all %}{% for c in  m.competences.all %}
 - {{c.libelle}} ({{c.code}})<br />{% endfor %}{% endfor %}</td></tr>
 <tr><th>Domaine</th><td>{{object.domaine.url|safe}}</td></tr>
-<tr><th>Responsable</th><td>{{object.domaine.responsable}} ({{object.domaine.responsable.email}})</td></tr>
+<tr><th>Responsable</th><td>{{object.domaine.responsable.descr|safe}}</td></tr>
 <tr><th>Modules concernés</th><td>{% for m in object.module_set.all %}{{m.url|safe}}</br>{% endfor %}</td></tr>
 
 

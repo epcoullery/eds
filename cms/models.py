@@ -47,31 +47,17 @@ class Enseignant(models.Model):
         return '{0} {1}'.format(self.nom, self.prenom)
     
     def descr(self):
-        return '{0} (<A HREF="{1}">{3}</A>)'.format(self.__str__(), self.email, self.email)
- 
-    
-class SVG_Domaine:
-    compteur = 0
-    x = 30
-    y = 10
-    width = 200
-    svg = '<rect x="20" y="{0}" rx="5" ry="5" width="60" height="{1}" fill="{3}" stroke="black" stroke-width="2" />'
-    txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:12;">{1}</text>'
-    
-    def get_svg(self):
-        return '{0}{1}'.format(self.svg, self.txt)
-    
-    def __init__(self, domaine):
-        SVG_Domaine.compteur += 1
-        self.svg = self.svg.format(20, 100, settings.DOMAINE_COULEUR[domaine.code])
-        self.txt = self.txt.format(20, domaine.__str__())
-        
+
+        return '{0} (<a href="mailto:{1}">{2}</A>)'.format(self.__str__(), self.email, self.email)
+
     
     
 class Domaine(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
     responsable = models.ForeignKey(Enseignant, null=True, default=None)
+    
+    height_screen = 50
     
     class Meta:
         ordering = ('code',)
@@ -83,10 +69,14 @@ class Domaine(models.Model):
         return "<a href='/domaine/{0}'>{1}</a>".format(self.id, self.__str__())
 
     def svg(self):
-        svg = '<rect x="20" y="{0}" rx="5" ry="5" width="200" height="{1}" fill="{2}" stroke="black" stroke-width="1" />'
-        txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:10;">{1}</text>'
+        processus = self.processus_set.all()
         
-        return svg.format(20, 100, settings.DOMAINE_COULEURS[self.code]) + txt.format(50, self.__str__())
+        
+        svg = '<rect x="20" y="{0}" rx="5" ry="5" width="250" height="{1}" fill="{2}" stroke="black" stroke-width="1" />'
+        txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:10;">{1}</text>'
+        height_frame = processus.count()* self.height_screen
+        color = settings.DOMAINE_COULEURS[self.code]
+        return svg.format(20, height_frame , color) + txt.format(50, self.__str__())
         
     
 
@@ -117,9 +107,9 @@ class Module(models.Model):
     situation = models.TextField()
     evaluation = models.TextField()
     contenu = models.TextField()
-    periode_presentiel = models.IntegerField()
-    travail_perso = models.IntegerField()
-    pratique_prof = models.IntegerField(default=0)
+    periode_presentiel = models.IntegerField(verbose_name='Période en présentiel')
+    travail_perso = models.IntegerField(verbose_name = 'Travail personnel')
+    pratique_prof = models.IntegerField(default=0, verbose_name='Pratique professionnelle')
     didactique = models.TextField()
     evaluation = models.TextField()
     sem1 = models.IntegerField(default=0)

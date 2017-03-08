@@ -30,7 +30,7 @@
 {% if object.travail_perso > 0 %}
 <tr><th>Travail perso.</th><td>{{object.travail_perso}} heures</td></tr>
 {% endif %}
-<tr><th>Responsable</th><td>{{object.processus.domaine.responsable.descr}}</td></tr>
+<tr><th>Responsable</th><td>{{object.processus.domaine.responsable.descr|safe}}</td></tr>
 </table>
 <p><a href="{% url 'module-pdf' object.id %}">Imprimer en PDF</a></p>
 
