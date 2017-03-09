@@ -50,8 +50,8 @@ class ProcessusInlineAdmin(admin.TabularInline):
     
 class CompetenceAdmin(admin.ModelAdmin):
     form = CompetenceAdminForm
-    list_display = ('code', 'nom', 'module')
-    list_editable = ('module',)
+    list_display = ('code', 'nom', 'proces_eval')
+    list_editable = ('proces_eval',)
     inlines = (SousCompetenceInline,)
     
 

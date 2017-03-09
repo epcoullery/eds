@@ -5,7 +5,7 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
-
+<script src="{% static 'js/jquery.js' %}"></script>
 {% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
 {% block extrahead %}{% endblock %}

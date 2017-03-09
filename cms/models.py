@@ -142,6 +142,7 @@ class Competence(models.Model):
     type = models.CharField(max_length=35, blank=True, default='')
     module = models.ForeignKey(Module, null=True, default=None)
     proces_eval = models.ForeignKey(Processus, null=True, default=True)
+    list_display = ('code', 'nom', 'type','proces_eval')
     
     class Meta:
         ordering = ('code',)

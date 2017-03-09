@@ -7,7 +7,7 @@ Created on 4 déc. 2012
 import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import ListView, TemplateView, DetailView
-from .models import Domaine, Processus, Module, Document, PDFResponse, MyDocTemplate, MyDocTemplateLandscape
+from .models import Domaine, Processus, Module, Competence, Document, PDFResponse, MyDocTemplate, MyDocTemplateLandscape
 from .models import style_normal, style_bold, style_title
 from django.db.models import F, Sum
 from django.conf import settings
@@ -162,6 +162,10 @@ def Preformatted_left(text):
 def Preformatted_right(text):
     return Preformatted(text, style_normal, maxLineLength=110)
 
+class EvaluationView(ListView):
+    template_name = 'cms/evaluation.html'
+    model = Processus
+    
 
 class ModulePDF(DetailView):
 

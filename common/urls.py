@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^modules/$', views.ModuleListView.as_view(), name='module-list'),
     url(r'^periodes$', views.PeriodeView.as_view(), name='periodes'),
     url(r'^periodes_pdf$', views.PeriodePDFView.as_view(), name='periodes-pdf'),
+    url(r'^evaluation/$', views.EvaluationView.as_view(), name='evaluation'),
     url(r'^upload/$', views.AddDocument.as_view(), name='upload'), 
     url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),  
     url(r'^calendrier/$', views.pdf_view, name='pdf-view'), 

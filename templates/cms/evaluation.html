@@ -1,0 +1,42 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+
+
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }}{% endblock %}
+
+
+{% block content %}
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $("select.P01").change(function(){
+ 
+    	tot = 0
+    	$('select.P01 option:selected').each(function(){
+    		tot = tot + parseInt($(this).val());
+    	});
+    	alert(tot);
+    });
+}); 
+
+</script>
+<div id="content-main">
+<h1>Evaluation des compétences</h1>
+<table>
+{% for p in object_list %}
+<tr><th>{{p}}</th><td></td></tr>
+{% for c in p.competence_set.all %}
+<tr><td>{{c}}</td><td><select class="{{p.code}}" ><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></td></tr>
+{% endfor %}
+{% endfor %}
+</table>
+
+
+</div>
+{% endblock %}
+
+
