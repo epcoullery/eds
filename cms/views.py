@@ -220,7 +220,7 @@ class ModulePDF(DetailView):
                 [Preformatted_left('Semestre'), Preformatted_right('Sem. {0}'.format(m.semestre))],
                 [Preformatted_left('Présentiel'), Preformatted_right('{0} heures'.format(m.periode_presentiel))],
                 [Preformatted_left('Travail personnel'), Preformatted_right('{0} heures'.format(m.travail_perso))],
-                [Preformatted_left('Responsable'), Preformatted_right(m.processus.domaine.responsable.descr())],
+                [Preformatted_left('Responsable'), Preformatted_right(m.processus.domaine.responsable.descr_pdf())],
             ]
         t =  Table(data, colWidths=[2.5*cm,10*cm])
         t.setStyle(TableStyle([ ('ALIGN',(0,0),(-1,-1),'LEFT'),

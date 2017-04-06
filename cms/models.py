@@ -47,9 +47,10 @@ class Enseignant(models.Model):
         return '{0} {1}'.format(self.nom, self.prenom)
     
     def descr(self):
-
         return '{0} (<a href="mailto:{1}">{2}</A>)'.format(self.__str__(), self.email, self.email)
 
+    def descr_pdf(self):
+        return '{0} ({1})'.format(self.__str__(), self.email)
     
     
 class Domaine(models.Model):
