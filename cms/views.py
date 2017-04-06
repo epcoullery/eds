@@ -162,6 +162,7 @@ def Preformatted_left(text):
 def Preformatted_right(text):
     return Preformatted(text, style_normal, maxLineLength=110)
 
+
 class EvaluationView(ListView):
     template_name = 'cms/evaluation.html'
     model = Processus
@@ -211,9 +212,9 @@ class ModulePDF(DetailView):
                 [Preformatted_left('Processus'), Preformatted_right(m.processus.__str__())],
                 [Preformatted_left('Situation emblématique'), Preformatted_right(m.situation)],
                 [Preformatted_left('Compétences visées'), Preformatted_right(str_comp)],
-                [Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
+                #[Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
                 [Preformatted_left('Objectifs à atteindre'), Preformatted_right(str_obj)],
-                [Preformatted_left('Contenu'), Preformatted_right(str_con)],
+                #[Preformatted_left('Contenu'), Preformatted_right(str_con)],
                 [Preformatted_left('Evaluation'), Preformatted_right(m.evaluation)],
                 [Preformatted_left('Type'), Preformatted_right('{0}, obligatoire'.format(m.type))],
                 [Preformatted_left('Semestre'), Preformatted_right('Sem. {0}'.format(m.semestre))],
@@ -282,8 +283,9 @@ class PeriodePDFView(TemplateView):
                 [context['sem1'][1], '{0} h.'.format(context['sem1'][1].sem1),'', context['sem2'][1], '{0} h.'.format(context['sem2'][1].sem2) ],
                 [context['sem1'][2], '{0} h.'.format(context['sem1'][2].sem1),'', context['sem2'][2], '{0} h.'.format(context['sem2'][2].sem2) ],
                 [context['sem1'][3], '{0} h.'.format(context['sem1'][3].sem1),'', context['sem2'][3], '{0} h.'.format(context['sem2'][3].sem2) ],
-                [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', '', ''],
-                [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', '', ''],
+                [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', context['sem2'][4], '{0} h.'.format(context['sem2'][4].sem2) ],
+                [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', context['sem2'][5], '{0} h.'.format(context['sem2'][5].sem2) ],
+                [context['sem1'][6], '{0} h.'.format(context['sem1'][6].sem1),'', '', ''],
                 
                 
                 ['Semestre 3', '{0} h.'.format(context['tot3']['sem3__sum']),'', 'Semestre 4', '{0} h.'.format(context['tot4']['sem4__sum'])],
@@ -294,13 +296,15 @@ class PeriodePDFView(TemplateView):
                 [context['sem3'][4], '{0} h.'.format(context['sem3'][4].sem3),'', context['sem4'][4], '{0} h.'.format(context['sem4'][4].sem4) ],
                 [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', context['sem4'][5], '{0} h.'.format(context['sem4'][5].sem4) ],
                 
+                
                 ['Semestre 5', '{0} h.'.format(context['tot5']['sem5__sum']),'', 'Semestre 6', '{0} h.'.format(context['tot6']['sem6__sum'])],
                 [context['sem5'][0], '{0} h.'.format(context['sem5'][0].sem5),'', context['sem6'][0], '{0} h.'.format(context['sem6'][0].sem6) ],
                 [context['sem5'][1], '{0} h.'.format(context['sem5'][1].sem5),'', context['sem6'][1], '{0} h.'.format(context['sem6'][1].sem6) ],
                 [context['sem5'][2], '{0} h.'.format(context['sem5'][2].sem5),'', context['sem6'][2], '{0} h.'.format(context['sem6'][2].sem6) ],
                 [context['sem5'][3], '{0} h.'.format(context['sem5'][3].sem5),'', context['sem6'][3], '{0} h.'.format(context['sem6'][3].sem6) ],
-                [context['sem5'][4], '{0} h.'.format(context['sem5'][4].sem5),'', '', '' ],
+                [context['sem5'][4], '{0} h.'.format(context['sem5'][4].sem5),'', context['sem6'][4], '{0} h.'.format(context['sem6'][4].sem6) ],
                 [context['sem5'][5], '{0} h.'.format(context['sem5'][5].sem5),'', '', '' ],
+                [context['sem5'][6], '{0} h.'.format(context['sem5'][6].sem5),'', '', '' ],
                  ]
         
         t = Table(data, colWidths=[6.5*cm,1*cm, 1*cm, 6.5*cm, 1*cm], spaceBefore=2*cm, spaceAfter=1.5*cm)
@@ -313,15 +317,15 @@ class PeriodePDFView(TemplateView):
                                 ('LINEBELOW', (0,0), (1,0), 1, colors.black),
                                 ('LINEBELOW', (3,0), (-1,0), 1, colors.black),
                                
-                                ('TOPPADDING', (0,7), (-1,7), 15),
-                                ('LINEBELOW', (0,7), (1,7), 1, colors.black),
-                                ('LINEBELOW', (3,7), (-1,7), 1, colors.black),
-                                ('TOPPADDING', (0,14), (-1,14), 15),
-                                ('LINEBELOW', (0,14), (1,14), 1, colors.black),
-                                ('LINEBELOW', (3,14), (-1,14), 1, colors.black),
+                                ('TOPPADDING', (0,8), (-1,8), 15),
+                                ('LINEBELOW', (0,8), (1,8), 1, colors.black),
+                                ('LINEBELOW', (3,8), (-1,8), 1, colors.black),
+                                ('TOPPADDING', (0,15), (-1,15), 15),
+                                ('LINEBELOW', (0,15), (1,15), 1, colors.black),
+                                ('LINEBELOW', (3,15), (-1,15), 1, colors.black),
                                 ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                                ('FONT', (0, 7), (-1, 7), 'Helvetica-Bold'),
-                                ('FONT', (0, 14), (-1, 14), 'Helvetica-Bold'),
+                                ('FONT', (0, 8), (-1, 8), 'Helvetica-Bold'),
+                                ('FONT', (0, 15), (-1, 15), 'Helvetica-Bold'),
                             ]))
         
         t.hAlign = 0

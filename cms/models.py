@@ -78,7 +78,14 @@ class Domaine(models.Model):
         color = settings.DOMAINE_COULEURS[self.code]
         return svg.format(20, height_frame , color) + txt.format(50, self.__str__())
         
-    
+    def json(self):
+        dic_js = {}
+        dic_js['{code'] = self.code
+        dic_js['nom'] = self.nom
+        dic_js['resp'] = self.responsable.nom
+        
+        return '{'
+        
 
 
 class Processus(models.Model):
