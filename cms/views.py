@@ -176,25 +176,7 @@ class DocumentListView(ListView):
 class DocumentDetailView(DetailView):
     template_name ='cms/document_detail.html'
     model = Document
-    
-    def get_object(self):
-        if self.docfile <> '':
-            
-            
-            
-    def render_to_response(self, context, **response_kwards):
-        print('============')
-        print(self.object.docfile)
-        if self.object.docfile == '':
-            print('docfile = vide')
-            return
-        pdf_file = settings.MEDIA_ROOT + '/media/EDS_Calendrier_2017.pdf'
-        with open(pdf_file, 'rb') as pdf:
-            response = HttpResponse(pdf.read(),content_type='application/pdf')
-            response['Content-Disposition'] = 'filename=some_file.pdf'
-            return response
-    
-    
+       
     
 def pdf_view(request):
     with open('/path/to/my/file.pdf', 'r') as pdf:
