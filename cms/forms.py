@@ -20,10 +20,11 @@ class DocumentAdminForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ('titre', 'texte','published')
+        
         widgets = {
             'texte': TinyMCE(attrs={'cols': 120, 'rows': 30}),
             }
-
+        
   
 class ProcessusAdminForm(forms.ModelForm):
     

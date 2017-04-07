@@ -63,6 +63,11 @@ class DomaineAdmin(admin.ModelAdmin):
 class DocumentAdmin(admin.ModelAdmin):
     form = DocumentAdminForm
 
+    class Meta:
+        js = (
+            '/static/js/tiny_mce/tiny_mce.js',
+            
+        )
         
 admin.site.register(Enseignant)
 admin.site.register(Domaine, DomaineAdmin)
