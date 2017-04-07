@@ -14,11 +14,13 @@
 <h1>Liste des documents</h1>
 <ol>
 {% for doc in object_list %}
+
 {% if doc.published %}
 <li><a href="{% url 'document-detail' doc.id %}">{{doc}}</a></li>
 {% else %}
 <li>{{doc}}&nbsp;&nbsp;(en travail)</li>
 {% endif %}
+
 {% empty %}
 <li>Aucun document disponible</li>
 {% endfor %}

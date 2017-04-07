@@ -1,0 +1,8 @@
+*.pyc
+common/local_settings.py
+db.sqlite3
+db.eds
+db.*
+*.sql
+*.csv
+.*
