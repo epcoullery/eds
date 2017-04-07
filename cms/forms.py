@@ -19,7 +19,7 @@ class DocumentAdminForm(forms.ModelForm):
     
     class Meta:
         model = Document
-        fields = '__all__'
+        fields = ('titre', 'texte','published')
         widgets = {
             'texte': TinyMCE(attrs={'cols': 120, 'rows': 30}),
             }
