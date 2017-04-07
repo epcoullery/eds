@@ -7,7 +7,7 @@ Created on 17 nov. 2012
 from django.db import models
 from django.http.response import HttpResponse
 from django.conf import settings
-
+from tinymce import models as tinymce_models
 from reportlab.platypus import SimpleDocTemplate
 from reportlab.platypus import Paragraph, Spacer, PageBreak, Table, TableStyle, Image
 from reportlab.graphics.shapes import Line
@@ -191,9 +191,17 @@ class Objectif(models.Model):
  
     
 class Document(models.Model):
-    docfile = models.FileField(upload_to='media')
+    docfile = models.FileField(upload_to='media', blank=True)
+    titre = models.CharField(max_length=128, blank=True)
+    texte = tinymce_models.HTMLField(blank=True)
+    published = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.titre
 
 
+    
+    
  
 class PDFResponse(HttpResponse):
     

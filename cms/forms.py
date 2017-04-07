@@ -4,18 +4,27 @@ Created on 17 nov. 2012
 
 @author: alzo
 '''
-from .models import Processus, Module, Domaine, Competence, SousCompetence
+from .models import Processus, Module, Domaine, Competence, SousCompetence, Document
 from django import forms
 
 from django.contrib import admin
 from _collections_abc import __all__
 #from django.forms import Textarea, TextInput
 
+from tinymce.widgets import TinyMCE
 
-class DocumentForm(forms.Form):
-    docfile = forms.FileField(label='Selectionner un fichier', help_text='Taille max.: 42 megabytes')
 
-   
+
+class DocumentAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = Document
+        fields = '__all__'
+        widgets = {
+            'texte': TinyMCE(attrs={'cols': 120, 'rows': 30}),
+            }
+
+  
 class ProcessusAdminForm(forms.ModelForm):
     
     def __init__(self, *args, **kwargs):

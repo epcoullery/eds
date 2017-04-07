@@ -1,0 +1,27 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+
+
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }}{% endblock %}
+
+{% block content %}
+
+<div id="content-main">
+<h1>Liste des documents</h1>
+<ol>
+{% for doc in object_list %}
+<li><a href="{% url 'document-detail' doc.id %}">{{doc}}</a></li>
+{% empty %}
+<li>Aucun document disponible</li>
+{% endfor %}
+</ol>
+
+
+</div>
+{% endblock %}
+
+

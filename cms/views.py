@@ -14,7 +14,7 @@ from django.conf import settings
 
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
-from .forms import DocumentForm
+#from .forms import DocumentAdminForm
 
 from reportlab.pdfgen import canvas
 
@@ -43,7 +43,7 @@ class HomeView(TemplateView):
         return context
 
    
-class HomwPDFView(TemplateView):
+class HomePDFView(TemplateView):
     template_name = 'cms/index.html'
     
     def render_to_response(self, context, **response_kwargs):
@@ -154,6 +154,7 @@ class ModuleDetailView(DetailView):
 class ModuleListView(ListView):
     template_name = 'cms/module_list.html'
     model = Module
+    
 
 def Preformatted_left(text):
     return Preformatted(text, style_normal, maxLineLength=15)
@@ -167,7 +168,42 @@ class EvaluationView(ListView):
     template_name = 'cms/evaluation.html'
     model = Processus
     
-
+class DocumentListView(ListView): 
+    template_name = 'cms/document_list.html'
+    model = Document 
+    
+    
+class DocumentDetailView(DetailView):
+    template_name ='cms/document_detail.html'
+    model = Document
+    
+    def get_object(self):
+        if self.docfile <> '':
+            
+            
+            
+    def render_to_response(self, context, **response_kwards):
+        print('============')
+        print(self.object.docfile)
+        if self.object.docfile == '':
+            print('docfile = vide')
+            return
+        pdf_file = settings.MEDIA_ROOT + '/media/EDS_Calendrier_2017.pdf'
+        with open(pdf_file, 'rb') as pdf:
+            response = HttpResponse(pdf.read(),content_type='application/pdf')
+            response['Content-Disposition'] = 'filename=some_file.pdf'
+            return response
+    
+    
+    
+def pdf_view(request):
+    with open('/path/to/my/file.pdf', 'r') as pdf:
+        response = HttpResponse(pdf.read(), mimetype='application/pdf')
+        response['Content-Disposition'] = 'inline;filename=some_file.pdf'
+        return response
+    pdf.closed
+    
+          
 class ModulePDF(DetailView):
 
     template_name = 'cms/module_detail.html'
