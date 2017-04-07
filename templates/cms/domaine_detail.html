@@ -1,0 +1,26 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+{% block coltype %}colMS{% endblock %}
+
+
+
+{% block content %}
+
+<div id="content-main">
+<h1>Domaine:  {{object}}</h1>
+{% for p in object.processus_set.all %}
+<div class="processus"><h2>Processus:  {{ p.url|safe }}</h2></div>
+{% for m in p.module_set.all %}
+<div class="module">Module:  <a href="/module/{{m.id}}">{{ m }}</a></div>
+<div class="competence">Compétences visées</div>
+{% for c in m.competences.all %}
+<div class="competence">{{ c }}</div>
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+</div>
+{% endblock %}
+
+
