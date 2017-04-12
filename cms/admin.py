@@ -66,7 +66,7 @@ class DocumentAdmin(admin.ModelAdmin):
     class Meta:
         js = (
             '/static/js/tiny_mce/tiny_mce.js',
-            
+            '/static/js/textrea.js',
         )
         
 admin.site.register(Enseignant)
