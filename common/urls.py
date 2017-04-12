@@ -38,6 +38,5 @@ urlpatterns = [
     url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'),
     url(r'^documents/$', views.DocumentListView.as_view(), name='document-list'), 
     url(r'^document/(?P<pk>\d+)$', views.DocumentDetailView.as_view(), name='document-detail'), 
-    url(r'^import/$', views.import_xls_file), 
     url(r'^tinymce/', include('tinymce.urls'), name='tinymce-js'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

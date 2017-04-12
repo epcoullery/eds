@@ -397,29 +397,10 @@ def Download(request, file_name):
     
 
 def pdf_view(request):
-    with open('/home/alzo/dev/eds/media/media/EDS_Calendrier_2017.pdf', 'r') as pdf:
+    with open(settings.MEDIA_ROOT + '/media/EDS_Calendrier_2017.pdf', 'r') as pdf:
         response = HttpResponse(pdf.read().decode('latin-1') , content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=some_file.pdf'
         return response
     pdf.closed  
     
     
-def import_xls_file(request):
-    import xlrd
-    
-    if request.method == 'POST':
-        xlspath = '/home/alzo/Export_CLOEE_FE.xls'
-        with xlrd.open_workbook(xlspath) as book:
-            sheet = book.sheet_by_index(0)
-            print(sheet.ncols)
-            print(sheet.nrows)
-        
-        
-    if request.method == 'GET':
-        xlspath = '/home/alzo/Export_CLOEE_FE.xls'
-        with xlrd.open_workbook(xlspath) as book:
-            sheet = book.sheet_by_index(0)
-            for rownum in range(1,sheet.nrows): 
-                print(int(sheet.row_values(rownum)[0]))
-                
-
