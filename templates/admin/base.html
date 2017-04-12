@@ -17,16 +17,6 @@
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}">
 
-<script>
-		jQuery(document).ready(function(){
-			tinymce.init({
-				  selector: 'textarea',  // change this value according to your HTML
-				  body_class: 'tinymce'
-				});
-			
-		});
-
-</script>
 <!-- Container -->
 <div id="container">
 

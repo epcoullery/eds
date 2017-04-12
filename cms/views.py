@@ -397,7 +397,7 @@ def Download(request, file_name):
     
 
 def pdf_view(request):
-    with open(settings.MEDIA_ROOT + '/media/EDS_Calendrier_2017.pdf', 'r') as pdf:
+    with open(settings.MEDIA_ROOT + 'media/EDS_Calendrier_2017.pdf', 'r') as pdf:
         response = HttpResponse(pdf.read().decode('latin-1') , content_type='application/pdf')
         response['Content-Disposition'] = 'inline;filename=some_file.pdf'
         return response
