@@ -8,6 +8,8 @@
 {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
 {% block extrahead %}
 <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>{% endblock %}
+
+
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
 </head>
 {% load i18n %}
@@ -15,6 +17,16 @@
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
   data-admin-utc-offset="{% now "Z" %}">
 
+<script>
+		jQuery(document).ready(function(){
+			tinymce.init({
+				  selector: 'textarea',  // change this value according to your HTML
+				  body_class: 'tinymce'
+				});
+			
+		});
+
+</script>
 <!-- Container -->
 <div id="container">
 
