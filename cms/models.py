@@ -193,7 +193,7 @@ class Objectif(models.Model):
 class Document(models.Model):
     docfile = models.FileField(upload_to='media', blank=True)
     titre = models.CharField(max_length=128, blank=True)
-    texte = tinymce_models.HTMLField(blank=True)
+    texte = tinymce_models.HTMLField(blank=True,)
     published = models.BooleanField(default=False)
     
     def __str__(self):

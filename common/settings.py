@@ -133,12 +133,14 @@ STUDENT_IMPORT_MAPPING = {
 
 DOMAINE_COULEURS = {'D1':'#fcaf3e', 'D2': '#cc0000', 'D3': '#ef896b', 'D4': '#ad7fa8', 'D5': '#729fcf', 'D6':'#73d216', 'D7':'#ffffff', 'D8':'#babdb6' }
 
-TINYMCE_JS_URL = STATIC_URL + 'js/tiny_mce/tiny_mce.js'
+TINYMCE_JS_URL = MEDIA_URL + 'js/tiny_mce/tiny_mce.js'
+TINYMCE_JS_ROOT = MEDIA_ROOT + 'js/tiny_mce'
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",
     'theme': "advanced",
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 10,
+    'theme_advanced_resizing': True,
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
