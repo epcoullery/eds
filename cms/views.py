@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 '''
 Created on 4 déc. 2012
 
@@ -7,7 +6,8 @@ Created on 4 déc. 2012
 import os
 from django.shortcuts import render, render_to_response
 from django.views.generic import ListView, TemplateView, DetailView
-from .models import Domaine, Processus, Module, Competence, Document, PDFResponse, MyDocTemplate, MyDocTemplateLandscape
+from .models import (Domaine, Processus, Module, Competence, Document, UploadDoc, 
+                     PDFResponse, MyDocTemplate, MyDocTemplateLandscape)
 from .models import style_normal, style_bold, style_title
 from django.db.models import F, Sum
 from django.conf import settings
@@ -170,39 +170,37 @@ class EvaluationView(ListView):
     
 class DocumentListView(ListView): 
     template_name = 'cms/document_list.html'
-    model = Document 
+    model = Document
     
-    
+    def get_context_data(self, **kwargs):
+        context = super(DocumentListView, self).get_context_data(**kwargs) 
+        context['upload'] = UploadDoc.objects.filter(published=True)
+        return context
+
+
 class DocumentDetailView(DetailView):
     template_name ='cms/document_detail.html'
     model = Document
        
     
-def pdf_view(request):
-    with open('/path/to/my/file.pdf', 'r') as pdf:
-        response = HttpResponse(pdf.read(), mimetype='application/pdf')
-        response['Content-Disposition'] = 'inline;filename=some_file.pdf'
-        return response
-    pdf.closed
+class UploadDetailView(DetailView):
+    template_name = 'cms/upload_detail.html'
+    model = UploadDoc
+    
+    def get_context_data(self, **kwargs):
+        context = super(UploadDetailView, self).get_context_data(**kwargs) 
+        context['fichier'] = self.get_object().docfile.url
+        return context
     
           
 class ModulePDF(DetailView):
-
     template_name = 'cms/module_detail.html'
     model = Module
     
-    def get_object(self):
-        # Call the superclass
-        return super(ModulePDF, self).get_object()
-
-            
-            
-    def render_to_response(self, context, **response_kwargs):
-        #return DetailView.render_to_response(self, context, **response_kwargs)    
+    def render_to_response(self, context, **response_kwargs):   
         m = self.get_object()
         response = PDFResponse('Module_{0}.pdf'.format(m.code) ,'Module de formation')
        
-        
         str_comp = ''
         for c in m.competence_set.all():
             str_comp += '- {0} ({1})\n'.format(c.nom, c.code)
@@ -249,16 +247,16 @@ class ModulePDF(DetailView):
         response.story.append(Spacer(0,1*cm))
         response.story.append(t)
         
-        
         doc = MyDocTemplate(response)  
         doc.build(response.story)
         
         return response
 
-"""
-Calcul du nombre de périodes de formation
-"""    
+  
 def get_context(context):
+    """
+    Calcul du nombre de périodes de formation
+    """  
     liste = Module.objects.exclude(periode_presentiel = 0)
     #context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
 
@@ -355,7 +353,7 @@ class PeriodePDFView(TemplateView):
         
         return response
 
-
+"""
 class AddDocument(TemplateView):
     template_name = 'cms/upload.html'
     
@@ -402,5 +400,5 @@ def pdf_view(request):
         response['Content-Disposition'] = 'inline;filename=some_file.pdf'
         return response
     pdf.closed  
-    
+"""    
     

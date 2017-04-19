@@ -4,7 +4,9 @@ Created on 17 nov. 2012
 
 @author: alzo
 '''
-from .models import Processus, Module, Domaine, Competence, SousCompetence, Document
+from .models import (Processus, Module, Domaine, Competence, SousCompetence, Document,
+                    UploadDoc)
+
 from django import forms
 
 from django.contrib import admin
@@ -163,4 +165,11 @@ class ModuleAdminForm(forms.ModelForm):
             'didactique': forms.Textarea(attrs={'cols': 125, 'rows':2}),
             'evaluation': forms.Textarea(attrs={'cols': 125, 'rows':2}),
             } 
-        
+
+
+class UploadAdminForm(forms.ModelForm):
+    
+    class Meta:
+        model = UploadDoc
+        fields = ('titre', 'docfile', 'published', )
+             

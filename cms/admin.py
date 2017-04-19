@@ -1,16 +1,21 @@
 from django.contrib import admin
+
 from .models import (Enseignant, Domaine, Competence, SousCompetence, Objectif,
-        Ressource, Module, Processus, Document)
+        Ressource, Module, Processus, Document, UploadDoc)
+
 from .forms import (ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm, DomaineAdminForm, CompetenceAdminForm, 
 SousCompetenceInlineAdminForm, CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
-SousCompetenceAdminForm, DocumentAdminForm)
+SousCompetenceAdminForm, DocumentAdminForm, UploadAdminForm )
+
 # Register your models here.
+
 
 class SousCompetenceInline(admin.TabularInline):
     form = SousCompetenceInlineAdminForm
     model = SousCompetence
     extra = 0
-    
+
+   
 class CompetenceInline(admin.TabularInline):
     form = CompetenceInlineAdminForm
     model = Competence
@@ -21,8 +26,6 @@ class SousCompetenceAdmin(admin.ModelAdmin):
     form = SousCompetenceAdminForm
     
     
-
-
 class RessourceAdmin(admin.ModelAdmin):
     form = RessourceAdminForm
     list_display = ('nom', 'module')
@@ -59,16 +62,16 @@ class DomaineAdmin(admin.ModelAdmin):
     list_display = ('nom', 'responsable',)
     form = DomaineAdminForm
     inlines = [ProcessusInlineAdmin,]
-    
+
+
 class DocumentAdmin(admin.ModelAdmin):
     form = DocumentAdminForm
 
-    class Meta:
-        js = (
-            '/static/js/tiny_mce/tiny_mce.js',
-            '/static/js/textarea.js',
-        )
-        
+
+class UploadAdmin(admin.ModelAdmin):
+    form = UploadAdminForm
+    
+         
 admin.site.register(Enseignant)
 admin.site.register(Domaine, DomaineAdmin)
 admin.site.register(Competence, CompetenceAdmin)
@@ -78,3 +81,5 @@ admin.site.register(Ressource, RessourceAdmin)
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(Processus, ProcessusAdmin)
 admin.site.register(Document, DocumentAdmin)
+
+admin.site.register(UploadDoc, UploadAdmin)

@@ -16,6 +16,7 @@ from reportlab.lib.units import cm
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle as PS
+
 style_8_c = PS(name='CORPS', fontName='Helvetica', fontSize=6, alignment = TA_CENTER)
 style_normal = PS(name='CORPS', fontName='Helvetica', fontSize=8, alignment = TA_LEFT)
 style_bold = PS(name='CORPS', fontName='Helvetica-Bold', fontSize=10, alignment = TA_LEFT)
@@ -35,13 +36,14 @@ CHOIX_TYPE_MODULE = (
 )
 
 class Enseignant(models.Model):
+
+    class Meta:
+        ordering =('nom',)
+    
     sigle = models.CharField(max_length= 5, blank=True, default='')
     nom = models.CharField(max_length=20, blank=True, default='')
     prenom = models.CharField(max_length=20, blank=True, default='')
     email = models.EmailField(blank=True, default='')
-    
-    class Meta:
-        ordering =('nom',)
         
     def __str__(self):
         return '{0} {1}'.format(self.nom, self.prenom)
@@ -54,25 +56,25 @@ class Enseignant(models.Model):
     
     
 class Domaine(models.Model):
+
+    class Meta:
+        ordering = ('code',)
+    
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
     responsable = models.ForeignKey(Enseignant, null=True, default=None)
-    
-    height_screen = 50
-    
-    class Meta:
-        ordering = ('code',)
+
+    #height_screen = 50   
         
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
         return "<a href='/domaine/{0}'>{1}</a>".format(self.id, self.__str__())
-
+    
+    """
     def svg(self):
         processus = self.processus_set.all()
-        
-        
         svg = '<rect x="20" y="{0}" rx="5" ry="5" width="250" height="{1}" fill="{2}" stroke="black" stroke-width="1" />'
         txt = '<text x="25" y="{0}" style="stroke:#000000;font-size:10;">{1}</text>'
         height_frame = processus.count()* self.height_screen
@@ -86,20 +88,20 @@ class Domaine(models.Model):
         dic_js['resp'] = self.responsable.nom
         
         return '{'
-        
+    """   
 
 
 class Processus(models.Model):
+
+    class Meta:
+        ordering = ('code',)
+        verbose_name_plural = 'processus'
+        
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
     domaine = models.ForeignKey(Domaine, null=False)
     description = models.TextField(default='')
     
-    
-    class Meta:
-        ordering = ('code',)
-        verbose_name_plural = 'processus'
-        
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
     
@@ -108,7 +110,10 @@ class Processus(models.Model):
     
 
 class Module(models.Model):
-              
+
+    class Meta:
+        ordering = ('code',)              
+    
     code = models.CharField(max_length=10, blank=False, default='Code')
     nom = models.CharField(max_length=100, blank=False, default='Nom du module')
     type = models.CharField(max_length=20, choices= CHOIX_TYPE_MODULE)
@@ -128,12 +133,7 @@ class Module(models.Model):
     sem6 = models.IntegerField(default=0)
     semestre = models.CharField(max_length=15, default='', blank=False)
     processus = models.ForeignKey(Processus, null=False, default=None)
-    
-
-    class Meta:
-        ordering = ('code',)
-        
-        
+       
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
     
@@ -145,44 +145,48 @@ class Module(models.Model):
     
     
 class Competence(models.Model):
+
+    class Meta:
+        ordering = ('code',)
+        verbose_name = 'compétence'
+    
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=250, blank=False)
     type = models.CharField(max_length=35, blank=True, default='')
     module = models.ForeignKey(Module, null=True, default=None)
     proces_eval = models.ForeignKey(Processus, null=True, default=True)
     list_display = ('code', 'nom', 'type','proces_eval')
-    
-    class Meta:
-        ordering = ('code',)
-        verbose_name = 'compétence'
-        
+   
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
     
-
     
 class SousCompetence(models.Model):
-    code = models.CharField(max_length=20, blank=True)
-    nom = models.CharField(max_length=250, blank=False)
-    competence = models.ForeignKey(Competence, null=False)
-    
+
     class Meta:
         ordering = ('code',)
         verbose_name = 'sous-compétence'
+    
+    code = models.CharField(max_length=20, blank=True)
+    nom = models.CharField(max_length=250, blank=False)
+    competence = models.ForeignKey(Competence, null=False)
         
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
 
     
 class Ressource(models.Model):
+    
     nom = models.CharField(max_length=200, blank=False)
     type = models.CharField(max_length=30, choices = CHOIX_TYPE_SAVOIR, default='Savoir')
     module=models.ForeignKey(Module, null=True, default=None)
     
     def __str__(self):
         return '{0}'.format(self.nom)
-    
+
+
 class Objectif(models.Model):
+
     nom = models.CharField(max_length=200, blank=False)
     module=models.ForeignKey(Module, null=True, default=None)
 
@@ -191,7 +195,8 @@ class Objectif(models.Model):
  
     
 class Document(models.Model):
-    docfile = models.FileField(upload_to='media', blank=True)
+    
+    #docfile = models.FileField(upload_to='media/')
     titre = models.CharField(max_length=128, blank=True)
     texte = tinymce_models.HTMLField(blank=True,)
     published = models.BooleanField(default=False)
@@ -200,9 +205,17 @@ class Document(models.Model):
         return self.titre
 
 
+class UploadDoc(models.Model):
+    
+    docfile = models.FileField(upload_to='doc/')
+    titre = models.CharField(max_length=100, blank=False)
+    published = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.titre
+   
     
     
- 
 class PDFResponse(HttpResponse):
     
     def __init__(self, filename, title='', portrait=True):
@@ -210,7 +223,7 @@ class PDFResponse(HttpResponse):
         self['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
         self['Content-Type'] = 'charset=utf-8'
         self.story = []
-        image = Image(settings.MEDIA_ROOT + '/media/header.png', width=480, height=80)
+        image = Image(settings.MEDIA_ROOT + '/media/header.png', width=520, height=75)
         image.hAlign = TA_LEFT
         
         self.story.append(image)
@@ -230,7 +243,6 @@ class PDFResponse(HttpResponse):
         self.story.append(t)
         
         
-    
 class MyDocTemplate(SimpleDocTemplate):
     
     def __init__(self, name):
@@ -241,7 +253,6 @@ class MyDocTemplate(SimpleDocTemplate):
         self.CENTRE_WIDTH = self.PAGE_WIDTH/2.0
         self.CENTRE_HEIGHT = self.PAGE_HEIGHT/2.0
         
-        
     def beforePage(self):
         # page number
         self.canv.saveState()
@@ -250,7 +261,6 @@ class MyDocTemplate(SimpleDocTemplate):
         self.canv.restoreState()
         
         
-    
 class MyDocTemplateLandscape(SimpleDocTemplate):
     
     def __init__(self, name):
@@ -269,5 +279,4 @@ class MyDocTemplateLandscape(SimpleDocTemplate):
         self.canv.restoreState()
     
     
-
        
