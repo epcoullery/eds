@@ -207,6 +207,9 @@ class Document(models.Model):
 
 class UploadDoc(models.Model):
     
+    class Meta:
+        verbose_name= 'UploadDoc'
+        
     docfile = models.FileField(upload_to='doc/')
     titre = models.CharField(max_length=100, blank=False)
     published = models.BooleanField(default=False)
