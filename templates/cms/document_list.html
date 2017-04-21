@@ -14,23 +14,11 @@
 <h1>Liste des documents</h1>
 <ol>
 {% for doc in object_list %}
-
-{% if doc.published %}
-	<li><a href="{% url 'document-detail' doc.id %}">{{doc}}</a></li>
-{% else %}
-<li>{{doc}}&nbsp;&nbsp;(en travail)</li>
-{% endif %}
-{% empty %}
-<li>Aucun document disponible</li>
+<li><a href="{% url 'document-detail' doc.id %}">{{ doc }}</a></li>
 {% endfor %}
 
 {% for fic in upload %}
-
-{% if fic.published %}
-	<li><a href="{% url 'upload-detail' fic.id %}">{{fic.titre}}</a></li>
-{% else %}
-<li>{{fic}}&nbsp;&nbsp;(en travail)</li>
-{% endif %}
+<li><a href="{% url 'upload-detail' fic.id %}">{{ fic.titre }} (pdf)</a></li>
 {% endfor %}
 
 

@@ -81,5 +81,4 @@ admin.site.register(Ressource, RessourceAdmin)
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(Processus, ProcessusAdmin)
 admin.site.register(Document, DocumentAdmin)
-
 admin.site.register(UploadDoc, UploadAdmin)
