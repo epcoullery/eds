@@ -39,5 +39,8 @@ urlpatterns = [
     url(r'^documents/$', views.DocumentListView.as_view(), name='document-list'), 
     url(r'^document/(?P<pk>\d+)$', views.DocumentDetailView.as_view(), name='document-detail'),
     url(r'^upload/(?P<pk>\d+)$', views.UploadDetailView.as_view(), name='upload-detail'), 
+    
+    #url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'), 
     url(r'^tinymce/', include('tinymce.urls'), name='tinymce-js'),
+    
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )

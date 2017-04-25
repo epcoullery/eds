@@ -172,6 +172,11 @@ class DocumentListView(ListView):
     template_name = 'cms/document_list.html'
     model = Document
     
+    def get_queryset(self, **kwargs):
+        query = Document.objects.filter(published=True)
+        return query
+    
+        
     def get_context_data(self, **kwargs):
         context = super(DocumentListView, self).get_context_data(**kwargs) 
         context['upload'] = UploadDoc.objects.filter(published=True)
@@ -184,6 +189,10 @@ class DocumentDetailView(DetailView):
        
     
 class UploadDetailView(DetailView):
+    """
+    Affiche les documents uploadés à la suite des doc.
+    DocumentsInline
+    """
     template_name = 'cms/upload_detail.html'
     model = UploadDoc
     
@@ -249,7 +258,6 @@ class ModulePDF(DetailView):
         
         doc = MyDocTemplate(response)  
         doc.build(response.story)
-        
         return response
 
   

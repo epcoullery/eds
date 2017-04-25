@@ -216,8 +216,13 @@ class UploadDoc(models.Model):
     
     def __str__(self):
         return self.titre
-   
-    
+"""  
+class OffreEmploi(models.Model):
+    source = models.CharField(max_lenght=200, blank=False)
+    descr = model.HTMLField(blank=False)
+    published = models.BooleanField(default=False)
+"""    
+      
     
 class PDFResponse(HttpResponse):
     
