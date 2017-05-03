@@ -125,7 +125,7 @@ class Module(models.Model):
     pratique_prof = models.IntegerField(default=0, verbose_name='Pratique professionnelle')
     didactique = models.TextField()
     evaluation = models.TextField()
-    didactique_published = models.BooleanField(default=False)
+    
     sem1 = models.IntegerField(default=0)
     sem2 = models.IntegerField(default=0)
     sem3 = models.IntegerField(default=0)
@@ -134,6 +134,10 @@ class Module(models.Model):
     sem6 = models.IntegerField(default=0)
     semestre = models.CharField(max_length=15, default='', blank=False)
     processus = models.ForeignKey(Processus, null=False, default=None)
+    
+    didactique_published = models.BooleanField(default=False)
+    evaluation_published = models.BooleanField(default=False)
+    contenu_published = models.BooleanField(default=False)
        
     def __str__(self):
         return '{0} - {1}'.format(self.code, self.nom)
