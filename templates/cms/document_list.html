@@ -1,9 +1,5 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
-
-
-
-
 {% block coltype %}colMS{% endblock %}
 
 {% block bodyclass %}{{ block.super }}{% endblock %}
@@ -20,14 +16,6 @@
 {% for fic in upload %}
 <li><a href="{% url 'upload-detail' fic.id %}">{{ fic.titre }}</a></li>
 {% endfor %}
-
-
-
-
 </ol>
-
-
 </div>
 {% endblock %}
-
-

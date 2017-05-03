@@ -125,6 +125,7 @@ class Module(models.Model):
     pratique_prof = models.IntegerField(default=0, verbose_name='Pratique professionnelle')
     didactique = models.TextField()
     evaluation = models.TextField()
+    didactique_published = models.BooleanField(default=False)
     sem1 = models.IntegerField(default=0)
     sem2 = models.IntegerField(default=0)
     sem3 = models.IntegerField(default=0)
