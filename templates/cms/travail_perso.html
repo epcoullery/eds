@@ -1,0 +1,36 @@
+{% extends "./base_site.html" %}
+{% load i18n static %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }}{% endblock %}
+
+{% block content %}
+
+<div id="content-main">
+<h1>Répartion des heures de formation</h1>
+<table border="0">
+<tr><th>Module</th><th >Heures de cours</th><th>Travail perso.</th><th>Pratique prof.</th></tr>
+{% for m in object_list %}
+<tr>
+<td >
+{% if forloop.last %}
+{{ m }} - Travail de diplôme
+{% else %}
+{{ m }}
+{% endif %}
+</td>
+<td align="center">{% if m.periode_presentiel == 0 %} &nbsp; {% else %} {{ m.periode_presentiel|rjust:"3" }} h. {% endif %}</td>
+<td align="center">{% if m.travail_perso == 0 %} &nbsp; {% else %} {{ m.travail_perso|rjust:"3" }} h. {% endif %}</td>
+<td align="center">{% if m.pratique_prof == 0 %} &nbsp; {% else %} {{ m.pratique_prof|rjust:"3" }} h.{% endif %}</td>
+</tr>
+{% endfor %}
+<tr>
+<th >Total</th>
+<th>{{ total_perso }} heures</th>
+<th>{{ total_presentiel }} heures</th>
+<th>{{ total_pratique }} heures</th>
+</tr>
+</table>
+</div>
+{% endblock %}

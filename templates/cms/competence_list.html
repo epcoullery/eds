@@ -8,16 +8,11 @@
 {% block content %}
 
 <div id="content-main">
-<h1>Liste des compétences</h1>
+<h1>Liste des compétences du PEC avec les modules correspondants</h1>
 <table border="0">
 {% for c in object_list %}
-<tr><td colspan="3">{{c}}</td></td></tr>
-{% for p in c.module_set.all %}
-<tr><th width="10px">&nbsp;</th><td colspan="2"><a href=" {% url 'processus-detail' p.id %}">{{p}}</a></td></tr>
-{% for m in p.module_set.all %}
-<tr><th colspan="2" width="45px">&nbsp;<td><a href=" {% url 'module-detail' m.id %}">{{m}}</a></td></tr>
-{% endfor %}
-{% endfor %}
+<tr><td colspan="3">{{ c }}</td></td></tr>
+<tr><th width="10px">&nbsp;</th><td colspan="2"><a href=" {% url 'module-detail' c.module.id %}">{{ c.module }}</a></td></tr>
 {% endfor %}
 </table>
 

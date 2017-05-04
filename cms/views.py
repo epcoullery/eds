@@ -59,11 +59,11 @@ class HomePDFView(TemplateView):
                 [''  , Preformatted(p[1].__str__(), style_normal, maxLineLength=60) , ''    , '' ,''    , 'M03'  , ''  , ''  ],
                 [''  , ''    , ''    , 'M04' ,''    , ''  , ''  , ''  ],
                 [Preformatted(d[1].__str__(), style_normal, maxLineLength=40), Preformatted(p[2].__str__(), style_normal, maxLineLength=60) , 'M05' , ''    ,'M06' , ''  , ''  , ''  ],
-                [''  , Preformatted(p[3].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,''    , 'M07'  , ''  , 'M09'  ],
-                [''  , ''    , ''    , ''    ,''    , 'M08'  , ''  , ''  ],
-                [Preformatted(d[2].__str__(), style_normal, maxLineLength=40), Preformatted(p[4].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,''    , 'M10'  , ''  , 'M12'  ],
-                [''  , Preformatted(p[5].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,''    , 'M11'  , ''  , ''  ],
-                [Preformatted(d[3].__str__(), style_normal, maxLineLength=40), Preformatted(p[6].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,''    , 'M13'  , ''  , 'M14'  ],
+                [''  , Preformatted(p[3].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,'' , ''   , 'M07'   , 'M09'  ],
+                [''  , ''    , ''    , ''    ,''  ,''  , 'M08'   , ''  ],
+                [Preformatted(d[2].__str__(), style_normal, maxLineLength=40), Preformatted(p[4].__str__(), style_normal, maxLineLength=60) , ''    , ''    , 'M10'  , ''  , 'M12' ],
+                [''  , Preformatted(p[5].__str__(), style_normal, maxLineLength=60) , ''    , ''    , 'M11'   ''  , ''  ],
+                [Preformatted(d[3].__str__(), style_normal, maxLineLength=40), Preformatted(p[6].__str__(), style_normal, maxLineLength=60) , ''    , ''     , 'M13'  , '' ,'' , 'M14'  ],
                 [Preformatted(d[4].__str__(), style_normal, maxLineLength=40), Preformatted(p[7].__str__(), style_normal, maxLineLength=60) , 'M15'    , ''    ,''    , ''  , ''  , ''  ],
                 [Preformatted(d[5].__str__(), style_normal, maxLineLength=40), Preformatted(p[8].__str__(), style_normal, maxLineLength=60) , 'M16_1'    , ''    ,'M16_2'    , ''  , 'M16_3'  , ''  ],
                 [Preformatted(d[6].__str__(), style_normal, maxLineLength=40), Preformatted(p[9].__str__(), style_normal, maxLineLength=60), 'M17_1'    , ''    ,'M17_2'    , ''  , 'M17_3'  , ''  ],
@@ -85,8 +85,8 @@ class HomePDFView(TemplateView):
             ('SPAN',(0,5), (0,7)), #Domaine 2
             ('SPAN',(1,6), (1,7)),
             ('SPAN',(0,8), (0,9)), #Domaine 3
-            ('SPAN',(5,8), (6,8)),
-            ('SPAN',(5,9), (6,9)),
+            ('SPAN',(4,8), (5,8)),
+            ('SPAN',(4,9), (5,9)),
             ('SPAN',(2,11), (-1,11)),
             ('SPAN',(2,12), (3,12)),
             ('SPAN',(4,12), (5,12)),
@@ -102,14 +102,14 @@ class HomePDFView(TemplateView):
             ('BACKGROUND',(0,5), (1,7), colors.red),
             ('BACKGROUND',(2,5), (2,5), colors.red),
             ('BACKGROUND',(4,5), (4,5), colors.red),
-            ('BACKGROUND',(5,6), (5,6), colors.red),
-            ('BACKGROperiodesUND',(7,6), (7,6), colors.red),
-            ('BACKGROUND',(5,7), (5,7), colors.red),
+            ('BACKGROUND',(6,6), (6,6), colors.red),
+            ('BACKGROUND',(7,6), (7,6), colors.red),
+            ('BACKGROUND',(6,7), (6,7), colors.red),
             ('BACKGROUND',(0,8), (1,9), colors.pink),
-            ('BACKGROUND',(5,8), (-1,8), colors.pink),
-            ('BACKGROUND',(5,9), (6,9), colors.pink),
+            ('BACKGROUND',(4,8), (6,8), colors.pink),
+            ('BACKGROUND',(4,9), (5,9), colors.pink),
             ('BACKGROUND',(0,10), (1,10), HexColor('#AD7FA8')),
-            ('BACKGROUND',(5,10), (5,10), HexColor('#AD7FA8')),
+            ('BACKGROUND',(4,10), (4,10), HexColor('#AD7FA8')),
             ('BACKGROUND',(7,10), (7,10), HexColor('#AD7FA8')),
             ('BACKGROUND',(0,11), (-1,11), HexColor('#729FCF')),
             ('BACKGROUND',(0,12), (-1,12), colors.lightgreen),
@@ -361,6 +361,26 @@ class PeriodePDFView(TemplateView):
         
         return response
 
+class CompetenceListView(ListView):
+    model = Competence
+    template_name = 'cms/competence_list.html'
+
+
+class TravailPersoListView(ListView):
+    model = Module
+    template_name = 'cms/travail_perso.html'
+    
+    def get_context_data(self, **kwargs):
+        context = ListView.get_context_data(self, **kwargs)
+        context['total_perso'] = Module.objects.aggregate((Sum('travail_perso')))['travail_perso__sum']
+        context['total_presentiel'] = Module.objects.aggregate((Sum('periode_presentiel')))['periode_presentiel__sum']
+        context['total_pratique'] = Module.objects.aggregate((Sum('pratique_prof')))['pratique_prof__sum']
+        return get_context(context)   
+
+    
+
+
+    
 """
 class AddDocument(TemplateView):
     template_name = 'cms/upload.html'
