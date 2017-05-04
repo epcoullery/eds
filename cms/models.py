@@ -120,9 +120,9 @@ class Module(models.Model):
     situation = models.TextField()
     evaluation = models.TextField()
     contenu = models.TextField()
-    periode_presentiel = models.IntegerField(verbose_name='Période en présentiel')
+    periode_presentiel = models.IntegerField(verbose_name='Présentiel')
     travail_perso = models.IntegerField(verbose_name = 'Travail personnel')
-    pratique_prof = models.IntegerField(default=0, verbose_name='Pratique professionnelle')
+    pratique_prof = models.IntegerField(default=0, verbose_name='Pratique prof.')
     didactique = models.TextField()
     evaluation = models.TextField()
     
