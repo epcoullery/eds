@@ -17,6 +17,7 @@
 {% for sc in c.souscompetence_set.all %}&nbsp;&nbsp;&nbsp; -- {{sc.nom}} <br />{%endfor %}{% endif %}{% endfor %}</td></tr>
 <!-- <tr><th>Ressources à acquérir</th><td>{% for c in object.ressource_set.all %}- {{c}}<br />{% endfor %}</td></tr> -->
 <tr><th>Objectifs à atteindre</th><td>{% for c in object.objectif_set.all %}- {{c}}<br />{% endfor %}</td></tr>
+<tr><th>Didactique</th><td>{{ object.didactique }}</td></tr>
 <!-- <tr><th>Contenu</th><td>{{object.contenu|linebreaksbr}}</td></tr> -->
 <tr><th>Evaluation</th><td>{{object.evaluation|linebreaksbr}}</td></tr>
 <tr><th>Type</th><td>{{object.type}}, obligatoire</td></tr>

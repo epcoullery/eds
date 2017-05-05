@@ -34,6 +34,7 @@ class HomeView(TemplateView):
         for d in Domaine.objects.all().order_by('code'):
             context[d.code] = d
             
+            
         for c in Processus.objects.all().order_by('code'):
             context[c.code] = c
 
