@@ -240,6 +240,7 @@ class ModulePDF(DetailView):
                 [Preformatted_left('Compétences visées'), Preformatted_right(str_comp)],
                 #[Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
                 [Preformatted_left('Objectifs à atteindre'), Preformatted_right(str_obj)],
+                [Preformatted_left('Didactique'), Preformatted_right(m.didactique)],
                 #[Preformatted_left('Contenu'), Preformatted_right(str_con)],
                 [Preformatted_left('Evaluation'), Preformatted_right(m.evaluation)],
                 [Preformatted_left('Type'), Preformatted_right('{0}, obligatoire'.format(m.type))],
