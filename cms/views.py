@@ -217,6 +217,11 @@ class ModulePDF(DetailView):
             if self.request.user.is_authenticated:
                 for sc in c.souscompetence_set.all():
                     str_comp += '    -- {0}\n'.format(sc.nom)
+        
+        str_scom = ''
+        for c in m.competence_set.all():
+            for sc in c.souscompetence_set.all():
+                str_scom += '- {0}\n'.format(sc.nom)
                     
         str_res = ''
         for c in m.ressource_set.all():
@@ -238,6 +243,7 @@ class ModulePDF(DetailView):
                 [Preformatted_left('Processus'), Preformatted_right(m.processus.__str__())],
                 [Preformatted_left('Situation emblématique'), Preformatted_right(m.situation)],
                 [Preformatted_left('Compétences visées'), Preformatted_right(str_comp)],
+                [Preformatted_left('Plus-value sur le CFC ASE'), Preformatted_right(str_scom)],
                 #[Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
                 [Preformatted_left('Objectifs à atteindre'), Preformatted_right(str_obj)],
                 [Preformatted_left('Didactique'), Preformatted_right(m.didactique)],

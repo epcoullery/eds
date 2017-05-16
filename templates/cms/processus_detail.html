@@ -12,7 +12,7 @@
 <div id="content-main">
 <h1>{{object}}</h1>
 <table>
-<tr><th>Description</th><td>{{object.description}}</td></tr>
+<tr><th width="100px">Description</th><td>{{object.description}}</td></tr>
 <tr><th>Compétences visées</th><td><p>L'éducateur social, l'éducatrice sociale:</p>
 {% for m in object.module_set.all %}{% for c in  m.competences.all %}
 - {{c.libelle}} ({{c.code}})<br />{% endfor %}{% endfor %}</td></tr>
