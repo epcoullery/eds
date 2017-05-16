@@ -214,10 +214,13 @@ class ModulePDF(DetailView):
         str_comp = ''
         for c in m.competence_set.all():
             str_comp += '- {0} ({1})\n'.format(c.nom, c.code)
+            """
             if self.request.user.is_authenticated:
+                
                 for sc in c.souscompetence_set.all():
                     str_comp += '    -- {0}\n'.format(sc.nom)
-        
+            """
+                
         str_scom = ''
         for c in m.competence_set.all():
             for sc in c.souscompetence_set.all():
