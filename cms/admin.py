@@ -35,7 +35,7 @@ class ModuleAdmin(admin.ModelAdmin):
     form = ModuleAdminForm
     inlines = [CompetenceInline,]
     extra = 0
-    fields = (('nom'),
+    fields = (('code', 'nom'),
               ('situation'),
               ('contenu', 'contenu_published'),
               ('didactique', 'didactique_published'),

@@ -7,7 +7,7 @@
 <div id="user-tools">
 {% if user.is_authenticated %}
 {% block welcome-msg %}Bienvenue <strong>{% firstof user.username %}</strong>.{% endblock %}
-<a href="http://localhost:8000">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
+<a href="{% url 'home' %}">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
 {% else %}
 <a href="{% url 'admin:index' %}">Admin</a>
 {% endif %}

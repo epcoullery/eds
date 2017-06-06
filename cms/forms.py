@@ -9,8 +9,6 @@ from .models import (Processus, Module, Domaine, Competence, SousCompetence, Doc
 
 from django import forms
 
-from django.contrib import admin
-from _collections_abc import __all__
 #from django.forms import Textarea, TextInput
 
 from tinymce.widgets import TinyMCE

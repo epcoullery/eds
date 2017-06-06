@@ -3,6 +3,7 @@
 <html lang="{{ LANGUAGE_CODE|default:"fr" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
 <title>{% block title %}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
 <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>

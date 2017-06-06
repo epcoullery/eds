@@ -3,20 +3,13 @@ Created on 4 déc. 2012
 
 @author: alzo
 '''
-import os
-from django.shortcuts import render, render_to_response
+
 from django.views.generic import ListView, TemplateView, DetailView
 from .models import (Domaine, Processus, Module, Competence, Document, UploadDoc, 
                      PDFResponse, MyDocTemplate, MyDocTemplateLandscape)
 from .models import style_normal, style_bold, style_title
 from django.db.models import F, Sum
-from django.conf import settings
 
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse
-#from .forms import DocumentAdminForm
-
-from reportlab.pdfgen import canvas
 
 from reportlab.platypus import Paragraph, Spacer, PageBreak, Table, TableStyle, Preformatted
 from reportlab.lib.units import cm
@@ -43,33 +36,45 @@ class HomeView(TemplateView):
 
         return context
 
-   
+class Element(object):
+    
+    def __init__(self, el, top_left, bottom_right):
+        self.txt = el.__str__()   
 class HomePDFView(TemplateView):
     template_name = 'cms/index.html'
     
+    def formating(self, el1=None, length=40 ):
+        el1 = '' if el1 is None else el1.__str__()
+               
+        return Preformatted(el1, style_normal, maxLineLength=length)
+                
+    def pf40(self, txt):
+        return Preformatted(txt, style_normal, maxLineLength=40)
+        
     def render_to_response(self, context, **response_kwargs):
         
         response = PDFResponse('PlanFormation.pdf' ,'Plan de formation', portrait=False)
         d = Domaine.objects.all().order_by('code')
         p = Processus.objects.all().order_by('code')
-
         
         data = [['Domaines','Processus', 'Sem1', 'Sem2', 'Sem3','Sem4','Sem5','Sem6'],
-                [Preformatted(d[0].__str__(), style_normal, maxLineLength=40), Preformatted(p[0].__str__(), style_normal, maxLineLength=60) , 'M01' , ''    ,''    , ''  , ''  ,''   ],
-                [''  , ''    , 'M02' , ''    ,''    , ''  , ''  ,''   ],
-                [''  , Preformatted(p[1].__str__(), style_normal, maxLineLength=60) , ''    , '' ,''    , 'M03'  , ''  , ''  ],
-                [''  , ''    , ''    , 'M04' ,''    , ''  , ''  , ''  ],
-                [Preformatted(d[1].__str__(), style_normal, maxLineLength=40), Preformatted(p[2].__str__(), style_normal, maxLineLength=60) , 'M05' , ''    ,'M06' , ''  , ''  , ''  ],
-                [''  , Preformatted(p[3].__str__(), style_normal, maxLineLength=60) , ''    , ''    ,'' , ''   , 'M07'   , 'M09'  ],
-                [''  , ''    , ''    , ''    ,''  ,''  , 'M08'   , ''  ],
-                [Preformatted(d[2].__str__(), style_normal, maxLineLength=40), Preformatted(p[4].__str__(), style_normal, maxLineLength=60) , ''    , ''    , 'M10'  , ''  , 'M12' ],
-                [''  , Preformatted(p[5].__str__(), style_normal, maxLineLength=60) , ''    , ''    , 'M11'   ''  , ''  ],
-                [Preformatted(d[3].__str__(), style_normal, maxLineLength=40), Preformatted(p[6].__str__(), style_normal, maxLineLength=60) , ''    , ''     , 'M13'  , '' ,'' , 'M14'  ],
-                [Preformatted(d[4].__str__(), style_normal, maxLineLength=40), Preformatted(p[7].__str__(), style_normal, maxLineLength=60) , 'M15'    , ''    ,''    , ''  , ''  , ''  ],
-                [Preformatted(d[5].__str__(), style_normal, maxLineLength=40), Preformatted(p[8].__str__(), style_normal, maxLineLength=60) , 'M16_1'    , ''    ,'M16_2'    , ''  , 'M16_3'  , ''  ],
-                [Preformatted(d[6].__str__(), style_normal, maxLineLength=40), Preformatted(p[9].__str__(), style_normal, maxLineLength=60), 'M17_1'    , ''    ,'M17_2'    , ''  , 'M17_3'  , ''  ],
-                [Preformatted(d[7].__str__(), style_normal, maxLineLength=40), Preformatted(p[10].__str__(), style_normal, maxLineLength=60) , 'Macc'    , ''    ,''    , ''  , ''  , ''  ],
+                [self.formating(d[0]), self.formating(p[0], 60) , 'M01' , ''    ,''    , ''  , ''  ,''   ],
+                [self.formating(None), self.formating(None, 60) , 'M02' , ''    ,''    , ''  , ''  ,''   ],
+                [self.formating(None), self.formating(p[1], 60) , ''    , '' ,''    , 'M03'  , ''  , ''  ],
+                [self.formating(None), self.formating(None, 60) , ''    , 'M04' ,''    , ''  , ''  , ''  ],
+                [self.formating(d[1]), self.formating(p[2], 60) , 'M05' , ''    ,'M06' , ''  , ''  , ''  ],
+                [self.formating(None), self.formating(p[3], 60) , ''    , ''    ,'' , ''   , 'M07'   , 'M09'  ],
+                [self.formating(None), self.formating(None, 60) , ''    , ''    ,''  ,''  , 'M08'   , ''  ],
+                [self.formating(d[2]), self.formating(p[4], 60), ''    , ''    , 'M10'  , ''  , 'M12' ],
+                [self.formating(None), self.formating(p[5], 60) , ''    , ''    , 'M11'   ''  , ''  ],
+                [self.formating(d[3]), self.formating(p[6], 60) , ''    , ''     , 'M13'  , '' ,'' , 'M14'  ],
+                [self.formating(d[4]), self.formating(p[7], 60) , 'M15'    , ''    ,''    , ''  , ''  , ''  ],
+                [self.formating(d[5]), self.formating(p[8], 60) , 'M16_1'    , ''    ,'M16_2'    , ''  , 'M16_3'  , ''  ],
+                [self.formating(d[6]), self.formating(p[9], 60) , 'M17_1'    , ''    ,'M17_2'    , ''  , 'M17_3'  , ''  ],
+                [self.formating(d[7]), self.formating(p[10],60), 'Macc'    , ''    ,''    , ''  , ''  , ''  ],
             ]
+        
+        print(data)
         
         t = Table(data, colWidths=[5.5*cm, 8*cm, 1.5*cm, 1.5*cm,1.5*cm, 1.5*cm,1.5*cm,1.5*cm], spaceBefore=0.5*cm, spaceAfter=1*cm)
         t.setStyle(TableStyle([
@@ -77,45 +82,52 @@ class HomePDFView(TemplateView):
             ('FONT', (0,0), (-1,0), 'Helvetica-Bold'),
             ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
             ('ALIGN',(2,0),(-1,-1),'CENTER'),
-
-            #('BOX',(0,0),(-1,-1), 0.25, colors.black),
             ('GRID',(0,0),(-1,-1), 0.25, colors.black),
-            ('SPAN',(0,1), (0,4)), #Domaine 1
+            #Domaine 1
+            ('SPAN',(0,1), (0,4)), 
             ('SPAN',(1,1), (1,2)),
             ('SPAN',(1,3), (1,4)),
-            ('SPAN',(0,5), (0,7)), #Domaine 2
-            ('SPAN',(1,6), (1,7)),
-            ('SPAN',(0,8), (0,9)), #Domaine 3
-            ('SPAN',(4,8), (5,8)),
-            ('SPAN',(4,9), (5,9)),
-            ('SPAN',(2,11), (-1,11)),
-            ('SPAN',(2,12), (3,12)),
-            ('SPAN',(4,12), (5,12)),
-            ('SPAN',(6,12), (7,12)),
-            ('SPAN',(2,13), (3,13)),
-            ('SPAN',(4,13), (5,13)),
-            ('SPAN',(6,13), (7,13)),
-            ('SPAN',(2,14), (-1,14)),
             ('BACKGROUND',(0,1), (1,4), colors.orange),
             ('BACKGROUND',(2,1), (2,2), colors.orange),
             ('BACKGROUND',(5,3), (5,3), colors.orange),
             ('BACKGROUND',(3,4), (3,4), colors.orange),
+            #Domaine 2
+            ('SPAN',(0,5), (0,7)), 
             ('BACKGROUND',(0,5), (1,7), colors.red),
             ('BACKGROUND',(2,5), (2,5), colors.red),
             ('BACKGROUND',(4,5), (4,5), colors.red),
             ('BACKGROUND',(6,6), (6,6), colors.red),
             ('BACKGROUND',(7,6), (7,6), colors.red),
             ('BACKGROUND',(6,7), (6,7), colors.red),
-            ('BACKGROUND',(0,8), (1,9), colors.pink),
+            #Domaine 3
+            ('SPAN',(0,8), (0,9)), 
+            ('SPAN',(1,6), (1,7)),
+            ('SPAN',(4,8), (5,8)),
+            ('SPAN',(4,9), (5,9)),
+             ('BACKGROUND',(0,8), (1,9), colors.pink),
             ('BACKGROUND',(4,8), (6,8), colors.pink),
             ('BACKGROUND',(4,9), (5,9), colors.pink),
+            #Domaine 4
             ('BACKGROUND',(0,10), (1,10), HexColor('#AD7FA8')),
             ('BACKGROUND',(4,10), (4,10), HexColor('#AD7FA8')),
             ('BACKGROUND',(7,10), (7,10), HexColor('#AD7FA8')),
+            #Domaine 5
+            ('SPAN',(2,11), (-1,11)), 
             ('BACKGROUND',(0,11), (-1,11), HexColor('#729FCF')),
+            #Domaine 6
+            ('SPAN',(2,12), (3,12)), 
+            ('SPAN',(4,12), (5,12)),
+            ('SPAN',(6,12), (7,12)),
             ('BACKGROUND',(0,12), (-1,12), colors.lightgreen),
+            #Domaine 7
+            ('SPAN',(2,13), (3,13)),
+            ('SPAN',(4,13), (5,13)),
+            ('SPAN',(6,13), (7,13)),
             ('BACKGROUND',(0,13), (-1,13), colors.white),
+            #Domaine 8
+            ('SPAN',(2,14), (-1,14)), 
             ('BACKGROUND',(0,14), (-1,14), colors.lightgrey),
+
         ]))
 
         t.hAlign = 0
