@@ -236,7 +236,7 @@ class ModulePDF(DetailView):
         str_scom = ''
         for c in m.competence_set.all():
             for sc in c.souscompetence_set.all():
-                str_scom += '- {0}\n'.format(sc.nom)
+                str_scom += '- {0} (voir {1})\n'.format(sc.nom, c.code)
                     
         str_res = ''
         for c in m.ressource_set.all():
