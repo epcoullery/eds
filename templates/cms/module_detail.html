@@ -16,7 +16,7 @@
 <tr><th>Plus-value sur le CFC ASE</th><td>
 {% for c in object.competence_set.all %}
 {% for sc in c.souscompetence_set.all %}
-- {{sc.nom}} <br />
+- {{sc.nom}} (voir {{sc.competence.code}}) <br />
 {%endfor %}
 {% endfor %}
 </td></tr>
