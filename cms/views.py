@@ -1,23 +1,23 @@
-'''
+"""
 Created on 4 déc. 2012
 
 @author: alzo
-'''
-
+"""
 from django.views.generic import ListView, TemplateView, DetailView
-from .models import (Domaine, Processus, Module, Competence, Document, UploadDoc, 
-                     PDFResponse, MyDocTemplate, MyDocTemplateLandscape)
-from .models import style_normal, style_bold, style_title
 from django.db.models import F, Sum
+from django.http import HttpResponse
 
-
-from reportlab.platypus import Paragraph, Spacer, PageBreak, Table, TableStyle, Preformatted
+from reportlab.platypus import Paragraph, Spacer, Table, TableStyle, Preformatted
 from reportlab.lib.units import cm
-from reportlab.lib.enums import TA_LEFT
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 
+from cms.pdf import PeriodPDF
+from .models import style_normal, style_title
+from .models import (Domaine, Processus, Module, Competence, Document, UploadDoc,
+                     PDFResponse, MyDocTemplate, MyDocTemplateLandscape)
 # Create your views here.
+
 
 class HomeView(TemplateView):
     template_name = 'cms/index.html'
@@ -26,116 +26,113 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
         for d in Domaine.objects.all().order_by('code'):
             context[d.code] = d
-            
-            
         for c in Processus.objects.all().order_by('code'):
             context[c.code] = c
-
         for m in Module.objects.all().order_by('code'):
             context[m.code] = m
-
         return context
+
 
 class Element(object):
     
-    def __init__(self, el, top_left, bottom_right):
-        self.txt = el.__str__()   
+    def __init__(self, el):
+        self.txt = el.__str__()
+
+
 class HomePDFView(TemplateView):
     template_name = 'cms/index.html'
-    
-    def formating(self, el1=None, length=40 ):
-        el1 = '' if el1 is None else el1.__str__()
-               
+
+    def formating(self, el1='', length=40):
+        el1 = '' if el1 == '' else el1.__str__()
         return Preformatted(el1, style_normal, maxLineLength=length)
                 
-    def pf40(self, txt):
-        return Preformatted(txt, style_normal, maxLineLength=40)
+    # def pf40(self, txt):
+    #    return Preformatted(txt, style_normal, maxLineLength=40)
         
     def render_to_response(self, context, **response_kwargs):
         
-        response = PDFResponse('PlanFormation.pdf' ,'Plan de formation', portrait=False)
+        response = PDFResponse('PlanFormation.pdf', 'Plan de formation', portrait=False)
         d = Domaine.objects.all().order_by('code')
         p = Processus.objects.all().order_by('code')
         
-        data = [['Domaines','Processus', 'Sem1', 'Sem2', 'Sem3','Sem4','Sem5','Sem6'],
-                [self.formating(d[0]), self.formating(p[0], 60) , 'M01' , ''    ,''    , ''  , ''  ,''   ],
-                [self.formating(None), self.formating(None, 60) , 'M02' , ''    ,''    , ''  , ''  ,''   ],
-                [self.formating(None), self.formating(p[1], 60) , ''    , '' ,''    , 'M03'  , ''  , ''  ],
-                [self.formating(None), self.formating(None, 60) , ''    , 'M04' ,''    , ''  , ''  , ''  ],
-                [self.formating(d[1]), self.formating(p[2], 60) , 'M05' , ''    ,'M06' , ''  , ''  , ''  ],
-                [self.formating(None), self.formating(p[3], 60) , ''    , ''    ,'' , ''   , 'M07'   , 'M09'  ],
-                [self.formating(None), self.formating(None, 60) , ''    , ''    ,''  ,''  , 'M08'   , ''  ],
-                [self.formating(d[2]), self.formating(p[4], 60), ''    , ''    , 'M10'  , ''  , 'M12' ],
-                [self.formating(None), self.formating(p[5], 60) , ''    , ''    , 'M11'   ''  , ''  ],
-                [self.formating(d[3]), self.formating(p[6], 60) , ''    , ''     , 'M13'  , '' ,'' , 'M14'  ],
-                [self.formating(d[4]), self.formating(p[7], 60) , 'M15'    , ''    ,''    , ''  , ''  , ''  ],
-                [self.formating(d[5]), self.formating(p[8], 60) , 'M16_1'    , ''    ,'M16_2'    , ''  , 'M16_3'  , ''  ],
-                [self.formating(d[6]), self.formating(p[9], 60) , 'M17_1'    , ''    ,'M17_2'    , ''  , 'M17_3'  , ''  ],
-                [self.formating(d[7]), self.formating(p[10],60), 'Macc'    , ''    ,''    , ''  , ''  , ''  ],
-            ]
+        data = [
+            ['Domaines', 'Processus', 'Sem1', 'Sem2', 'Sem3', 'Sem4', 'Sem5', 'Sem6'],
+            [self.formating(d[0]), self.formating(p[0], 60), 'M01', '', '', '', '', ''],
+            [self.formating(''), self.formating('', 60), 'M02', '', '', '', '', ''],
+            [self.formating(''), self.formating(p[1], 60), '', '', '', 'M03', '', ''],
+            [self.formating(''), self.formating('', 60), '', 'M04', '', '', '', ''],
+            [self.formating(d[1]), self.formating(p[2], 60), 'M05', '', 'M06', '', '', ''],
+            [self.formating(''), self.formating(p[3], 60), '', '', '', '', 'M07', 'M09'],
+            [self.formating(''), self.formating('', 60), '', '', '', '', 'M08', ''],
+            [self.formating(d[2]), self.formating(p[4], 60), '', '', 'M10', '', 'M12'],
+            [self.formating(''), self.formating(p[5], 60), '', '', 'M11', '', ''],
+            [self.formating(d[3]), self.formating(p[6], 60), '', '', 'M13', '', '', 'M14'],
+            [self.formating(d[4]), self.formating(p[7], 60), 'M15', '', '', '', '', ''],
+            [self.formating(d[5]), self.formating(p[8], 60), 'M16_1', '', 'M16_2', '', 'M16_3', ''],
+            [self.formating(d[6]), self.formating(p[9], 60), 'M17_1', '', 'M17_2', '', 'M17_3', ''],
+            [self.formating(d[7]), self.formating(p[10], 60), 'Macc', '', '', '', '', ''],
+        ]
         
         print(data)
         
-        t = Table(data, colWidths=[5.5*cm, 8*cm, 1.5*cm, 1.5*cm,1.5*cm, 1.5*cm,1.5*cm,1.5*cm], spaceBefore=0.5*cm, spaceAfter=1*cm)
+        t = Table(data, colWidths=[5.5*cm, 8*cm, 1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm, 1.5*cm],
+                  spaceBefore=0.5*cm, spaceAfter=1*cm)
         t.setStyle(TableStyle([
-            ('SIZE', (0,0), (-1,-1), 8),
-            ('FONT', (0,0), (-1,0), 'Helvetica-Bold'),
-            ('VALIGN',(0,0),(-1,-1),'MIDDLE'),
-            ('ALIGN',(2,0),(-1,-1),'CENTER'),
-            ('GRID',(0,0),(-1,-1), 0.25, colors.black),
-            #Domaine 1
-            ('SPAN',(0,1), (0,4)), 
-            ('SPAN',(1,1), (1,2)),
-            ('SPAN',(1,3), (1,4)),
-            ('BACKGROUND',(0,1), (1,4), colors.orange),
-            ('BACKGROUND',(2,1), (2,2), colors.orange),
-            ('BACKGROUND',(5,3), (5,3), colors.orange),
-            ('BACKGROUND',(3,4), (3,4), colors.orange),
-            #Domaine 2
-            ('SPAN',(0,5), (0,7)), 
-            ('BACKGROUND',(0,5), (1,7), colors.red),
-            ('BACKGROUND',(2,5), (2,5), colors.red),
-            ('BACKGROUND',(4,5), (4,5), colors.red),
-            ('BACKGROUND',(6,6), (6,6), colors.red),
-            ('BACKGROUND',(7,6), (7,6), colors.red),
-            ('BACKGROUND',(6,7), (6,7), colors.red),
-            #Domaine 3
-            ('SPAN',(0,8), (0,9)), 
-            ('SPAN',(1,6), (1,7)),
-            ('SPAN',(4,8), (5,8)),
-            ('SPAN',(4,9), (5,9)),
-             ('BACKGROUND',(0,8), (1,9), colors.pink),
-            ('BACKGROUND',(4,8), (6,8), colors.pink),
-            ('BACKGROUND',(4,9), (5,9), colors.pink),
-            #Domaine 4
-            ('BACKGROUND',(0,10), (1,10), HexColor('#AD7FA8')),
-            ('BACKGROUND',(4,10), (4,10), HexColor('#AD7FA8')),
-            ('BACKGROUND',(7,10), (7,10), HexColor('#AD7FA8')),
-            #Domaine 5
-            ('SPAN',(2,11), (-1,11)), 
-            ('BACKGROUND',(0,11), (-1,11), HexColor('#729FCF')),
-            #Domaine 6
-            ('SPAN',(2,12), (3,12)), 
-            ('SPAN',(4,12), (5,12)),
-            ('SPAN',(6,12), (7,12)),
-            ('BACKGROUND',(0,12), (-1,12), colors.lightgreen),
-            #Domaine 7
-            ('SPAN',(2,13), (3,13)),
-            ('SPAN',(4,13), (5,13)),
-            ('SPAN',(6,13), (7,13)),
-            ('BACKGROUND',(0,13), (-1,13), colors.white),
-            #Domaine 8
-            ('SPAN',(2,14), (-1,14)), 
-            ('BACKGROUND',(0,14), (-1,14), colors.lightgrey),
+            ('SIZE', (0, 0), (-1, -1), 8),
+            ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('ALIGN', (2, 0), (-1, -1), 'CENTER'),
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            # Domaine 1
+            ('SPAN', (0, 1), (0, 4)),
+            ('SPAN', (1, 1), (1, 2)),
+            ('SPAN', (1, 3), (1, 4)),
+            ('BACKGROUND', (0, 1), (1, 4), colors.orange),
+            ('BACKGROUND', (2, 1), (2, 2), colors.orange),
+            ('BACKGROUND', (5, 3), (5, 3), colors.orange),
+            ('BACKGROUND', (3, 4), (3, 4), colors.orange),
+            # Domaine 2
+            ('SPAN', (0, 5), (0, 7)),
+            ('BACKGROUND', (0, 5), (1, 7), colors.red),
+            ('BACKGROUND', (2, 5), (2, 5), colors.red),
+            ('BACKGROUND', (4, 5), (4, 5), colors.red),
+            ('BACKGROUND', (6, 6), (6, 6), colors.red),
+            ('BACKGROUND', (7, 6), (7, 6), colors.red),
+            ('BACKGROUND', (6, 7), (6, 7), colors.red),
+            # Domaine 3
+            ('SPAN', (0, 8), (0, 9)),
+            ('SPAN', (1, 6), (1, 7)),
+            ('SPAN', (4, 8), (5, 8)),
+            ('SPAN', (4, 9), (5, 9)),
+            ('BACKGROUND', (0, 8), (1, 9), colors.pink),
+            ('BACKGROUND', (4, 8), (6, 8), colors.pink),
+            ('BACKGROUND', (4, 9), (5, 9), colors.pink),
+            # Domaine 4
+            ('BACKGROUND', (0, 10), (1, 10), HexColor('#AD7FA8')),
+            ('BACKGROUND', (4, 10), (4, 10), HexColor('#AD7FA8')),
+            ('BACKGROUND', (7, 10), (7, 10), HexColor('#AD7FA8')),
+            # Domaine 5
+            ('SPAN', (2, 11), (-1, 11)),
+            ('BACKGROUND', (0, 11), (-1, 11), HexColor('#729FCF')),
+            # Domaine 6
+            ('SPAN', (2, 12), (3, 12)),
+            ('SPAN', (4, 12), (5, 12)),
+            ('SPAN', (6, 12), (7, 12)),
+            ('BACKGROUND', (0, 12), (-1, 12), colors.lightgreen),
+            # Domaine 7
+            ('SPAN', (2, 13), (3, 13)),
+            ('SPAN', (4, 13), (5, 13)),
+            ('SPAN', (6, 13), (7, 13)),
+            ('BACKGROUND', (0, 13), (-1, 13), colors.white),
+            # Domaine 8
+            ('SPAN', (2, 14), (-1, 14)),
+            ('BACKGROUND', (0, 14), (-1, 14), colors.lightgrey),
 
         ]))
-
         t.hAlign = 0
         response.story.append(t)
-        
         doc = MyDocTemplateLandscape(response)  
         doc.build(response.story)
-        
         return response
     
     
@@ -169,18 +166,19 @@ class ModuleListView(ListView):
     model = Module
     
 
-def Preformatted_left(text):
+def preformatted_left(text):
     return Preformatted(text, style_normal, maxLineLength=15)
 
 
-def Preformatted_right(text):
+def preformatted_right(text):
     return Preformatted(text, style_normal, maxLineLength=110)
 
 
 class EvaluationView(ListView):
     template_name = 'cms/evaluation.html'
     model = Processus
-    
+
+
 class DocumentListView(ListView): 
     template_name = 'cms/document_list.html'
     model = Document
@@ -188,8 +186,7 @@ class DocumentListView(ListView):
     def get_queryset(self, **kwargs):
         query = Document.objects.filter(published=True)
         return query
-    
-        
+
     def get_context_data(self, **kwargs):
         context = super(DocumentListView, self).get_context_data(**kwargs) 
         context['upload'] = UploadDoc.objects.filter(published=True)
@@ -197,7 +194,7 @@ class DocumentListView(ListView):
 
 
 class DocumentDetailView(DetailView):
-    template_name ='cms/document_detail.html'
+    template_name = 'cms/document_detail.html'
     model = Document
        
     
@@ -221,7 +218,7 @@ class ModulePDF(DetailView):
     
     def render_to_response(self, context, **response_kwargs):   
         m = self.get_object()
-        response = PDFResponse('Module_{0}.pdf'.format(m.code) ,'Module de formation')
+        response = PDFResponse('Module_{0}.pdf'.format(m.code), 'Module de formation')
        
         str_comp = ''
         for c in m.competence_set.all():
@@ -251,32 +248,34 @@ class ModulePDF(DetailView):
         for l in lines:
             str_con += '{0}\n'.format(l)
         
-        response.story.append(Spacer(0,1*cm))
+        response.story.append(Spacer(0, 1*cm))
         response.story.append(Paragraph(m.__str__(), style_title))   
          
-        data = [[Preformatted_left('Domaine'), Preformatted_right(m.processus.domaine.__str__())],
-                [Preformatted_left('Processus'), Preformatted_right(m.processus.__str__())],
-                [Preformatted_left('Situation emblématique'), Preformatted_right(m.situation)],
-                [Preformatted_left('Compétences visées'), Preformatted_right(str_comp)],
-                [Preformatted_left('Plus-value sur le CFC ASE'), Preformatted_right(str_scom)],
-                #[Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
-                [Preformatted_left('Objectifs à atteindre'), Preformatted_right(str_obj)],
-                [Preformatted_left('Didactique'), Preformatted_right(m.didactique)],
-                #[Preformatted_left('Contenu'), Preformatted_right(str_con)],
-                [Preformatted_left('Evaluation'), Preformatted_right(m.evaluation)],
-                [Preformatted_left('Type'), Preformatted_right('{0}, obligatoire'.format(m.type))],
-                [Preformatted_left('Semestre'), Preformatted_right('Sem. {0}'.format(m.semestre))],
-                [Preformatted_left('Présentiel'), Preformatted_right('{0} heures'.format(m.periode_presentiel))],
-                [Preformatted_left('Travail personnel'), Preformatted_right('{0} heures'.format(m.travail_perso))],
-                [Preformatted_left('Responsable'), Preformatted_right(m.processus.domaine.responsable.descr_pdf())],
-            ]
-        t =  Table(data, colWidths=[2.5*cm,10*cm])
-        t.setStyle(TableStyle([ ('ALIGN',(0,0),(-1,-1),'LEFT'),
-                                ('VALIGN',(0,0),(-1,-1),'TOP'),
-                                ('LEFTPADDING', (0,0),(-1,-1), 0),
-                            ]))
-        t.hAlign=0
-        response.story.append(Spacer(0,1*cm))
+        data = [
+            [preformatted_left('Domaine'), preformatted_right(m.processus.domaine.__str__())],
+            [preformatted_left('Processus'), preformatted_right(m.processus.__str__())],
+            [preformatted_left('Situation emblématique'), preformatted_right(m.situation)],
+            [preformatted_left('Compétences visées'), preformatted_right(str_comp)],
+            [preformatted_left('Plus-value sur le CFC ASE'), preformatted_right(str_scom)],
+            # [Preformatted_left('Ressources à acquérir'), Preformatted_right(str_res)],
+            [preformatted_left('Objectifs à atteindre'), preformatted_right(str_obj)],
+            [preformatted_left('Didactique'), preformatted_right(m.didactique)],
+            # [Preformatted_left('Contenu'), Preformatted_right(str_con)],
+            [preformatted_left('Evaluation'), preformatted_right(m.evaluation)],
+            [preformatted_left('Type'), preformatted_right('{0}, obligatoire'.format(m.type))],
+            [preformatted_left('Semestre'), preformatted_right('Sem. {0}'.format(m.semestre))],
+            [preformatted_left('Présentiel'), preformatted_right('{0} heures'.format(m.periode_presentiel))],
+            [preformatted_left('Travail personnel'), preformatted_right('{0} heures'.format(m.travail_perso))],
+            [preformatted_left('Responsable'), preformatted_right(m.processus.domaine.responsable.descr_pdf())],
+        ]
+        t = Table(data, colWidths=[2.5*cm, 10*cm])
+        t.setStyle(TableStyle([
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 0), ])
+        )
+        t.hAlign = 0
+        response.story.append(Spacer(0, 1*cm))
         response.story.append(t)
         
         doc = MyDocTemplate(response)  
@@ -288,24 +287,25 @@ def get_context(context):
     """
     Calcul du nombre de périodes de formation
     """  
-    liste = Module.objects.exclude(periode_presentiel = 0)
-    #context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
+    liste = Module.objects.exclude(periode_presentiel=0)
+    # context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
 
-    context['sem1'] = liste.exclude(sem1 = 0)
-    context['tot1'] = liste.aggregate(Sum(F('sem1')))
-    context['sem2'] = liste.exclude(sem2 = 0)
-    context['tot2'] = liste.aggregate(Sum(F('sem2')))
-    context['sem3'] = liste.exclude(sem3 = 0)
-    context['tot3'] = liste.aggregate(Sum(F('sem3')))
-    context['sem4'] = liste.exclude(sem4 = 0)
-    context['tot4'] = liste.aggregate(Sum(F('sem4')))
-    context['sem5'] = liste.exclude(sem5 = 0)
-    context['tot5'] = liste.aggregate(Sum(F('sem5')))
-    context['sem6'] = liste.exclude(sem6 = 0)
-    context['tot6'] = liste.aggregate(Sum(F('sem6'))) 
-    context['tot'] = context['tot1']['sem1__sum'] + context['tot2']['sem2__sum'] + context['tot3']['sem3__sum'] + \
-                    context['tot4']['sem4__sum'] + context['tot5']['sem5__sum'] + context['tot6']['sem6__sum'] 
-    
+    context['sem1'] = liste.exclude(sem1=0)
+    context['tot1'] = liste.aggregate(Sum(F('sem1')))['sem1__sum']
+    context['sem2'] = liste.exclude(sem2=0)
+    context['tot2'] = liste.aggregate(Sum(F('sem2')))['sem2__sum']
+    context['sem3'] = liste.exclude(sem3=0)
+    context['tot3'] = liste.aggregate(Sum(F('sem3')))['sem3__sum']
+    context['sem4'] = liste.exclude(sem4=0)
+    context['tot4'] = liste.aggregate(Sum(F('sem4')))['sem4__sum']
+    context['sem5'] = liste.exclude(sem5=0)
+    context['tot5'] = liste.aggregate(Sum(F('sem5')))['sem5__sum']
+    context['sem6'] = liste.exclude(sem6=0)
+    context['tot6'] = liste.aggregate(Sum(F('sem6')))['sem6__sum']
+
+    context['tot'] = context['tot1'] + context['tot2'] + context['tot3'] + \
+        context['tot4'] + context['tot5'] + context['tot6']
+
     return context
     
     
@@ -316,73 +316,25 @@ class PeriodeView(TemplateView):
         context = TemplateView.get_context_data(self, **kwargs)
         return get_context(context)   
 
-  
-class PeriodePDFView(TemplateView):  
-    template_name = 'cms/periodes.html'
-    
+
+class PeriodePDFView(TemplateView):
+
     def render_to_response(self, context, **response_kwargs):
-        
-        response = PDFResponse('Périodes.pdf' ,'Périodes de formation')
         context = get_context(context)
-        
-        data = [['Semestre 1', '{0} h.'.format(context['tot1']['sem1__sum']),'', 'Semestre 2', '{0} h.'.format(context['tot2']['sem2__sum'])],               
-                [context['sem1'][0], '{0} h.'.format(context['sem1'][0].sem1),'', context['sem2'][0], '{0} h.'.format(context['sem2'][0].sem2) ],
-                [context['sem1'][1], '{0} h.'.format(context['sem1'][1].sem1),'', context['sem2'][1], '{0} h.'.format(context['sem2'][1].sem2) ],
-                [context['sem1'][2], '{0} h.'.format(context['sem1'][2].sem1),'', context['sem2'][2], '{0} h.'.format(context['sem2'][2].sem2) ],
-                [context['sem1'][3], '{0} h.'.format(context['sem1'][3].sem1),'', context['sem2'][3], '{0} h.'.format(context['sem2'][3].sem2) ],
-                [context['sem1'][4], '{0} h.'.format(context['sem1'][4].sem1),'', context['sem2'][4], '{0} h.'.format(context['sem2'][4].sem2) ],
-                [context['sem1'][5], '{0} h.'.format(context['sem1'][5].sem1),'', context['sem2'][5], '{0} h.'.format(context['sem2'][5].sem2) ],
-                [context['sem1'][6], '{0} h.'.format(context['sem1'][6].sem1),'', '', ''],
-                
-                
-                ['Semestre 3', '{0} h.'.format(context['tot3']['sem3__sum']),'', 'Semestre 4', '{0} h.'.format(context['tot4']['sem4__sum'])],
-                [context['sem3'][0], '{0} h.'.format(context['sem3'][0].sem3),'', context['sem4'][0], '{0} h.'.format(context['sem4'][0].sem4) ],
-                [context['sem3'][1], '{0} h.'.format(context['sem3'][1].sem3),'', context['sem4'][1], '{0} h.'.format(context['sem4'][1].sem4) ],
-                [context['sem3'][2], '{0} h.'.format(context['sem3'][2].sem3),'', context['sem4'][2], '{0} h.'.format(context['sem4'][2].sem4) ],
-                [context['sem3'][3], '{0} h.'.format(context['sem3'][3].sem3),'', context['sem4'][3], '{0} h.'.format(context['sem4'][3].sem4) ],
-                [context['sem3'][4], '{0} h.'.format(context['sem3'][4].sem3),'', context['sem4'][4], '{0} h.'.format(context['sem4'][4].sem4) ],
-                [context['sem3'][5], '{0} h.'.format(context['sem3'][5].sem3),'', context['sem4'][5], '{0} h.'.format(context['sem4'][5].sem4) ],
-                
-                
-                ['Semestre 5', '{0} h.'.format(context['tot5']['sem5__sum']),'', 'Semestre 6', '{0} h.'.format(context['tot6']['sem6__sum'])],
-                [context['sem5'][0], '{0} h.'.format(context['sem5'][0].sem5),'', context['sem6'][0], '{0} h.'.format(context['sem6'][0].sem6) ],
-                [context['sem5'][1], '{0} h.'.format(context['sem5'][1].sem5),'', context['sem6'][1], '{0} h.'.format(context['sem6'][1].sem6) ],
-                [context['sem5'][2], '{0} h.'.format(context['sem5'][2].sem5),'', context['sem6'][2], '{0} h.'.format(context['sem6'][2].sem6) ],
-                [context['sem5'][3], '{0} h.'.format(context['sem5'][3].sem5),'', context['sem6'][3], '{0} h.'.format(context['sem6'][3].sem6) ],
-                [context['sem5'][4], '{0} h.'.format(context['sem5'][4].sem5),'', context['sem6'][4], '{0} h.'.format(context['sem6'][4].sem6) ],
-                [context['sem5'][5], '{0} h.'.format(context['sem5'][5].sem5),'', '', '' ],
-                [context['sem5'][6], '{0} h.'.format(context['sem5'][6].sem5),'', '', '' ],
-                 ]
-        
-        t = Table(data, colWidths=[6.5*cm,1*cm, 1*cm, 6.5*cm, 1*cm], spaceBefore=2*cm, spaceAfter=1.5*cm)
-        t.setStyle(TableStyle([ ('ALIGN',(0,0),(-1,-1),'LEFT'),
-                                ('VALIGN',(0,0),(-1,-1),'TOP'),
-                                ('LEFTPADDING', (0,0),(-1,-1), 0),
-                                ('SIZE', (0,0), (-1,-1), 8),
-                                ('ALIGN', (1,0), (1,-1), 'RIGHT'),
-                                ('ALIGN', (-1,0), (-1,-1), 'RIGHT'),
-                                ('LINEBELOW', (0,0), (1,0), 1, colors.black),
-                                ('LINEBELOW', (3,0), (-1,0), 1, colors.black),
-                               
-                                ('TOPPADDING', (0,8), (-1,8), 15),
-                                ('LINEBELOW', (0,8), (1,8), 1, colors.black),
-                                ('LINEBELOW', (3,8), (-1,8), 1, colors.black),
-                                ('TOPPADDING', (0,15), (-1,15), 15),
-                                ('LINEBELOW', (0,15), (1,15), 1, colors.black),
-                                ('LINEBELOW', (3,15), (-1,15), 1, colors.black),
-                                ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold'),
-                                ('FONT', (0, 8), (-1, 8), 'Helvetica-Bold'),
-                                ('FONT', (0, 15), (-1, 15), 'Helvetica-Bold'),
-                            ]))
-        
-        t.hAlign = 0
-        response.story.append(t)
-        
-        response.story.append(Paragraph('Total des heures de cours: {0} heures'.format(context['tot']), style_normal))
-        doc = MyDocTemplate(response)  
-        doc.build(response.story)
-        
+        filename = 'periode.pdf'
+        pdf = PeriodPDF(filename)
+        for semestre_id in range(1, 7):
+            modules = context['sem{0}'.format(str(semestre_id))]
+            total = context['tot{0}'.format(str(semestre_id))]
+            pdf.produce_half_year(semestre_id, modules, total)
+        pdf.print_total(context['tot'])
+        pdf.canv.save()
+
+        with open(filename, mode='rb') as fh:
+            response = HttpResponse(fh.read(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
         return response
+
 
 class CompetenceListView(ListView):
     model = Competence
@@ -400,10 +352,7 @@ class TravailPersoListView(ListView):
         context['total_pratique'] = Module.objects.aggregate((Sum('pratique_prof')))['pratique_prof__sum']
         return get_context(context)   
 
-    
 
-
-    
 """
 class AddDocument(TemplateView):
     template_name = 'cms/upload.html'

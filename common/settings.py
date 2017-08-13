@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chartjs',
     'tinymce',
-	'cms',
+    'cms',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,9 +72,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'common.wsgi.application'
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -128,10 +126,18 @@ STUDENT_IMPORT_MAPPING = {
     'Email élève': 'email_rpn',
     'Date nais. élève': 'date_naissance',
     'Classe': 'klasse',
-    
 }
 
-DOMAINE_COULEURS = {'D1':'#fcaf3e', 'D2': '#cc0000', 'D3': '#ef896b', 'D4': '#ad7fa8', 'D5': '#729fcf', 'D6':'#73d216', 'D7':'#ffffff', 'D8':'#babdb6' }
+DOMAINE_COULEURS = {
+    'D1': '#fcaf3e',
+    'D2': '#cc0000',
+    'D3': '#ef896b',
+    'D4': '#ad7fa8',
+    'D5': '#729fcf',
+    'D6': '#73d216',
+    'D7': '#ffffff',
+    'D8': '#babdb6'
+}
 
 TINYMCE_JS_URL = MEDIA_URL + 'js/tiny_mce/tiny_mce.js'
 TINYMCE_JS_ROOT = MEDIA_ROOT + 'js/tiny_mce'
@@ -146,5 +152,3 @@ TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
 
 from .local_settings import *
-
-

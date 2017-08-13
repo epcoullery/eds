@@ -2,18 +2,16 @@
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"fr" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
-<title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
-<script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
-
-
-<script src="{% static 'js/jquery.js' %}"></script>
-{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
-{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
-{% block extrahead %}{% endblock %}
-{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+    <script type="text/javascript" src="{% static "js/tiny_mce/tiny_mce.js" %}"></script>
+    <script src="{% static 'js/jquery.js' %}"></script>
+    {% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+    {% block extrahead %}{% endblock %}
+    {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
 </head>
 {% load i18n %}
 

@@ -2,35 +2,37 @@
 
 {% block title %}EDS{% endblock %}
 
-{% block branding %}<h1 id="site-name"><a href="{% url 'home' %}">Ecole Santé-social Pierre-Coullery</a> &nbsp;&nbsp;Formation en Education sociale</h1>{% endblock %}
+{% block branding %}
+    <h1 id="site-name"><a href="{% url 'home' %}">Ecole Santé-social Pierre-Coullery</a> &nbsp;&nbsp;Formation en Education sociale</h1>
+{% endblock %}
 {% block usertools %}
-<div id="user-tools">
-{% if user.is_authenticated %}
-{% block welcome-msg %}Bienvenue <strong>{% firstof user.username %}</strong>.{% endblock %}
-<a href="{% url 'home' %}">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
-{% else %}
-<a href="{% url 'admin:index' %}">Admin</a>
-{% endif %}
-</div>
+    <div id="user-tools">
+        {% if user.is_authenticated %}
+            {% block welcome-msg %}Bienvenue <strong>{% firstof user.username %}</strong>.{% endblock %}
+            <a href="{% url 'home' %}">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
+        {% else %}
+            <a href="{% url 'admin:index' %}">Admin</a>
+        {% endif %}
+    </div>
 {% endblock %}
 {% block nav-global %}{% endblock %}
 {% block breadcrumbs %}
-<div class="breadcrumbs">
-<ul>
-<li><a href="{% url 'home' %}">Accueil</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'domaine-list' %}">Domaines</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'processus-list' %}">Processus</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'module-list' %}">Modules</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'periodes' %}">Périodes</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'competences' %}">Compétences</a>&nbsp;&nbsp;</li>
-<li><a href="{% url 'travail' %}">Heures de formation</a>&nbsp;&nbsp;</li>
+    <div class="breadcrumbs">
+        <ul>
+            <li><a href="{% url 'home' %}">Accueil</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'domaine-list' %}">Domaines</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'processus-list' %}">Processus</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'module-list' %}">Modules</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'periodes' %}">Périodes</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'competences' %}">Compétences</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'travail' %}">Heures de formation</a>&nbsp;&nbsp;</li>
 
-<!-- <li><a href="{% url 'evaluation' %}">Evaluation</a>&nbsp;&nbsp;</li> -->
+            <!-- <li><a href="{% url 'evaluation' %}">Evaluation</a>&nbsp;&nbsp;</li> -->
 
-<li><a href="{% url 'document-list' %}">Documents</a>&nbsp;&nbsp;</li>
-{% if has_permission %}
-<li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
-{% endif %}
-</ul>
-</div>
+            <li><a href="{% url 'document-list' %}">Documents</a>&nbsp;&nbsp;</li>
+            {% if has_permission %}
+                <li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
+            {% endif %}
+        </ul>
+    </div>
 {% endblock %}

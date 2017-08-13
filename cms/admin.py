@@ -1,13 +1,12 @@
 from django.contrib import admin
 
 from .models import (Enseignant, Domaine, Competence, SousCompetence, Objectif,
-        Ressource, Module, Processus, Document, UploadDoc)
+                     Ressource, Module, Processus, Document, UploadDoc)
 
-from .forms import (ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm, DomaineAdminForm, CompetenceAdminForm, 
-SousCompetenceInlineAdminForm, CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
-SousCompetenceAdminForm, DocumentAdminForm, UploadAdminForm )
-
-# Register your models here.
+from .forms import (ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm,
+                    DomaineAdminForm, CompetenceAdminForm, SousCompetenceInlineAdminForm,
+                    CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
+                    SousCompetenceAdminForm, DocumentAdminForm, UploadAdminForm)
 
 
 class SousCompetenceInline(admin.TabularInline):
@@ -19,8 +18,8 @@ class SousCompetenceInline(admin.TabularInline):
 class CompetenceInline(admin.TabularInline):
     form = CompetenceInlineAdminForm
     model = Competence
-    extra=0
-    #template ='templates/admin/cms/processus/edit_inline/tabular.html'
+    extra = 0
+
 
 class SousCompetenceAdmin(admin.ModelAdmin):
     form = SousCompetenceAdminForm
@@ -33,10 +32,10 @@ class RessourceAdmin(admin.ModelAdmin):
 
 class ModuleAdmin(admin.ModelAdmin):
     form = ModuleAdminForm
-    inlines = [CompetenceInline,]
+    inlines = [CompetenceInline]
     extra = 0
     fields = (('code', 'nom'),
-              ('situation'),
+              'situation',
               ('contenu', 'contenu_published'),
               ('didactique', 'didactique_published'),
               ('evaluation', 'evaluation_published'),
@@ -45,7 +44,7 @@ class ModuleAdmin(admin.ModelAdmin):
               ('sem1', 'sem2'),
               ('sem3', 'sem4'),
               ('sem5', 'sem6'),
-              ('processus'),
+              'processus',
               )
     
     
@@ -60,7 +59,7 @@ class ObjectifAdmin(admin.ModelAdmin):
 class ProcessusInlineAdmin(admin.TabularInline):
     form = ProcessusInlineAdminForm
     model = Processus
-    extra=0
+    extra = 0
     
     
 class CompetenceAdmin(admin.ModelAdmin):
@@ -73,7 +72,7 @@ class CompetenceAdmin(admin.ModelAdmin):
 class DomaineAdmin(admin.ModelAdmin):
     list_display = ('nom', 'responsable',)
     form = DomaineAdminForm
-    inlines = [ProcessusInlineAdmin,]
+    inlines = [ProcessusInlineAdmin]
 
 
 class DocumentAdmin(admin.ModelAdmin):

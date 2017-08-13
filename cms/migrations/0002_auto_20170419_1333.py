@@ -21,6 +21,7 @@ class Migration(migrations.Migration):
                 ('published', models.BooleanField(default=False)),
             ],
         ),
+
         migrations.RemoveField(
             model_name='document',
             name='docfile',

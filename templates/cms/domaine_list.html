@@ -11,20 +11,27 @@
 {% block content %}
 
 <div id="content-main">
-<h1>Liste des domaines</h1>
-<table border="0">
-{% for d in object_list %}
-<tr><td colspan="3">{{d}}</td></td></tr>
-{% for p in d.processus_set.all %}
-<tr><th width="10px">&nbsp;</th><td colspan="2"><a href=" {% url 'processus-detail' p.id %}">{{p}}</a></td></tr>
-{% for m in p.module_set.all %}
-<tr><th colspan="2" width="45px">&nbsp;<td><a href=" {% url 'module-detail' m.id %}">{{m}}</a></td></tr>
-{% endfor %}
-{% endfor %}
-{% endfor %}
-</table>
 
-
+    <h1>Liste des domaines</h1>
+    <table border="0">
+        {% for d in object_list %}
+            <tr>
+                <td colspan="3">{{d}}</td></td>
+            </tr>
+            {% for p in d.processus_set.all %}
+                <tr>
+                    <th width="10px">&nbsp;</th>
+                    <td colspan="2"><a href=" {% url 'processus-detail' p.id %}">{{p}}</a></td>
+                </tr>
+                {% for m in p.module_set.all %}
+                    <tr>
+                        <th colspan="2" width="45px">&nbsp;</th>
+                        <td><a href=" {% url 'module-detail' m.id %}">{{m}}</a></td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
 

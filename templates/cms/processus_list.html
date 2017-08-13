@@ -1,27 +1,27 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-
-
-
 {% block coltype %}colMS{% endblock %}
 
 {% block bodyclass %}{{ block.super }}{% endblock %}
 
 {% block content %}
-
 <div id="content-main">
-<h1>Liste des processus</h1>
-<table>
-{% for p in object_list %}
-<tr><th>{{p.code}}</th><td><a href=" {% url 'processus-detail' p.id %}">{{p.nom}}</a></td></tr>
-{% for m in p.module_set.all %}
-<tr><th>&nbsp;</th><td><a href=" {% url 'module-detail' m.id %}">{{m}}</a></td></tr>
-{% endfor %}
-{% endfor %}
-</table>
-
-
+    <h1>Liste des processus</h1>
+    <table>
+        {% for p in object_list %}
+            <tr>
+                <th>{{p.code}}</th>
+                <td><a href=" {% url 'processus-detail' p.id %}">{{p.nom}}</a></td>
+            </tr>
+            {% for m in p.module_set.all %}
+                <tr>
+                    <th>&nbsp;</th>
+                    <td><a href=" {% url 'module-detail' m.id %}">{{m}}</a></td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
 

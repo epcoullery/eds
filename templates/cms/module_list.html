@@ -8,14 +8,15 @@
 {% block content %}
 
 <div id="content-main">
-<h1>Liste des modules</h1>
-<table>
-{% for m in object_list %}
-<tr><th>{{m.code}}</th><td><a href=" {% url 'module-detail' m.id %}">{{m.nom}}</a></td></tr>
-{% endfor %}
-</table>
-
-
+    <h1>Liste des modules</h1>
+    <table>
+        {% for m in object_list %}
+            <tr>
+                <th>{{m.code}}</th>
+                <td><a href=" {% url 'module-detail' m.id %}">{{m.nom}}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
 

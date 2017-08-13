@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-from cms import views
 from django.conf import settings
 from django.conf.urls.static import static
+
+from cms import views
 
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
@@ -34,15 +35,15 @@ urlpatterns = [
     url(r'^evaluation/$', views.EvaluationView.as_view(), name='evaluation'),
     url(r'^competences/$', views.CompetenceListView.as_view(), name='competences'),
     url(r'^travail/$', views.TravailPersoListView.as_view(), name='travail'),
-    #url(r'^upload/$', views.AddDocument.as_view(), name='upload'), 
-    #url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),  
-    #url(r'^calendrier/$', views.pdf_view, name='pdf-view'), 
+    # url(r'^upload/$', views.AddDocument.as_view(), name='upload'),
+    # url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
+    # url(r'^calendrier/$', views.pdf_view, name='pdf-view'),
     url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'),
     url(r'^documents/$', views.DocumentListView.as_view(), name='document-list'), 
     url(r'^document/(?P<pk>\d+)$', views.DocumentDetailView.as_view(), name='document-detail'),
     url(r'^upload/(?P<pk>\d+)$', views.UploadDetailView.as_view(), name='upload-detail'), 
     
-    #url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'), 
+    # url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'),
     url(r'^tinymce/', include('tinymce.urls'), name='tinymce-js'),
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT )
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

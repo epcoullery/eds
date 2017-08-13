@@ -1,25 +1,28 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
+{% block extrastyle %}
+    {{ block.super }}
+        <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+        <link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />
+{% endblock %}
 
 {% block coltype %}colMS{% endblock %}
 
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+{% block bodyclass %}
+    {{ block.super }} dashboard
+{% endblock %}
 
 {% block breadcrumbs %}
     <div class="breadcrumbs">
-    <a href="{% url 'home' %}">Accueil</a>
-    <a href="{% url 'document' %}">Document</a>
+        <a href="{% url 'home' %}">Accueil</a>
+        <a href="{% url 'document' %}">Document</a>
     </div>
-    {% endblock %}
-
+{% endblock %}
 {% block content %}
-
-<div id="content-main">
-Page non trouvée
-</div>
+    <div id="content-main">
+        Page non trouvée
+    </div>
 {% endblock %}
 
 
