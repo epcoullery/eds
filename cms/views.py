@@ -3,10 +3,12 @@ Created on 4 déc. 2012
 
 @author: alzo
 """
+import os
+
 from django.views.generic import ListView, TemplateView, DetailView
 from django.db.models import F, Sum
 from django.http import HttpResponse
-
+from django.conf import settings
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle, Preformatted
 from reportlab.lib.units import cm
 from reportlab.lib import colors
@@ -269,10 +271,12 @@ class ModulePDF(DetailView):
             [preformatted_left('Responsable'), preformatted_right(m.processus.domaine.responsable.descr_pdf())],
         ]
         t = Table(data, colWidths=[2.5*cm, 10*cm])
-        t.setStyle(TableStyle([
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('LEFTPADDING', (0, 0), (-1, -1), 0), ])
+        t.setStyle(
+            TableStyle([
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 0), ]
+            )
         )
         t.hAlign = 0
         response.story.append(Spacer(0, 1*cm))
@@ -321,7 +325,7 @@ class PeriodePDFView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         context = get_context(context)
-        filename = 'media/periode.pdf'
+        filename = os.path.join(settings.MEDIA_ROOT, 'periode.pdf')
         pdf = PeriodPDF(filename)
         for semestre_id in range(1, 7):
             modules = context['sem{0}'.format(str(semestre_id))]
