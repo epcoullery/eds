@@ -321,7 +321,7 @@ class PeriodePDFView(TemplateView):
 
     def render_to_response(self, context, **response_kwargs):
         context = get_context(context)
-        filename = 'periode.pdf'
+        filename = 'media/periode.pdf'
         pdf = PeriodPDF(filename)
         for semestre_id in range(1, 7):
             modules = context['sem{0}'.format(str(semestre_id))]
