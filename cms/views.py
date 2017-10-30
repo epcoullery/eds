@@ -116,6 +116,7 @@ def print_plan_formation(request):
     domain = Domaine.objects.all().order_by('code')
     process = Processus.objects.all().order_by('code')
     pdf.produce(domain, process)
+    pdf.canv.save()
 
     with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
@@ -126,21 +127,18 @@ def print_plan_formation(request):
 def print_periode_formation(request):
     filename = 'periode_formation.pdf'
     path = os.path.join(tempfile.gettempdir(), filename)
+
     pdf = PeriodeFormationPdf(path)
     context = {}
     context = get_context(context)
-    canv = canvas.Canvas(filename)
-
     for semestre_id in range(1, 7):
         modules = context['sem{0}'.format(str(semestre_id))]
         total = context['tot{0}'.format(str(semestre_id))]
-        pdf.produce_half_year(semestre_id, modules, total, canv)
+        pdf.produce_half_year(semestre_id, modules, total)
+    pdf.print_total(context['tot'])
+    pdf.canv.save()
 
-    pdf.print_total(context['tot'], canv)
-
-    canv.save()
-
-    with open(filename, mode='rb') as fh:
+    with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="{0}"'.format(filename)
     return response

@@ -6,11 +6,12 @@ from reportlab.platypus import SimpleDocTemplate, Spacer, Frame, Paragraph, Pref
 from reportlab.platypus import Table, TableStyle, Image
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
-from reportlab.lib.enums import TA_LEFT, TA_CENTER
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle as ps
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase.pdfmetrics import stringWidth
 
 style_8_c = ps(name='CORPS', fontName='Helvetica', fontSize=6, alignment=TA_CENTER)
 style_normal = ps(name='CORPS', fontName='Helvetica', fontSize=9, alignment=TA_LEFT)
@@ -24,16 +25,41 @@ class MyDocTemplateES(SimpleDocTemplate):
         if portrait is True:
             page_size = A4
             column_width = 8 * cm
+            my_frame = Frame(2*cm, 24*cm, 17*cm, 5*cm, showBoundary=1)
         else:
             page_size = landscape(A4)
+            my_frame = Frame(2*cm, 16*cm, 25*cm, 5*cm, showBoundary=1)
             column_width = 13 * cm
+        self.flowable = list()
         SimpleDocTemplate.__init__(self, filename, pagesize=page_size,
                                    topMargin=0 * cm,
                                    leftMargin=2 * cm,
                                    rightMargin=2 * cm,
                                    bottomMargin=0.5 * cm,
                                    )
+
         self.fileName = filename
+        width, height = page_size
+        self.textWidth = width - 2*cm
+        self.canv = canvas.Canvas(filename, pagesize=page_size)
+        self.canv.drawImage(settings.MEDIA_ROOT + 'logo_EPC.png', 2 * cm, 17* cm, 5 * cm, 5 * cm,
+                            preserveAspectRatio=True)
+        self.canv.drawImage(settings.MEDIA_ROOT + 'logo_ESNE.png', 14 * cm, 25.5 * cm, 5 * cm, 5 * cm,
+                            preserveAspectRatio=True)
+
+        string_width = stringWidth(title_right, 'Helvetica-Bold', 12)
+        self.canv.setFont('Helvetica-Bold', 12)
+        self.canv.line(2 * cm, 25.5 * cm, 19 * cm, 25.5 * cm)
+        self.canv.drawString(2 * cm, 25 * cm, title_left)
+        self.canv.drawString(self.textWidth-string_width, 25*cm, title_right)
+        self.canv.line(2 * cm, 24.6 * cm, 19 * cm, 24.6 * cm)
+        self.canv.setFont('Helvetica', 10)
+
+        my_frame.addFromList(self.flowable, self.canv)
+
+        """
+        self.fileName = filename
+        self.canv = canvas.Canvas(filename, pagesize=A4)
         im1 = Image(settings.MEDIA_ROOT + 'logo_EPC.png', width=170, height=80)
         im2 = Image(settings.MEDIA_ROOT + 'logo_ESNE.png', width=170, height=80)
         data = list()
@@ -54,6 +80,8 @@ class MyDocTemplateES(SimpleDocTemplate):
             )
         )
         self.flowable.append(t)
+        """
+
 
     def beforePage(self):
         # page number
@@ -144,7 +172,6 @@ class ModulePdf(MyDocTemplateES):
 class PlanFormationPdf(MyDocTemplateES):
 
     def __init__(self, filename):
-        self.flowable = list()
         MyDocTemplateES.__init__(self, filename, 'Formation EDS', 'Plan de formation', portrait=False)
 
     def formating(self, el1='', length=40):
@@ -152,6 +179,7 @@ class PlanFormationPdf(MyDocTemplateES):
         return Preformatted(el1, style_normal, maxLineLength=length)
 
     def produce(self, domain, process):
+        my_frame = Frame(2*cm, 1*cm, 26*cm, 15*cm, showBoundary=1)
         data = [
             ['Domaines', 'Processus', 'Sem1', 'Sem2', 'Sem3', 'Sem4', 'Sem5', 'Sem6'],
             [self.formating(domain[0]), self.formating(process[0], 60), 'M01', '', '', '', '', ''],
@@ -223,9 +251,10 @@ class PlanFormationPdf(MyDocTemplateES):
             ('BACKGROUND', (0, 14), (-1, 14), colors.lightgrey),
 
         ]))
-        t.hAlign = TA_CENTER
+        # t.hAlign = TA_CENTER
         self.flowable.append(t)
-        self.build(self.flowable)
+        my_frame.addFromList(self.flowable, self.canv)
+        #self.build(self.flowable)
 
 
 class PDFResponse(HttpResponse):
@@ -258,19 +287,10 @@ class PeriodeFormationPdf(SimpleDocTemplate):
     """Imprime les heures de cours par semestre"""
     def __init__(self, filename):
         self.flowable = list()
-        #SimpleDocTemplate.__init__(self, filename) #, 'Formation EDS', 'Périodes de la formation', portrait=True)
-        c = canvas.Canvas(filename, pagesize=A4)
-        width, height = A4
-        im1 = Image(settings.MEDIA_ROOT + 'logo_EPC.png', width=120, height=80)
-        im2 = Image(settings.MEDIA_ROOT + 'logo_ESNE.png', width=120, height=80)
-        c.drawImage(settings.MEDIA_ROOT + 'logo_EPC.png', 0, height - 1*cm)  # Who needs consistency?
-        c.drawImage(settings.MEDIA_ROOT + 'logo_ESNE.png', 8*cm, height-1*cm)
-        c.showPage()
-        c.save()
+        MyDocTemplateES.__init__(self, filename, 'Filière EDS', 'Heures de formation', portrait=True)
 
-
-    def produce_half_year(self, half_year_id, modules, total, canv):
-        initial_pos_x = [2, 11]
+    def produce_half_year(self, half_year_id, modules, total):
+        initial_pos_x = [2, 11.5]
         initial_pos_y = [17, 17, 10, 10, 3, 3]
         width = 7.5*cm
         height = 6.5*cm
@@ -278,21 +298,21 @@ class PeriodeFormationPdf(SimpleDocTemplate):
         x = initial_pos_x[(half_year_id-1) % 2]*cm
         y = initial_pos_y[half_year_id-1]*cm
 
-        my_frame = Frame(x, y, width, height, showBoundary=1)
+        my_frame = Frame(x, y, width, height, showBoundary=0)
         data = [['Semestre {0}'.format(half_year_id), '{0} h.'.format(total)]]
         for line in modules:
             value = getattr(line, 'sem{0}'.format(half_year_id))
             data.append([line.nom, '{0} h.'.format(value)])
 
-        t = Table(data, colWidths=[7*cm, 1*cm], spaceBefore=0, spaceAfter=0, hAlign=TA_LEFT)
+        t = Table(data, colWidths=[7*cm, 1*cm], spaceBefore=0.5*cm, spaceAfter=1*cm, hAlign=TA_LEFT)
         t.setStyle(TableStyle([('ALIGN', (0, 0), (0, 0), 'LEFT'),
                                ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
                                ('LINEBELOW', (0, 0), (1, 0), 1, colors.black),
                                ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold'), ]))
 
         self.flowable.append(t)
-        my_frame.addFromList(self.flowable, canv)
-        # self.build(self.flowable)
+        my_frame.addFromList(self.flowable, self.canv)
 
-    def print_total(self, total, canv):
-        canv.drawString(2*cm, 2*cm, 'Total de la formation: {0} heures'.format(total))
+    def print_total(self, total):
+        self.canv.drawString(2*cm, 2*cm, 'Total de la formation: {0} heures'.format(total))
+
