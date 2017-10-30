@@ -69,7 +69,7 @@ class Domaine(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/domaine/{0}'>{1}</a>".format(self.id, self.__str__())
+        return "<a href='/domaine/{0}'>{1}</a>".format(self.pk, self.__str__())
 
 
 class Processus(models.Model):
@@ -86,7 +86,7 @@ class Processus(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/processus/{0}'>{1}</a>".format(self.id, self.__str__())
+        return "<a href='/processus/{0}'>{1}</a>".format(self.pk, self.__str__())
     
 
 class Module(models.Model):
@@ -121,10 +121,10 @@ class Module(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/module/{0}'>{1}</a>".format(self.id, self.__str__())
+        return "<a href='/module/{0}'>{1}</a>".format(self.pk, self.__str__())
     
     def url_code(self):
-        return "<a href='/module/{0}' title='{2}'>{1}</a>".format(self.id, self.code, self.nom)
+        return "<a href='/module/{0}' title=\"{2}\">{1}</a>".format(self.pk, self.code, self.nom)
     
     
 class Competence(models.Model):
@@ -209,12 +209,16 @@ class PDFResponse(HttpResponse):
             t = Table(data, colWidths=[8*cm, 8*cm])
         else:
             t = Table(data, colWidths=[11*cm, 11*cm])
-        t.setStyle(TableStyle([
-            ('ALIGN', (0, 0), (0, 0), 'LEFT'),
-            ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
-            ('LINEABOVE', (0, 0), (-1, -1), 0.5, colors.black),
-            ('LINEBELOW', (0, -1), (-1, -1), 0.5, colors.black),
-        ]))
+        t.setStyle(
+            TableStyle(
+                [
+                    ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                    ('ALIGN', (1, 0), (-1, -1), 'RIGHT'),
+                    ('LINEABOVE', (0, 0), (-1, -1), 0.5, colors.black),
+                    ('LINEBELOW', (0, -1), (-1, -1), 0.5, colors.black),
+                ]
+            )
+        )
         t.hAlign = TA_LEFT
         self.story.append(t)
         

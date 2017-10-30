@@ -22,7 +22,8 @@ from cms import views
 
 urlpatterns = [
     url(r'^$', views.HomeView.as_view(), name='home'),
-    url(r'^plan_pdf/$', views.HomePDFView.as_view(), name='plan-pdf'),
+    # url(r'^plan_pdf/$', views.HomePDFView.as_view(), name='plan-pdf'),
+    url(r'^plan_pdf/$', views.print_plan_formation, name='plan-pdf'),
     url(r'^admin/', admin.site.urls),
     url(r'^domaine/(?P<pk>\d+)$', views.DomaineDetailView.as_view(), name='domaine-detail'),
     url(r'^domaines/$', views.DomaineListView.as_view(), name='domaine-list'),
@@ -31,14 +32,16 @@ urlpatterns = [
     url(r'^module/(?P<pk>\d+)$', views.ModuleDetailView.as_view(), name='module-detail'),
     url(r'^modules/$', views.ModuleListView.as_view(), name='module-list'),
     url(r'^periodes$', views.PeriodeView.as_view(), name='periodes'),
-    url(r'^periodes_pdf$', views.PeriodePDFView.as_view(), name='periodes-pdf'),
+    # url(r'^periodes_pdf$', views.PeriodePDFView.as_view(), name='periodes-pdf'),
+    url(r'^periodes_pdf$', views.print_periode_formation, name='periodes-pdf'),
     url(r'^evaluation/$', views.EvaluationView.as_view(), name='evaluation'),
     url(r'^competences/$', views.CompetenceListView.as_view(), name='competences'),
     url(r'^travail/$', views.TravailPersoListView.as_view(), name='travail'),
     # url(r'^upload/$', views.AddDocument.as_view(), name='upload'),
     # url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
     # url(r'^calendrier/$', views.pdf_view, name='pdf-view'),
-    url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'),
+    url(r'^module_pdf/(?P<pk>\d+)$', views.print_module_pdf, name='module-pdf'),
+    # url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'),
     url(r'^documents/$', views.DocumentListView.as_view(), name='document-list'), 
     url(r'^document/(?P<pk>\d+)$', views.DocumentDetailView.as_view(), name='document-detail'),
     url(r'^upload/(?P<pk>\d+)$', views.UploadDetailView.as_view(), name='upload-detail'), 
@@ -47,3 +50,9 @@ urlpatterns = [
     url(r'^tinymce/', include('tinymce.urls'), name='tinymce-js'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
