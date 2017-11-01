@@ -116,7 +116,6 @@ def print_plan_formation(request):
     domain = Domaine.objects.all().order_by('code')
     process = Processus.objects.all().order_by('code')
     pdf.produce(domain, process)
-    pdf.canv.save()
 
     with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
@@ -135,8 +134,7 @@ def print_periode_formation(request):
         modules = context['sem{0}'.format(str(semestre_id))]
         total = context['tot{0}'.format(str(semestre_id))]
         pdf.produce_half_year(semestre_id, modules, total)
-    pdf.print_total(context['tot'])
-    pdf.canv.save()
+    #pdf.print_total(context['tot'])
 
     with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
