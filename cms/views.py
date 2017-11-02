@@ -9,9 +9,8 @@ import tempfile
 from django.views.generic import ListView, TemplateView, DetailView
 from django.db.models import F, Sum
 from django.http import HttpResponse
-from reportlab.pdfgen import canvas
 
-from cms.pdf import PeriodeFormationPdf, ModulePdf, PlanFormationPdf
+from cms.pdf import PeriodSemesterPdf, ModuleDescriptionPdf, FormationPlanPdf
 from cms.models import (Domaine, Processus, Module, Competence, Document, UploadDoc,)
 
 
@@ -85,8 +84,7 @@ class DocumentDetailView(DetailView):
     
 class UploadDetailView(DetailView):
     """
-    Affiche les documents uploadés à la suite des doc.
-    DocumentsInline
+    Display first recorded documents and next uploaded documents
     """
     template_name = 'cms/upload_detail.html'
     model = UploadDoc
@@ -100,7 +98,7 @@ class UploadDetailView(DetailView):
 def print_module_pdf(request, pk):
     filename = 'module.pdf'
     path = os.path.join(tempfile.gettempdir(), filename)
-    pdf = ModulePdf(path)
+    pdf = ModuleDescriptionPdf(path)
     module = Module.objects.get(pk=pk)
     pdf.produce(module)
     with open(path, mode='rb') as fh:
@@ -112,7 +110,7 @@ def print_module_pdf(request, pk):
 def print_plan_formation(request):
     filename = 'plan_formation.pdf'
     path = os.path.join(tempfile.gettempdir(), filename)
-    pdf = PlanFormationPdf(path)
+    pdf = FormationPlanPdf(path)
     domain = Domaine.objects.all().order_by('code')
     process = Processus.objects.all().order_by('code')
     pdf.produce(domain, process)
@@ -128,15 +126,8 @@ def print_periode_formation(request):
     path = os.path.join(tempfile.gettempdir(), filename)
     context = {}
     context = get_context(context)
-    pdf = PeriodeFormationPdf(path)
+    pdf = PeriodSemesterPdf(path)
     pdf.produce(context)
-    """
-    for semestre_id in range(1, 7):
-        modules = context['sem{0}'.format(str(semestre_id))]
-        total = context['tot{0}'.format(str(semestre_id))]
-        pdf.produce_half_year(semestre_id, modules, total)
-    """
-    #pdf.print_total(context['tot'])
 
     with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
@@ -146,7 +137,7 @@ def print_periode_formation(request):
 
 def get_context(context):
     """
-    Calcul du nombre de périodes de formation
+    Retrive periods 
     """
     liste = Module.objects.exclude(periode_presentiel=0)
     # context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
