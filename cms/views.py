@@ -137,7 +137,7 @@ def print_periode_formation(request):
 
 def get_context(context):
     """
-    Retrive periods 
+    Retrive periods
     """
     liste = Module.objects.exclude(periode_presentiel=0)
     # context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
