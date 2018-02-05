@@ -9,4 +9,5 @@ db.*
 *.xlsx
 *.xls
 .*
+scripts/*
 
