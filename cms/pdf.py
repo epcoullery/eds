@@ -238,7 +238,7 @@ class FormationPlanPdf(EpcBaseDocTemplate):
             # Domaine 4
             ('BACKGROUND', (0, 10), (1, 10), HexColor('#AD7FA8')),
             ('BACKGROUND', (4, 10), (4, 10), HexColor('#AD7FA8')),
-            ('BACKGROUND', (7, 10), (7, 10), HexColor('#AD7FA8')),
+            ('BACKGROUND', (6, 10), (6, 10), HexColor('#AD7FA8')),
             # Domaine 5
             ('SPAN', (2, 11), (-1, 11)),
             ('BACKGROUND', (0, 11), (-1, 11), HexColor('#729FCF')),
