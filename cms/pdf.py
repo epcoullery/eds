@@ -20,7 +20,7 @@ FILIERE = 'Formation EDS'
 
 class NumberedCanvas(canvas.Canvas):
     """
-    Page number and page count
+    Page number and pages counter
     """
 
     def __init__(self, *args, **kwargs):

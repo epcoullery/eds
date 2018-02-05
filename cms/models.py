@@ -8,9 +8,10 @@ Created on 17 nov. 2012
 from django.db import models
 from django.http.response import HttpResponse
 from django.conf import settings
+
 from tinymce import models as tinymce_models
-from reportlab.platypus import SimpleDocTemplate
-from reportlab.platypus import Table, TableStyle, Image
+
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Image
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.units import cm
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
@@ -18,18 +19,18 @@ from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle as PS
 
 
-style_8_c = PS(name='CORPS', fontName='Helvetica', fontSize=6, alignment=TA_CENTER)
-style_normal = PS(name='CORPS', fontName='Helvetica', fontSize=8, alignment=TA_LEFT)
-style_bold = PS(name='CORPS', fontName='Helvetica-Bold', fontSize=10, alignment=TA_LEFT)
-style_title = PS(name='CORPS', fontName='Helvetica', fontSize=12, alignment=TA_LEFT)
-style_adress = PS(name='CORPS', fontName='Helvetica', fontSize=10, alignment=TA_LEFT, leftIndent=300)
+#style_8_c = PS(name='CORPS', fontName='Helvetica', fontSize=6, alignment=TA_CENTER)
+#style_normal = PS(name='CORPS', fontName='Helvetica', fontSize=8, alignment=TA_LEFT)
+#style_bold = PS(name='CORPS', fontName='Helvetica-Bold', fontSize=10, alignment=TA_LEFT)
+#style_title = PS(name='CORPS', fontName='Helvetica', fontSize=12, alignment=TA_LEFT)
+#style_adress = PS(name='CORPS', fontName='Helvetica', fontSize=10, alignment=TA_LEFT, leftIndent=300)
 
 
 CHOIX_TYPE_SAVOIR = (
     ('Savoir', 'savoir'),
     ('Savoir méthodologique', 'savoir méthodologique'),
     ('Savoir relationnel', 'savoir relationnel'),
- )
+)
 
 
 CHOIX_TYPE_MODULE = (
@@ -60,7 +61,7 @@ class Enseignant(models.Model):
 class Domaine(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
-    responsable = models.ForeignKey(Enseignant, null=True, default=None)
+    responsable = models.ForeignKey(Enseignant, null=True, blank=True, default=None, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('code', )
@@ -75,7 +76,7 @@ class Domaine(models.Model):
 class Processus(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
-    domaine = models.ForeignKey(Domaine, null=False)
+    domaine = models.ForeignKey(Domaine, null=False, on_delete=models.PROTECT)
     description = models.TextField(default='')
 
     class Meta:
@@ -100,7 +101,6 @@ class Module(models.Model):
     travail_perso = models.IntegerField(verbose_name='Travail personnel')
     pratique_prof = models.IntegerField(default=0, verbose_name='Pratique prof.')
     didactique = models.TextField()
-    
     sem1 = models.IntegerField(default=0)
     sem2 = models.IntegerField(default=0)
     sem3 = models.IntegerField(default=0)
@@ -108,7 +108,7 @@ class Module(models.Model):
     sem5 = models.IntegerField(default=0)
     sem6 = models.IntegerField(default=0)
     semestre = models.CharField(max_length=15, default='', blank=False)
-    processus = models.ForeignKey(Processus, null=False, default=None)
+    processus = models.ForeignKey(Processus, null=False, on_delete=models.PROTECT)
     
     didactique_published = models.BooleanField(default=False)
     evaluation_published = models.BooleanField(default=False)
@@ -131,7 +131,7 @@ class Competence(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=250, blank=False)
     type = models.CharField(max_length=35, blank=True, default='')
-    module = models.ForeignKey(Module, null=True, default=None)
+    module = models.ForeignKey(Module, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     proces_eval = models.ForeignKey(Processus, null=True, default=True)
     list_display = ('code', 'nom', 'type', 'proces_eval')
 
@@ -146,7 +146,7 @@ class Competence(models.Model):
 class SousCompetence(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=250, blank=False)
-    competence = models.ForeignKey(Competence, null=False)
+    competence = models.ForeignKey(Competence, null=False, on_delete=models.PROTECT)
 
     class Meta:
         ordering = ('code',)
@@ -159,7 +159,7 @@ class SousCompetence(models.Model):
 class Ressource(models.Model):
     nom = models.CharField(max_length=200, blank=False)
     type = models.CharField(max_length=30, choices=CHOIX_TYPE_SAVOIR, default='Savoir')
-    module = models.ForeignKey(Module, null=True, default=None)
+    module = models.ForeignKey(Module, null=True, default=None, blank=True, on_delete=models.PROTECT)
     
     def __str__(self):
         return '{0}'.format(self.nom)
@@ -167,7 +167,7 @@ class Ressource(models.Model):
 
 class Objectif(models.Model):
     nom = models.CharField(max_length=200, blank=False)
-    module = models.ForeignKey(Module, null=True, default=None)
+    module = models.ForeignKey(Module, null=True, default=None, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return '{0}'.format(self.nom)
