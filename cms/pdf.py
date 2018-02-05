@@ -196,7 +196,7 @@ class FormationPlanPdf(EpcBaseDocTemplate):
             [self.formating(''), self.formating('', 60), '', '', '', '', 'M08', ''],
             [self.formating(domain[2]), self.formating(process[4], 60), '', '', 'M10', '', 'M12'],
             [self.formating(''), self.formating(process[5], 60), '', '', 'M11', '', ''],
-            [self.formating(domain[3]), self.formating(process[6], 60), '', '', 'M13', '', '', 'M14'],
+            [self.formating(domain[3]), self.formating(process[6], 60), '', '', 'M13', '', 'M14', ''],
             [self.formating(domain[4]), self.formating(process[7], 60), 'M15', '', '', '', '', ''],
             [self.formating(domain[5]), self.formating(process[8], 60), 'M16_1', '', 'M16_2', '', 'M16_3', ''],
             [self.formating(domain[6]), self.formating(process[9], 60), 'M17_1', '', 'M17_2', '', 'M17_3', ''],
