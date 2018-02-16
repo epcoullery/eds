@@ -26,15 +26,15 @@
                     {% endif %}
                 </td>
                 <td align="center">
-                    {% if m.periode_presentiel == 0 %}
+                    {% if m.total_presentiel == 0 %}
                         &nbsp;
                     {% else %}
-                        {{ m.periode_presentiel|rjust:"3" }} h.
+                        {{ m.total_presentiel|rjust:"3" }} h.
                     {% endif %}
                 </td>
                 <td align="center">
                     {% if m.travail_perso == 0 %}
-                        &nbsp;nbsp;
+                        &nbsp;
                     {% else %}
                         {{ m.travail_perso|rjust:"3" }} h.
                     {% endif %}
@@ -50,8 +50,8 @@
         {% endfor %}
         <tr>
             <th >Total</th>
-            <th>{{ total_perso }} heures</th>
             <th>{{ total_presentiel }} heures</th>
+            <th>{{ total_perso }} heures</th>
             <th>{{ total_pratique }} heures</th>
         </tr>
     </table>

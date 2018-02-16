@@ -1,6 +1,4 @@
-import os
 
-from django.conf import settings
 from reportlab.platypus import (SimpleDocTemplate, Spacer, Frame, Paragraph, Preformatted,
                                 PageTemplate, NextPageTemplate, FrameBreak, Table, TableStyle)
 from reportlab.lib.pagesizes import A4, landscape
@@ -10,12 +8,13 @@ from reportlab.lib import colors
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import ParagraphStyle as ps
 from reportlab.pdfgen import canvas
+from django.contrib.staticfiles.finders import find
 
 style_normal = ps(name='CORPS', fontName='Helvetica', fontSize=9, alignment=TA_LEFT)
 style_bold = ps(name='CORPS', fontName='Helvetica-Bold', fontSize=10, alignment=TA_LEFT)
 
-LOGO_EPC = os.path.join(settings.MEDIA_ROOT, 'logo_EPC.png')
-LOGO_ESNE = os.path.join(settings.MEDIA_ROOT, 'logo_ESNE.png')
+LOGO_EPC = find('img/logo_EPC.png')
+LOGO_ESNE = find('img/logo_ESNE.png')
 FILIERE = 'Formation EDS'
 
 class NumberedCanvas(canvas.Canvas):
@@ -142,7 +141,7 @@ class ModuleDescriptionPdf(EpcBaseDocTemplate):
             ['Evaluation', module.evaluation],
             ['Type', '{0}, obligatoire'.format(module.type)],
             ['Semestre', 'Sem. {0}'.format(module.semestre)],
-            ['Présentiel', '{0} heures'.format(module.periode_presentiel)],
+            ['Présentiel', '{0} heures'.format(module.total_presentiel)],
             ['Travail personnel', '{0} heures'.format(module.travail_perso)],
             ['Responsable', module.processus.domaine.responsable.descr_pdf()]
         ]

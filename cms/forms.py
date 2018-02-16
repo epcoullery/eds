@@ -148,10 +148,10 @@ class ModuleAdminForm(forms.ModelForm):
         model = Module
         fields = '__all__'
         widgets = {
-            'nom': forms.Textarea(attrs={'cols': 125, 'rows': 2}),
-            'description': forms.Textarea(attrs={'cols': 125, 'rows': 4}),
-            'situation': forms.Textarea(attrs={'cols': 125, 'rows': 6}),
-            'contenu': forms.Textarea(attrs={'cols': 125, 'rows': 4}),
+            'nom': forms.Textarea(attrs={'cols': 50, 'rows': 1}),
+            'description': forms.Textarea(attrs={'cols': 125, 'rows': 3}),
+            'situation': forms.Textarea(attrs={'cols': 125, 'rows': 4}),
+            'contenu': forms.Textarea(attrs={'cols': 125, 'rows': 3}),
             'didactique': forms.Textarea(attrs={'cols': 125, 'rows': 2}),
             'evaluation': forms.Textarea(attrs={'cols': 125, 'rows': 2}),
         }

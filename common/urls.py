@@ -13,40 +13,40 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+import os
+from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
-from django.conf.urls.static import static
+from django.views.static import serve
 
 from cms import views
 
 urlpatterns = [
-    url(r'^$', views.HomeView.as_view(), name='home'),
+    path('', views.HomeView.as_view(), name='home'),
     # url(r'^plan_pdf/$', views.HomePDFView.as_view(), name='plan-pdf'),
-    url(r'^plan_pdf/$', views.print_plan_formation, name='plan-pdf'),
-    url(r'^admin/', admin.site.urls),
-    url(r'^domaine/(?P<pk>\d+)$', views.DomaineDetailView.as_view(), name='domaine-detail'),
-    url(r'^domaines/$', views.DomaineListView.as_view(), name='domaine-list'),
-    url(r'^processus/(?P<pk>\d+)$', views.ProcessusDetailView.as_view(), name='processus-detail'),
-    url(r'^processus/$', views.ProcessusListView.as_view(), name='processus-list'),
-    url(r'^module/(?P<pk>\d+)$', views.ModuleDetailView.as_view(), name='module-detail'),
-    url(r'^modules/$', views.ModuleListView.as_view(), name='module-list'),
-    url(r'^periodes$', views.PeriodeView.as_view(), name='periodes'),
-    # url(r'^periodes_pdf$', views.PeriodePDFView.as_view(), name='periodes-pdf'),
-    url(r'^periodes_pdf$', views.print_periode_formation, name='periodes-pdf'),
-    url(r'^evaluation/$', views.EvaluationView.as_view(), name='evaluation'),
-    url(r'^competences/$', views.CompetenceListView.as_view(), name='competences'),
-    url(r'^travail/$', views.TravailPersoListView.as_view(), name='travail'),
-    # url(r'^upload/$', views.AddDocument.as_view(), name='upload'),
-    # url(r'^download/(?P<file_name>.+)$', views.Download, name='download'),
-    # url(r'^calendrier/$', views.pdf_view, name='pdf-view'),
-    url(r'^module_pdf/(?P<pk>\d+)$', views.print_module_pdf, name='module-pdf'),
-    # url(r'^module_pdf/(?P<pk>\d+)$', views.ModulePDF.as_view(), name='module-pdf'),
-    url(r'^documents/$', views.DocumentListView.as_view(), name='document-list'), 
-    url(r'^document/(?P<pk>\d+)$', views.DocumentDetailView.as_view(), name='document-detail'),
-    url(r'^upload/(?P<pk>\d+)$', views.UploadDetailView.as_view(), name='upload-detail'), 
-    
+    path('plan_pdf/', views.print_plan_formation, name='plan-pdf'),
+    path('admin/', admin.site.urls),
+    path('domaine/<int:pk>/', views.DomaineDetailView.as_view(), name='domaine-detail'),
+    path('domaines/', views.DomaineListView.as_view(), name='domaine-list'),
+    path('processus/<int:pk>/', views.ProcessusDetailView.as_view(), name='processus-detail'),
+    path('processus/', views.ProcessusListView.as_view(), name='processus-list'),
+    path('module/<int:pk>/', views.ModuleDetailView.as_view(), name='module-detail'),
+    path('modules/', views.ModuleListView.as_view(), name='module-list'),
+    path('periodes/', views.PeriodeView.as_view(), name='periodes'),
+    path('periodes_pdf/', views.print_periode_formation, name='periodes-pdf'),
+    path('evaluation/', views.EvaluationView.as_view(), name='evaluation'),
+    path('competences/', views.CompetenceListView.as_view(), name='competences'),
+    path('travail/', views.TravailPersoListView.as_view(), name='travail'),
+    path('module_pdf/<int:pk>/', views.print_module_pdf, name='module-pdf'),
+    path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
+    path('document/<int:pk>/', views.DocumentDetailView.as_view(), name='document-detail'),
+    path('upload/<int:pk>/', views.UploadDocDetailView.as_view(), name='uploaddoc-detail'),
+
     # url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'),
-    url(r'^tinymce/', include('tinymce.urls'), name='tinymce-js'),
+    path('tinymce/', include('tinymce.urls'), name='tinymce-js'),
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Serve bulletins by Django to allow LoginRequiredMiddleware to apply
+    path('media/doc/<path:path>', serve,
+        {'document_root': os.path.join(settings.MEDIA_ROOT, 'doc'), 'show_indexes': False}
+    ),
+]

@@ -33,17 +33,16 @@ class RessourceAdmin(admin.ModelAdmin):
 class ModuleAdmin(admin.ModelAdmin):
     form = ModuleAdminForm
     inlines = [CompetenceInline]
+    readonly_fields = ('total_presentiel',)
     extra = 0
     fields = (('code', 'nom'),
               'situation',
               ('contenu', 'contenu_published'),
               ('didactique', 'didactique_published'),
               ('evaluation', 'evaluation_published'),
-              ('periode_presentiel', 'travail_perso', 'pratique_prof'),
-              ('type', 'semestre'),
-              ('sem1', 'sem2'),
-              ('sem3', 'sem4'),
-              ('sem5', 'sem6'),
+              ('sem1', 'sem2', 'sem3', 'sem4', 'sem5', 'sem6'),
+              ('total_presentiel', 'travail_perso', 'pratique_prof'),
+              ('type', ),
               'processus',
               )
     

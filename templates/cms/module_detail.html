@@ -64,10 +64,10 @@
             <th>Semestre</th>
             <td>Sem. {{object.semestre}}</td>
         </tr>
-        {% if object.periode_presentiel > 0 %}
+        {% if object.total_presentiel > 0 %}
             <tr>
                 <th>Présentiel</th>
-                <td>{{object.periode_presentiel}} heures</td>
+                <td>{{object.total_presentiel}} heures</td>
             </tr>
         {% endif %}
         {% if object.pratique_prof > 0 %}

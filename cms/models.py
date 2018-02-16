@@ -97,7 +97,7 @@ class Module(models.Model):
     situation = models.TextField()
     evaluation = models.TextField()
     contenu = models.TextField()
-    periode_presentiel = models.IntegerField(verbose_name='Présentiel')
+    #periode_presentiel = models.IntegerField(verbose_name='Présentiel')
     travail_perso = models.IntegerField(verbose_name='Travail personnel')
     pratique_prof = models.IntegerField(default=0, verbose_name='Pratique prof.')
     didactique = models.TextField()
@@ -125,14 +125,18 @@ class Module(models.Model):
     
     def url_code(self):
         return "<a href='/module/{0}' title=\"{2}\">{1}</a>".format(self.pk, self.code, self.nom)
-    
-    
+
+    @property
+    def total_presentiel(self):
+        return self.sem1 + self.sem2 + self.sem3 + self.sem4 + self.sem5 + self.sem6 - self.pratique_prof
+
+
 class Competence(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=250, blank=False)
     type = models.CharField(max_length=35, blank=True, default='')
     module = models.ForeignKey(Module, null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    proces_eval = models.ForeignKey(Processus, null=True, default=True)
+    proces_eval = models.ForeignKey(Processus, null=True, default=True, on_delete=models.SET_NULL)
     list_display = ('code', 'nom', 'type', 'proces_eval')
 
     class Meta:
@@ -183,7 +187,7 @@ class Document(models.Model):
 
 
 class UploadDoc(models.Model):
-    docfile = models.FileField(upload_to='doc/')
+    docfile = models.FileField(upload_to='doc')
     titre = models.CharField(max_length=100, blank=False)
     published = models.BooleanField(default=False)
 

@@ -63,36 +63,26 @@ class EvaluationView(ListView):
     model = Processus
 
 
-class DocumentListView(ListView): 
-    template_name = 'cms/document_list.html'
-    model = Document
-    
-    def get_queryset(self, **kwargs):
-        query = Document.objects.filter(published=True)
-        return query
-
-    def get_context_data(self, **kwargs):
-        context = super(DocumentListView, self).get_context_data(**kwargs) 
-        context['upload'] = UploadDoc.objects.filter(published=True)
-        return context
-
-
 class DocumentDetailView(DetailView):
     template_name = 'cms/document_detail.html'
     model = Document
-       
-    
-class UploadDetailView(DetailView):
+
+
+class UploadDocListView(ListView):
+    template_name = 'cms/uploaddoc_list.html'
+    model = UploadDoc
+
+    def get_queryset(self, **kwargs):
+        query = UploadDoc.objects.filter(published=True)
+        return query
+
+
+class UploadDocDetailView(DetailView):
     """
     Display first recorded documents and next uploaded documents
     """
-    template_name = 'cms/upload_detail.html'
+    template_name = 'cms/uploaddoc_detail.html'
     model = UploadDoc
-    
-    def get_context_data(self, **kwargs):
-        context = super(UploadDetailView, self).get_context_data(**kwargs) 
-        context['fichier'] = self.get_object().docfile.url
-        return context
 
 
 def print_module_pdf(request, pk):
@@ -139,8 +129,8 @@ def get_context(context):
     """
     Retrive periods
     """
-    liste = Module.objects.exclude(periode_presentiel=0)
-    # context['tot'] = liste.aggregate(Sum(F('periode_presentiel')))
+    # liste = Module.objects.exclude(total_presentiel=0)
+    liste = Module.objects.filter(pratique_prof=0)
     context['sem1'] = liste.exclude(sem1=0)
     context['tot1'] = liste.aggregate(Sum(F('sem1')))['sem1__sum']
     context['sem2'] = liste.exclude(sem2=0)
@@ -154,8 +144,10 @@ def get_context(context):
     context['sem6'] = liste.exclude(sem6=0)
     context['tot6'] = liste.aggregate(Sum(F('sem6')))['sem6__sum']
 
-    context['tot'] = context['tot1'] + context['tot2'] + context['tot3'] + context['tot4'] \
-                     + context['tot5'] + context['tot6']
+    context['tot'] = (
+        context['tot1'] + context['tot2'] + context['tot3'] + context['tot4']
+        + context['tot5'] + context['tot6']
+    )
     return context
     
     
@@ -163,7 +155,7 @@ class PeriodeView(TemplateView):
     template_name = 'cms/periodes.html'
 
     def get_context_data(self, **kwargs):
-        context = TemplateView.get_context_data(self, **kwargs)
+        context = super().get_context_data(**kwargs)
         return get_context(context)
 
 
@@ -177,8 +169,9 @@ class TravailPersoListView(ListView):
     template_name = 'cms/travail_perso.html'
     
     def get_context_data(self, **kwargs):
-        context = ListView.get_context_data(self, **kwargs)
+        context = super().get_context_data(**kwargs)
+        context = get_context(context)
         context['total_perso'] = Module.objects.aggregate((Sum('travail_perso')))['travail_perso__sum']
-        context['total_presentiel'] = Module.objects.aggregate((Sum('periode_presentiel')))['periode_presentiel__sum']
+        context['total_presentiel'] = context['tot']
         context['total_pratique'] = Module.objects.aggregate((Sum('pratique_prof')))['pratique_prof__sum']
         return get_context(context)   

@@ -26,10 +26,12 @@
             <li><a href="{% url 'periodes' %}">Périodes</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'competences' %}">Compétences</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'travail' %}">Heures de formation</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'document-detail' 1 %}">Concept pédagogique</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'document-detail' 2 %}">Concept de formation</a>&nbsp;&nbsp;</li>
 
             <!-- <li><a href="{% url 'evaluation' %}">Evaluation</a>&nbsp;&nbsp;</li> -->
 
-            <li><a href="{% url 'document-list' %}">Documents</a>&nbsp;&nbsp;</li>
+            <li><a href="{% url 'uploaddoc-list' %}">Téléchargements</a>&nbsp;&nbsp;</li>
             {% if has_permission %}
                 <li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
             {% endif %}

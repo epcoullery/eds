@@ -1,6 +1,8 @@
 *.pyc
 common/local_settings.py
-db.sqlite3
+/media/
+/static/
+*.sqlite3
 db.eds
 db.*
 *.sql
