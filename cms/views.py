@@ -81,7 +81,7 @@ class UploadDocListView(ListView):
 
 class UploadDocDetailView(DetailView):
     """
-    Display first recorded documents and next uploaded documents
+    Display uploaded docs
     """
     template_name = 'cms/uploaddoc_detail.html'
     model = UploadDoc
