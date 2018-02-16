@@ -4,15 +4,17 @@ Created on 17 nov. 2012
 @author: alzo
 """
 from django import forms
-
-from .models import (Processus, Module, Domaine, Competence, SousCompetence, Document, UploadDoc)
 from tinymce.widgets import TinyMCE
 
+from .models import (
+    Processus, Module, Domaine, Competence, SousCompetence, Concept, UploadDoc
+)
 
-class DocumentAdminForm(forms.ModelForm):
+
+class ConceptAdminForm(forms.ModelForm):
     
     class Meta:
-        model = Document
+        model = Concept
         fields = ('titre', 'texte', 'published')
         
         widgets = {

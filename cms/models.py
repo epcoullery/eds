@@ -177,7 +177,7 @@ class Objectif(models.Model):
         return '{0}'.format(self.nom)
  
     
-class Document(models.Model):
+class Concept(models.Model):
     titre = models.CharField(max_length=128, blank=True)
     texte = tinymce_models.HTMLField(blank=True,)
     published = models.BooleanField(default=False)

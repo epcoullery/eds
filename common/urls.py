@@ -39,7 +39,7 @@ urlpatterns = [
     path('travail/', views.TravailPersoListView.as_view(), name='travail'),
     path('module_pdf/<int:pk>/', views.print_module_pdf, name='module-pdf'),
     path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
-    path('document/<int:pk>/', views.DocumentDetailView.as_view(), name='document-detail'),
+    path('document/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
     path('upload/<int:pk>/', views.UploadDocDetailView.as_view(), name='uploaddoc-detail'),
 
     # url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'),

@@ -1,12 +1,16 @@
 from django.contrib import admin
 
-from .models import (Enseignant, Domaine, Competence, SousCompetence, Objectif,
-                     Ressource, Module, Processus, Document, UploadDoc)
+from .models import (
+    Enseignant, Domaine, Competence, SousCompetence, Objectif,
+    Ressource, Module, Processus, Concept, UploadDoc
+)
 
-from .forms import (ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm,
-                    DomaineAdminForm, CompetenceAdminForm, SousCompetenceInlineAdminForm,
-                    CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
-                    SousCompetenceAdminForm, DocumentAdminForm, UploadAdminForm)
+from .forms import (
+    ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm,
+    DomaineAdminForm, CompetenceAdminForm, SousCompetenceInlineAdminForm,
+    CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
+    SousCompetenceAdminForm, ConceptAdminForm, UploadAdminForm
+)
 
 
 class SousCompetenceInline(admin.TabularInline):
@@ -74,8 +78,8 @@ class DomaineAdmin(admin.ModelAdmin):
     inlines = [ProcessusInlineAdmin]
 
 
-class DocumentAdmin(admin.ModelAdmin):
-    form = DocumentAdminForm
+class ConceptAdmin(admin.ModelAdmin):
+    form = ConceptAdminForm
 
 
 class UploadAdmin(admin.ModelAdmin):
@@ -90,5 +94,5 @@ admin.site.register(Objectif, ObjectifAdmin)
 admin.site.register(Ressource, RessourceAdmin)
 admin.site.register(Module, ModuleAdmin)
 admin.site.register(Processus, ProcessusAdmin)
-admin.site.register(Document, DocumentAdmin)
+admin.site.register(Concept, ConceptAdmin)
 admin.site.register(UploadDoc, UploadAdmin)

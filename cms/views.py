@@ -11,7 +11,9 @@ from django.db.models import F, Sum
 from django.http import HttpResponse
 
 from cms.pdf import PeriodSemesterPdf, ModuleDescriptionPdf, FormationPlanPdf
-from cms.models import (Domaine, Processus, Module, Competence, Document, UploadDoc,)
+from cms.models import (
+    Domaine, Processus, Module, Competence, Concept, UploadDoc
+)
 
 
 class HomeView(TemplateView):
@@ -63,9 +65,9 @@ class EvaluationView(ListView):
     model = Processus
 
 
-class DocumentDetailView(DetailView):
-    template_name = 'cms/document_detail.html'
-    model = Document
+class ConceptDetailView(DetailView):
+    template_name = 'cms/concept_detail.html'
+    model = Concept
 
 
 class UploadDocListView(ListView):
