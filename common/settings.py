@@ -114,20 +114,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-"""
-STUDENT_IMPORT_MAPPING = {
-    'Num élève': 'id_ext',
-    'Nom élève': 'nom',
-    'Prénom élève': 'prenom',
-    'Rue élève': 'adresse',
-    'Localité élève': 'localite',  # pcode is separated from city in prepare_import
-    'Tél. élève': 'telephone',
-    'Natel élève': 'mobile',
-    'Email élève': 'email_rpn',
-    'Date nais. élève': 'date_naissance',
-    'Classe': 'klasse',
-}
-"""
 
 DOMAINE_COULEURS = {
     'D1': '#fcaf3e',
