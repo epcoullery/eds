@@ -70,7 +70,7 @@ class Domaine(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/domaine/{0}'>{1}</a>".format(self.pk, self.__str__())
+        return "<a href='/domaine/{0}/'>{1}</a>".format(self.pk, self.__str__())
 
 
 class Processus(models.Model):
@@ -121,10 +121,10 @@ class Module(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/module/{0}'>{1}</a>".format(self.pk, self.__str__())
+        return "<a href='/module/{0}/'>{1}</a>".format(self.pk, self.__str__())
     
     def url_code(self):
-        return "<a href='/module/{0}' title=\"{2}\">{1}</a>".format(self.pk, self.code, self.nom)
+        return "<a href='/module/{0}/' title=\"{2}\">{1}</a>".format(self.pk, self.code, self.nom)
 
     @property
     def total_presentiel(self):

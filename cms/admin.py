@@ -39,6 +39,7 @@ class ModuleAdmin(admin.ModelAdmin):
     inlines = [CompetenceInline]
     readonly_fields = ('total_presentiel',)
     extra = 0
+
     fields = (('code', 'nom'),
               'situation',
               ('contenu', 'contenu_published'),
@@ -49,8 +50,8 @@ class ModuleAdmin(admin.ModelAdmin):
               ('type', ),
               'processus',
               )
-    
-    
+
+
 class ProcessusAdmin(admin.ModelAdmin):   
     form = ProcessusAdminForm
 

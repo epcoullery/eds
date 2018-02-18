@@ -1,4 +1,5 @@
-{% load i18n static %}<!DOCTYPE html>
+<!DOCTYPE html>
+{% load i18n static %}
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"fr" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
@@ -6,7 +7,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main3.css' %}" />
     <script type="text/javascript" src="{% static 'js/tiny_mce/tiny_mce.js' %}"></script>
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static 'admin/css/rtl.css' %}{% endblock %}" />{% endif %}

@@ -55,6 +55,7 @@ class EpcBaseDocTemplate(SimpleDocTemplate):
         self.title = title
 
     def header(self, canvas, doc):
+
         canvas.saveState()
         canvas.drawImage(LOGO_EPC, doc.leftMargin, doc.height - 0.5 * cm, 5 * cm, 3 * cm, preserveAspectRatio=True)
         canvas.drawImage(LOGO_ESNE, doc.width - 2 * cm, doc.height - 0.5 * cm, 5 * cm, 3 * cm,

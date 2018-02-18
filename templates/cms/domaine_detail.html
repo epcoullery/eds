@@ -10,7 +10,7 @@
     {% for p in object.processus_set.all %}
         <div class="processus"><h2>Processus:  {{ p.url|safe }}</h2></div>
         {% for m in p.module_set.all %}
-            <div class="module">Module:  <a href="{% url 'module-detail' c.module.id %}">{{ m }}</a></div>
+            <div class="module">Module:  <a href="{% url 'module-detail' m.id %}">{{ m }}</a></div>
             <div class="competence">Compétences visées</div>
             {% for c in m.competences.all %}
                 <div class="competence">{{ c }}</div>
