@@ -7,7 +7,7 @@ import os
 import tempfile
 
 from django.views.generic import ListView, TemplateView, DetailView
-from django.db.models import F, Sum
+from django.db.models import F, Sum, Q
 from django.http import HttpResponse
 
 from cms.pdf import PeriodSemesterPdf, ModuleDescriptionPdf, FormationPlanPdf
@@ -133,6 +133,7 @@ def get_context(context):
     """
     # liste = Module.objects.exclude(total_presentiel=0)
     liste = Module.objects.filter(pratique_prof=0)
+
     context['sem1'] = liste.exclude(sem1=0)
     context['tot1'] = liste.aggregate(Sum(F('sem1')))['sem1__sum']
     context['sem2'] = liste.exclude(sem2=0)
