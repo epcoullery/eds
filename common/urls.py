@@ -1,17 +1,5 @@
 """eds URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.10/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 import os
 from django.urls import path, re_path, include
@@ -23,7 +11,6 @@ from cms import views
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    # url(r'^plan_pdf/$', views.HomePDFView.as_view(), name='plan-pdf'),
     path('plan_pdf/', views.print_plan_formation, name='plan-pdf'),
     path('admin/', admin.site.urls),
     path('domaine/<int:pk>/', views.DomaineDetailView.as_view(), name='domaine-detail'),
@@ -41,11 +28,9 @@ urlpatterns = [
     path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
     path('document/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
     path('upload/<int:pk>/', views.UploadDocDetailView.as_view(), name='uploaddoc-detail'),
-
-    # url(r'^emplois/$', views.EmploiListView.as_view(), name='emploi-list'),
     path('tinymce/', include('tinymce.urls'), name='tinymce-js'),
     
-    # Serve bulletins by Django to allow LoginRequiredMiddleware to apply
+    # Serve docs by Django to allow LoginRequiredMiddleware to apply
     path('media/doc/<path:path>', serve,
         {'document_root': os.path.join(settings.MEDIA_ROOT, 'doc'), 'show_indexes': False}
     ),
