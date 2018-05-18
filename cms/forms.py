@@ -16,7 +16,6 @@ class ConceptAdminForm(forms.ModelForm):
     class Meta:
         model = Concept
         fields = ('titre', 'texte', 'published')
-        
         widgets = {
             'texte': TinyMCE(attrs={'cols': 120, 'rows': 30}),
         }

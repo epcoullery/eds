@@ -113,7 +113,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-
 DOMAINE_COULEURS = {
     'D1': '#fcaf3e',
     'D2': '#cc0000',
@@ -136,5 +135,8 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
+
+PDF_FOOTER_TEXT = 'Ecole Santé-social Pierre-Coullery | Prévoyance 82 - 2300 La Chaux-de-Fonds | 032 886 33 00 | cifom-epc@rpn.ch'
+
 
 from .local_settings import *

@@ -1,15 +1,15 @@
 from django.contrib import admin
 
-from .models import (
-    Enseignant, Domaine, Competence, SousCompetence, Objectif,
-    Ressource, Module, Processus, Concept, UploadDoc
-)
-
 from .forms import (
     ProcessusAdminForm, ProcessusInlineAdminForm, ModuleAdminForm,
     DomaineAdminForm, CompetenceAdminForm, SousCompetenceInlineAdminForm,
     CompetenceInlineAdminForm, ObjectifAdminForm, RessourceAdminForm,
     SousCompetenceAdminForm, ConceptAdminForm, UploadAdminForm
+)
+
+from .models import (
+    Enseignant, Domaine, Competence, SousCompetence, Objectif,
+    Ressource, Module, Processus, Concept, UploadDoc
 )
 
 

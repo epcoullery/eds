@@ -137,7 +137,6 @@ class Competence(models.Model):
     type = models.CharField(max_length=35, blank=True, default='')
     module = models.ForeignKey(Module, null=True, blank=True, default=None, on_delete=models.SET_NULL)
     proces_eval = models.ForeignKey(Processus, null=True, default=True, on_delete=models.SET_NULL)
-    list_display = ('code', 'nom', 'type', 'proces_eval')
 
     class Meta:
         ordering = ('code',)
@@ -197,7 +196,7 @@ class UploadDoc(models.Model):
     def __str__(self):
         return self.titre
 
-    
+"""
 class PDFResponse(HttpResponse):
     
     def __init__(self, filename, title='', portrait=True):
@@ -261,3 +260,4 @@ class MyDocTemplateLandscape(SimpleDocTemplate):
         self.canv.setFontSize(8)
         self.canv.drawCentredString(self.CENTRE_WIDTH, 1*cm, "Page : " + str(self.canv.getPageNumber()))
         self.canv.restoreState()
+"""
