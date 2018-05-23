@@ -9,13 +9,13 @@
 <div id="content-main">
     <h1>Liste des compétences du PEC avec les modules correspondants</h1>
     <table border="0">
-        {% for c in object_list %}
+        {% for competence in object_list %}
             <tr>
-                <td colspan="3">{{ c }}</td>
+                <td colspan="3">{{ competence }}</td>
             </tr>
             <tr>
                 <th width="10px">&nbsp;</th>
-                <td colspan="2"><a href=" {% url 'module-detail' c.module.id %}">{{ c.module }}</a></td>
+                <td colspan="2"><a href=" {% url 'module-detail' competence.module.id %}">{{ competence.module }}</a></td>
             </tr>
         {% endfor %}
     </table>

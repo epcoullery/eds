@@ -6,11 +6,13 @@ Created on 4 déc. 2012
 import os
 import tempfile
 
-from django.views.generic import ListView, TemplateView, DetailView
-from django.db.models import F, Sum, Q
+
+from django.db.models import F, Sum
 from django.http import HttpResponse
+from django.views.generic import ListView, TemplateView, DetailView
 
 from cms.pdf import PeriodSemesterPdf, ModuleDescriptionPdf, FormationPlanPdf
+
 from cms.models import (
     Domaine, Processus, Module, Competence, Concept, UploadDoc
 )

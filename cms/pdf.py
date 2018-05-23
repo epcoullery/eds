@@ -227,7 +227,6 @@ class FormationPlanPdf(EpcBaseDocTemplate):
         return Preformatted(el1, style_normal, maxLineLength=length)
 
     def produce(self, domain, process):
-        print(domain[0], process[0])
         data = [
             ['Domaines', 'Processus', 'Sem1', 'Sem2', 'Sem3', 'Sem4', 'Sem5', 'Sem6'],
             [self.formating(domain[0]), self.formating(process[0], 60), 'M01', '', '', '', '', ''],
