@@ -1,13 +1,13 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
-{% block coltype %}colMS{% endblock %}
+
 {% block content %}
 
 <div id="content-main">
-    <div style="margin:auto;width:50%;">
-        <h1><b>{{object}}</b></h1>
+    <div style="margin:auto;width:80%;">
+        <h1>{{ object }}</h1>
         {% if object.published %}
-            <p>{{object.texte|safe}}</p>
+            <p>{{ object.texte|safe }}</p>
         {% else %}
             <p>Le document est en travail</p>
         {% endif %}

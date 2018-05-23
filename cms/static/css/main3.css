@@ -149,14 +149,14 @@ ul li {
 }
 
 .p {
-		border:1px solid black;
-font-size:105%;
+	border:1px solid black;
+	font-size:105%;
 	vertical-align:middle;
 }
 
 .m {
 	border:1px solid black;
-font-size:105%;
+	font-size:105%;
 	text-align:center;
 	vertical-align:middle;
 	height:20px;

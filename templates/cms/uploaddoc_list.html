@@ -1,33 +1,20 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/main.css" %}" />{% endblock %}
-
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
-
-{% block breadcrumbs %}
-    <div class="breadcrumbs">
-        <a href="{% url 'home' %}">Accueil</a>
-        <a href="{% url 'uploaddoc-list' %}">Téléchargements</a>
-    </div>
-{% endblock %}
-
 {% block content %}
     <div id="content-main">
-        <h1>Documents en téléchargement</h1>
-        {% if object_list %}
-            <ul class="liste-verticale">
-                {% for upload in object_list %}
-                    <li><a href="{{ upload.docfile.url }}">{{upload.titre}}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No documents.</p>
-        {% endif %}
-
+        <div style="margin:auto;width:60%;">
+            <h1>Documents en téléchargement</h1>
+            {% if object_list %}
+                <ul class="liste-verticale">
+                    {% for upload in object_list %}
+                        <li><a href="{{ upload.docfile.url }}">{{ upload.titre }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No documents.</p>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 

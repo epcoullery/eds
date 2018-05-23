@@ -1,30 +1,28 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block coltype %}colMS{% endblock %}
-
 {% block content %}
 <div id="content-main">
-    <h1>{{object}}</h1>
+    <h1>{{ object }}</h1>
     <table>
         <tr>
             <th width="100px">Domaine</th>
-            <td>{{object.processus.domaine.url|safe}}</td>
+            <td>{{ object.processus.domaine.url|safe }}</td>
         </tr>
         <tr>
             <th>Processus</th>
-            <td>{{object.processus.url|safe}}</td>
+            <td>{{ object.processus.url|safe }}</td>
         </tr>
         <tr>
             <th>Situation emblématique</th>
-            <td>{{object.situation|linebreaksbr}}</td>
+            <td>{{ object.situation|linebreaksbr }}</td>
         </tr>
         <tr>
             <th>Compétences visées</th>
             <td>
                 <p>L'éducateur social, l'éducatrice sociale:</p>
                 {% for c in object.competence_set.all %}
-                    - {{c.nom}} ({{c.code}})<br>
+                    - {{ c.nom }} ({{ c.code }})<br>
                 {% endfor %}
             </td>
         </tr>
@@ -33,8 +31,8 @@
             <td>
                 {% for c in object.competence_set.all %}
                     {% for sc in c.souscompetence_set.all %}
-                        - {{sc.nom}} (voir {{sc.competence.code}}) <br>
-                    {%endfor %}
+                        - {{ sc.nom }} (voir {{ sc.competence.code }}) <br>
+                    {% endfor %}
                 {% endfor %}
             </td>
         </tr>
@@ -43,7 +41,7 @@
             <th>Objectifs à atteindre</th>
             <td>
                 {% for c in object.objectif_set.all %}
-                    - {{c}}<br>
+                    - {{ c }}<br>
                 {% endfor %}
             </td>
         </tr>
@@ -54,37 +52,37 @@
         <!-- <tr><th>Contenu</th><td>{{object.contenu|linebreaksbr}}</td></tr> -->
         <tr>
             <th>Evaluation</th>
-            <td>{{object.evaluation|linebreaksbr}}</td>
+            <td>{{ object.evaluation|linebreaksbr }}</td>
         </tr>
         <tr>
             <th>Type</th>
-            <td>{{object.type}}, obligatoire</td>
+            <td>{{ object.type }}, obligatoire</td>
         </tr>
         <tr>
             <th>Semestre</th>
-            <td>Sem. {{object.semestre}}</td>
+            <td>Sem. {{ object.semestre }}</td>
         </tr>
         {% if object.total_presentiel > 0 %}
             <tr>
                 <th>Présentiel</th>
-                <td>{{object.total_presentiel}} heures</td>
+                <td>{{ object.total_presentiel }} heures</td>
             </tr>
         {% endif %}
         {% if object.pratique_prof > 0 %}
             <tr>
                 <th>Pratique prof.</th>
-                <td>{{object.pratique_prof}} heures</td>
+                <td>{{ object.pratique_prof }} heures</td>
             </tr>
         {% endif %}
         {% if object.travail_perso > 0 %}
             <tr>
                 <th>Travail perso.</th>
-                <td>{{object.travail_perso}} heures</td>
+                <td>{{ object.travail_perso }} heures</td>
             </tr>
         {% endif %}
         <tr>
             <th>Responsable</th>
-            <td>{{object.processus.domaine.responsable.descr|safe}}</td>
+            <td>{{ object.processus.domaine.responsable.descr|safe }}</td>
         </tr>
     </table>
     <p><a href="{% url 'module-pdf' object.id %}">Imprimer en PDF</a></p>

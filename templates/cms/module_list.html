@@ -1,10 +1,6 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}{{ block.super }}{% endblock %}
-
 {% block content %}
 
 <div id="content-main">
@@ -12,8 +8,8 @@
     <table>
         {% for m in object_list %}
             <tr>
-                <th>{{m.code}}</th>
-                <td><a href=" {% url 'module-detail' m.id %}">{{m.nom}}</a></td>
+                <th>{{ m.code }}</th>
+                <td><a href=" {% url 'module-detail' m.id %}">{{ m.nom }}</a></td>
             </tr>
         {% endfor %}
     </table>

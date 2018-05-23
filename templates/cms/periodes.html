@@ -1,33 +1,34 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block coltype %}colMS{% endblock %}
-
-
 {% block content %}
 <div id="content-main">
     <h1>Périodes de formation</h1>
     <table>
         <tr>
             <th width="290px">Semestre 1</th>
-            <th text-align="right">{{tot1}}h.</th>
+            <th text-align="right">{{ tot1 }}h.</th>
             <th width="40px"></th>
             <th width="290px">Semestre 2</th>
-            <th text-align="right">{{tot2}}h.</th>
+            <th text-align="right">{{ tot2 }}h.</th>
         </tr>
         <tr>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem1 %}
-                        <tr><td width="290px">{{s}}</td><td>{{s.sem1}} h.</td></tr>
+                    {% for s in modules %}
+                        {% if s.sem1 > 0 %}
+                            <tr><td width="290px">{{ s }}</td><td>{{ s.sem1 }} h.</td></tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
             <td></td>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem2 %}
-                        <tr><td width="290px">{{s}}</td><td>{{s.sem2}} h.</td></tr>
+                    {% for s in modules %}
+                        {% if s.sem2 > 0 %}
+                            <tr><td width="290px">{{ s }}</td><td>{{ s.sem2 }} h.</td></tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
@@ -38,27 +39,31 @@
         </tr>
         <tr>
             <th>Semestre 3</th>
-            <th text-align="right">{{tot3}}h.</th>
+            <th text-align="right">{{ tot3 }}h.</th>
             <th></th>
             <th>Semestre 4</th>
-            <th text-align="right">{{tot4}}h.</th>
+            <th text-align="right">{{ tot4 }}h.</th>
         </tr>
         <tr>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem3 %}
-                        <tr><td width="290px">{{s}}</td><td>{{s.sem3}} h.</td></tr>
+                    {% for s in modules %}
+                        {% if s.sem3 > 0 %}
+                            <tr><td width="290px">{{ s }}</td><td>{{ s.sem3 }} h.</td></tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
             <td></td>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem4 %}
-                        <tr>
-                            <td width="290px">{{s}}</td>
-                            <td>{{s.sem4}} h.</td>
-                        </tr>
+                    {% for s in modules %}
+                        {% if s.sem4 > 0 %}
+                            <tr>
+                                <td width="290px">{{ s }}</td>
+                                <td>{{ s.sem4 }} h.</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
@@ -69,34 +74,38 @@
         </tr>
         <tr>
             <th>Semestre 5</th>
-            <th text-align="right">{{tot5}}h.</th>
+            <th text-align="right">{{ tot5 }}h.</th>
             <th></th>
             <th>Semestre 6</th>
-            <th text-align="right">{{tot6}}h.</th>
+            <th text-align="right">{{ tot6 }}h.</th>
         </tr>
         <tr>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem5 %}
-                        <tr><td width="290px">{{s}}</td><td>{{s.sem5}} h.</td></tr>
+                    {% for s in modules %}
+                        {% if s.sem5 > 0 %}
+                            <tr><td width="290px">{{ s }}</td><td>{{ s.sem5 }} h.</td></tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
             <td></td>
             <td colspan="2">
                 <table align="left">
-                    {% for s in sem6 %}
-                        <tr>
-                            <td width="290px">{{s}}</td>
-                            <td>{{s.sem6}} h.</td>
-                        </tr>
+                    {% for s in modules %}
+                        {% if s.sem6 > 6 %}
+                            <tr>
+                                <td width="290px">{{ s }}</td>
+                                <td>{{ s.sem6 }} h.</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </table>
             </td>
         </tr>
     </table>
     <br>
-    <p><strong>Total des heures de cours: {{tot}} heures</strong></p>
+    <p><strong>Total des heures de cours: {{ tot }} heures</strong></p>
     <a href="{% url 'periodes-pdf' %}">Imprimer en PDF</a>
 </div>
 {% endblock %}

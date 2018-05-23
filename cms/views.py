@@ -7,11 +7,11 @@ import os
 import tempfile
 
 
-from django.db.models import F, Sum
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.views.generic import ListView, TemplateView, DetailView
 
-from cms.pdf import PeriodSemesterPdf, ModuleDescriptionPdf, FormationPlanPdf
+from cms.pdf import PeriodeSemestrePdf, ModuleDescriptionPdf, FormationPlanPdf
 
 from cms.models import (
     Domaine, Processus, Module, Competence, Concept, UploadDoc
@@ -95,6 +95,7 @@ def print_module_pdf(request, pk):
     pdf = ModuleDescriptionPdf(path)
     module = Module.objects.get(pk=pk)
     pdf.produce(module)
+
     with open(path, mode='rb') as fh:
         response = HttpResponse(fh.read(), content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="EDS_module_{0}.pdf"'.format(module.code)
@@ -119,8 +120,8 @@ def print_periode_formation(request):
     filename = 'periode_formation.pdf'
     path = os.path.join(tempfile.gettempdir(), filename)
     context = {}
-    context = get_context(context)
-    pdf = PeriodSemesterPdf(path)
+    context = get_detail_semestre(context)
+    pdf = PeriodeSemestrePdf(path)
     pdf.produce(context)
 
     with open(path, mode='rb') as fh:
@@ -129,30 +130,21 @@ def print_periode_formation(request):
     return response
 
 
-def get_context(context):
+def get_detail_semestre(context):
     """
     Retrive periods
     """
-    # liste = Module.objects.exclude(total_presentiel=0)
+    context['tot']= 0
     liste = Module.objects.filter(pratique_prof=0)
+    for i in range(1, 7):
+        sss = 'sem{}'.format(i)
+        tot_sem = liste.aggregate(Sum(sss))['{}__sum'.format(sss)]  # total du semestre
+        context.update({
+            'tot{}'.format(i): tot_sem
+        })
+        context['tot'] += tot_sem  # total des semestres
 
-    context['sem1'] = liste.exclude(sem1=0)
-    context['tot1'] = liste.aggregate(Sum(F('sem1')))['sem1__sum']
-    context['sem2'] = liste.exclude(sem2=0)
-    context['tot2'] = liste.aggregate(Sum(F('sem2')))['sem2__sum']
-    context['sem3'] = liste.exclude(sem3=0)
-    context['tot3'] = liste.aggregate(Sum(F('sem3')))['sem3__sum']
-    context['sem4'] = liste.exclude(sem4=0)
-    context['tot4'] = liste.aggregate(Sum(F('sem4')))['sem4__sum']
-    context['sem5'] = liste.exclude(sem5=0)
-    context['tot5'] = liste.aggregate(Sum(F('sem5')))['sem5__sum']
-    context['sem6'] = liste.exclude(sem6=0)
-    context['tot6'] = liste.aggregate(Sum(F('sem6')))['sem6__sum']
-
-    context['tot'] = (
-        context['tot1'] + context['tot2'] + context['tot3'] + context['tot4']
-        + context['tot5'] + context['tot6']
-    )
+    context['modules'] = liste
     return context
     
     
@@ -161,7 +153,7 @@ class PeriodeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        return get_context(context)
+        return get_detail_semestre(context)
 
 
 class CompetenceListView(ListView):
@@ -175,8 +167,10 @@ class TravailPersoListView(ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = get_context(context)
-        context['total_perso'] = Module.objects.aggregate((Sum('travail_perso')))['travail_perso__sum']
-        context['total_presentiel'] = context['tot']
-        context['total_pratique'] = Module.objects.aggregate((Sum('pratique_prof')))['pratique_prof__sum']
-        return get_context(context)   
+        context = get_detail_semestre(context)
+        context.update({
+            'total_perso' :  Module.objects.aggregate((Sum('travail_perso')))['travail_perso__sum'],
+            'total_presentiel' : context['tot'],
+            'total_pratique': Module.objects.aggregate((Sum('pratique_prof')))['pratique_prof__sum']
+        })
+        return context

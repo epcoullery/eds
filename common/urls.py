@@ -2,7 +2,7 @@
 
 """
 import os
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 from django.views.static import serve
@@ -19,15 +19,14 @@ urlpatterns = [
     path('processus/', views.ProcessusListView.as_view(), name='processus-list'),
     path('module/<int:pk>/', views.ModuleDetailView.as_view(), name='module-detail'),
     path('modules/', views.ModuleListView.as_view(), name='module-list'),
+    path('module_pdf/<int:pk>/', views.print_module_pdf, name='module-pdf'),
     path('periodes/', views.PeriodeView.as_view(), name='periodes'),
     path('periodes_pdf/', views.print_periode_formation, name='periodes-pdf'),
-    path('evaluation/', views.EvaluationView.as_view(), name='evaluation'),
     path('competences/', views.CompetenceListView.as_view(), name='competences'),
     path('travail/', views.TravailPersoListView.as_view(), name='travail'),
-    path('module_pdf/<int:pk>/', views.print_module_pdf, name='module-pdf'),
+
     path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
-    path('document/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
-    path('upload/<int:pk>/', views.UploadDocDetailView.as_view(), name='uploaddoc-detail'),
+    path('concept/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
     path('tinymce/', include('tinymce.urls'), name='tinymce-js'),
     
     # Serve docs by Django to allow LoginRequiredMiddleware to apply

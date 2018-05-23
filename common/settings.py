@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['eds.webzos.net', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['eds.webzos.net', 'localhost']
 
 
 # Application definition
@@ -135,6 +135,7 @@ TINYMCE_DEFAULT_CONFIG = {
 }
 TINYMCE_SPELLCHECKER = True
 TINYMCE_COMPRESSOR = True
+
 
 PDF_FOOTER_TEXT = 'Ecole Santé-social Pierre-Coullery | Prévoyance 82 - 2300 La Chaux-de-Fonds | 032 886 33 00 | cifom-epc@rpn.ch'
 

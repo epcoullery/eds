@@ -307,7 +307,7 @@ class FormationPlanPdf(EpcBaseDocTemplate):
         self.build(self.story)
 
 
-class PeriodSemesterPdf(EpcBaseDocTemplate):
+class PeriodeSemestrePdf(EpcBaseDocTemplate):
     """
     PDF for periods during semesters
     """
@@ -319,7 +319,7 @@ class PeriodSemesterPdf(EpcBaseDocTemplate):
     def produce(self, context):
 
         for sem in range(1, 7):
-            modules = context['sem{0}'.format(str(sem))]
+            modules = [m for m in context['modules'] if getattr(m, 'sem{0}'.format(sem))]
             total = context['tot{0}'.format(str(sem))]
             data = [['Semestre {0}'.format(sem), '{0} h.'.format(total)]]
             for line in modules:

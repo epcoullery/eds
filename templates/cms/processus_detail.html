@@ -1,17 +1,13 @@
 {% extends "./base_site.html" %}
 {% load i18n static %}
 
-{% block coltype %}colMS{% endblock %}
-
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
-
 {% block content %}
 <div id="content-main">
-    <h1>{{object}}</h1>
+    <h1>{{ object }}</h1>
     <table>
         <tr>
             <th width="100px">Description</th>
-            <td>{{object.description}}</td>
+            <td>{{ object.description }}</td>
         </tr>
         <tr>
             <th>Compétences visées</th>
@@ -19,24 +15,24 @@
                 <p>L'éducateur social, l'éducatrice sociale:</p>
                 {% for m in object.module_set.all %}
                     {% for c in  m.competences.all %}
-                        - {{c.libelle}} ({{c.code}})<br>
+                        - {{ c.libelle }} ({{ c.code }})<br>
                     {% endfor %}
                 {% endfor %}
             </td>
         </tr>
         <tr>
             <th>Domaine</th>
-            <td>{{object.domaine.url|safe}}</td>
+            <td>{{ object.domaine.url|safe }}</td>
         </tr>
         <tr>
             <th>Responsable</th>
-            <td>{{object.domaine.responsable.descr|safe}}</td>
+            <td>{{ object.domaine.responsable.descr|safe }}</td>
         </tr>
         <tr>
             <th>Modules concernés</th>
             <td>
                 {% for m in object.module_set.all %}
-                    {{m.url|safe}}<br>
+                    {{ m.url|safe }}<br>
                 {% endfor %}
             </td>
         </tr>

@@ -1,6 +1,6 @@
 import os
 
-from django.db.models import Sum
+from django.db.models import Sum, F
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -37,11 +37,19 @@ class PdfTestCase(TestCase):
         self.assertEqual(response['content-type'], 'application/pdf')
         self.assertGreater(len(response.content), 200)
 
+    def test_periodes_pdf(self):
+        response = self.client.get(reverse('periodes-pdf'))
+        self.assertEqual(
+            response['content-disposition'],
+            'attachment; filename="periode_formation.pdf"'
+        )
+        self.assertEqual(response['content-type'], 'application/pdf')
+        self.assertGreater(len(response.content), 200)
+
     def test_periode_presentiel(self):
         tot = 0
         for m in Module.objects.all():
             tot += m.total_presentiel
-        tot = Module.objects.aggregate(Sum('total_presentiel'))
         self.assertEqual(tot, 1200)
 
     def test_periode_pratique(self):
@@ -51,3 +59,14 @@ class PdfTestCase(TestCase):
     def test_periode_travail_perso(self):
         tot = Module.objects.aggregate(Sum('travail_perso'))
         self.assertEqual(tot['travail_perso__sum'], 1200)
+
+    def test_periode(self):
+        liste = Module.objects.filter(pratique_prof=0)
+        context = {}
+        for i in range(1, 7):
+            semestre = 'sem{}'.format(i)
+            context.update({
+                semestre: liste.exclude(semestre=0),
+                'tot{}'.format(i): liste.aggregate(Sum(F(semestre)))['{}__sum'.format(semestre)]
+            })
+        print(context)
