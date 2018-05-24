@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 """
 Created on 17 nov. 2012
 
@@ -12,8 +11,8 @@ from tinymce import models as tinymce_models
 
 CHOIX_TYPE_SAVOIR = (
     ('Savoir', 'savoir'),
-    ('Savoir méthodologique', 'savoir méthodologique'),
-    ('Savoir relationnel', 'savoir relationnel'),
+    ('Savoir-faire méthodologique et technique', 'savoir méthodologique'),
+    ('Savoir-faire relationnel', 'savoir relationnel'),
 )
 
 
@@ -144,7 +143,7 @@ class SousCompetence(models.Model):
     
 class Ressource(models.Model):
     nom = models.CharField(max_length=200, blank=False)
-    type = models.CharField(max_length=30, choices=CHOIX_TYPE_SAVOIR, default='Savoir')
+    type = models.CharField(max_length=50, choices=CHOIX_TYPE_SAVOIR, default='Savoir')
     module = models.ForeignKey(Module, null=True, default=None, blank=True, on_delete=models.PROTECT)
     
     def __str__(self):
