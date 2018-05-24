@@ -23,10 +23,10 @@ CHOIX_TYPE_MODULE = (
 
 
 class Enseignant(models.Model):
-    sigle = models.CharField(max_length=5, blank=True, default='')
-    nom = models.CharField(max_length=20, blank=True, default='')
-    prenom = models.CharField(max_length=20, blank=True, default='')
-    email = models.EmailField(blank=True, default='')
+    sigle = models.CharField(max_length=5, blank=True)
+    nom = models.CharField(max_length=20, blank=True)
+    prenom = models.CharField(max_length=20, blank=True)
+    email = models.EmailField(blank=True)
 
     class Meta:
         ordering = ('nom',)
@@ -44,7 +44,7 @@ class Enseignant(models.Model):
 class Domaine(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
-    responsable = models.ForeignKey(Enseignant, null=True, blank=True, default=None, on_delete=models.SET_NULL)
+    responsable = models.ForeignKey(Enseignant, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('code', )
@@ -60,7 +60,7 @@ class Processus(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=200, blank=False)
     domaine = models.ForeignKey(Domaine, null=False, on_delete=models.PROTECT)
-    description = models.TextField(default='')
+    description = models.TextField()
 
     class Meta:
         ordering = ('code',)
@@ -89,8 +89,8 @@ class Module(models.Model):
     sem4 = models.IntegerField(default=0)
     sem5 = models.IntegerField(default=0)
     sem6 = models.IntegerField(default=0)
-    semestre = models.CharField(max_length=15, default='', blank=False)
-    processus = models.ForeignKey(Processus, null=False, on_delete=models.PROTECT)
+    semestre = models.CharField(max_length=15)
+    processus = models.ForeignKey(Processus, on_delete=models.PROTECT)
     
     didactique_published = models.BooleanField(default=False)
     evaluation_published = models.BooleanField(default=False)
@@ -116,9 +116,9 @@ class Module(models.Model):
 class Competence(models.Model):
     code = models.CharField(max_length=20, blank=True)
     nom = models.CharField(max_length=250, blank=False)
-    type = models.CharField(max_length=35, blank=True, default='')
-    module = models.ForeignKey(Module, null=True, blank=True, default=None, on_delete=models.SET_NULL)
-    proces_eval = models.ForeignKey(Processus, null=True, default=True, on_delete=models.SET_NULL)
+    type = models.CharField(max_length=35, blank=True)
+    module = models.ForeignKey(Module, null=True, blank=True, on_delete=models.SET_NULL)
+    proces_eval = models.ForeignKey(Processus, null=True, blank=True, on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ('code',)
@@ -144,7 +144,7 @@ class SousCompetence(models.Model):
 class Ressource(models.Model):
     nom = models.CharField(max_length=200, blank=False)
     type = models.CharField(max_length=50, choices=CHOIX_TYPE_SAVOIR, default='Savoir')
-    module = models.ForeignKey(Module, null=True, default=None, blank=True, on_delete=models.PROTECT)
+    module = models.ForeignKey(Module, null=True, blank=True, on_delete=models.PROTECT)
     
     def __str__(self):
         return '{0}'.format(self.nom)
@@ -152,7 +152,7 @@ class Ressource(models.Model):
 
 class Objectif(models.Model):
     nom = models.CharField(max_length=200, blank=False)
-    module = models.ForeignKey(Module, null=True, default=None, blank=True, on_delete=models.PROTECT)
+    module = models.ForeignKey(Module, null=True, blank=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return '{0}'.format(self.nom)
@@ -160,7 +160,7 @@ class Objectif(models.Model):
     
 class Concept(models.Model):
     titre = models.CharField(max_length=128, blank=True)
-    texte = tinymce_models.HTMLField(blank=True,)
+    texte = tinymce_models.HTMLField(blank=True)
     published = models.BooleanField(default=False)
     
     def __str__(self):
