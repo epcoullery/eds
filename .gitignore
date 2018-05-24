@@ -3,14 +3,8 @@ common/local_settings.py
 /media/
 /static/
 *.sqlite3
-*.json
 db.eds
 db.*
 *.sql
-*.csv
-*.xls
-*.xlsx
-*.xls
-.*
 scripts/*
 

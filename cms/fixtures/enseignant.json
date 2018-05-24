@@ -1,0 +1,7 @@
+[
+  {"model": "cms.enseignant", "pk": 1, "fields": {"sigle": "AAA", "nom": "Artimon", "prenom": "Paul", "email": "aaa@rpn.ch"}},
+  {"model": "cms.enseignant", "pk": 2, "fields": {"sigle": "BBB", "nom": "Bertha", "prenom": "Pauline", "email": "bbb@rpn.ch"}},
+  {"model": "cms.enseignant", "pk": 3, "fields": {"sigle": "CCC", "nom": "Colombin", "prenom": "Marceline", "email": "ccc@rpn.ch"}},
+  {"model": "cms.enseignant", "pk": 4, "fields": {"sigle": "DDD", "nom": "Durtal", "prenom": "Yves", "email": "ddd@rpn.ch"}},
+  {"model": "cms.enseignant", "pk": 6, "fields": {"sigle": "ABA", "nom": "Bertha/Colombin", "prenom": "Pauline/Marceline", "email": "aba@rpn.ch"}}
+]
