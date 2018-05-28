@@ -5,6 +5,7 @@ Created on 17 nov. 2012
 """
 
 from django.db import models
+from django.utils.html import format_html
 
 from tinymce import models as tinymce_models
 
@@ -53,7 +54,7 @@ class Domaine(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/domaine/{0}/'>{1}</a>".format(self.pk, self.__str__())
+        return format_html('<a href="/domaine/{0}/">{1}</a>', self.pk, str(self))
 
 
 class Processus(models.Model):
@@ -70,7 +71,7 @@ class Processus(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/processus/{0}'>{1}</a>".format(self.pk, self.__str__())
+        return format_html('<a href="/processus/{0}/">{1}</a>', self.pk, str(self))
     
 
 class Module(models.Model):
@@ -103,10 +104,10 @@ class Module(models.Model):
         return '{0} - {1}'.format(self.code, self.nom)
     
     def url(self):
-        return "<a href='/module/{0}/'>{1}</a>".format(self.pk, self.__str__())
+        return format_html('<a href="/module/{0}/">{1}</a>', self.pk, str(self))
     
     def url_code(self):
-        return "<a href='/module/{0}/' title=\"{2}\">{1}</a>".format(self.pk, self.code, self.nom)
+        return format_html('<a href="/module/{0}/" title="{2}">{1}</a>', self.pk, self.code, self.nom)
 
     @property
     def total_presentiel(self):

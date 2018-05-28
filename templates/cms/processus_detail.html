@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <th>Domaine</th>
-            <td>{{ object.domaine.url|safe }}</td>
+            <td>{{ object.domaine.url }}</td>
         </tr>
         <tr>
             <th>Responsable</th>
@@ -32,7 +32,7 @@
             <th>Modules concernés</th>
             <td>
                 {% for m in object.module_set.all %}
-                    {{ m.url|safe }}<br>
+                    {{ m.url }}<br>
                 {% endfor %}
             </td>
         </tr>

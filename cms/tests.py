@@ -8,7 +8,7 @@ from django.core import mail
 
 from django.test import TestCase, Client
 from django.urls import reverse
-# Create your tests here.
+
 from cms.models import Domaine, Processus, Module
 
 
@@ -17,11 +17,9 @@ class PdfTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-
         User.objects.create_superuser('me', 'me@example.org', 'mepassword')
 
     def setUp(self):
-        self.client = Client()
         self.client.login(username='me', password='mepassword')
 
     def test_index(self):
