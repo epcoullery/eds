@@ -1,12 +1,10 @@
 import os
 
-from django.db.models import Sum, F
-
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import mail
-
-from django.test import TestCase, Client
+from django.db.models import Sum, F
+from django.test import TestCase
 from django.urls import reverse
 
 from cms.models import Domaine, Processus, Module
