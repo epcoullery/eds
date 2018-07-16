@@ -178,3 +178,17 @@ class UploadDoc(models.Model):
 
     def __str__(self):
         return self.titre
+
+class DocumentProf(models.Model):
+    doc = models.FileField(upload_to='docprof')
+    module = models.ForeignKey(Module, blank=False, on_delete=models.PROTECT)
+    title = models.CharField('titre', max_length=100, blank=False)
+    published = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = 'DocProf'
+
+    def __str__(self):
+        return "{0} : {1}".format(self.module.code, self.title)
+
+    
