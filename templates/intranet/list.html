@@ -1,0 +1,23 @@
+{% extends "../cms/base_site.html" %}
+{% load i18n static %}
+
+{% block content %}
+<style type="text/css">
+    ul li {float: none;}
+</style>
+<div id="content-main">
+    <h1>Documents de cours</h1>
+    {% regroup object_list by module as module_list %}
+    <ul>
+    {% for module in module_list %}
+        <li><h3>{{ module.grouper }}</h3>
+        <ol>
+            {% for doc in module.list %}
+              <li><a href="{{ doc.doc.url }}">{{ doc.doc.name }} ({{ doc.get_authorization_display }})</a></li>
+            {% endfor %}
+        </ol>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

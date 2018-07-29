@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tinymce',
     'cms',
+    'intranet',
 ]
 
 
@@ -123,5 +124,6 @@ TINYMCE_COMPRESSOR = True
 
 PDF_FOOTER_TEXT = 'Ecole Santé-social Pierre-Coullery | Prévoyance 82 - 2300 La Chaux-de-Fonds | 032 886 33 00 | cifom-epc@rpn.ch'
 
+LOGIN_REDIRECT_URL = '/intranet/list/'
 
 from .local_settings import *

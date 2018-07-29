@@ -9,9 +9,9 @@
     <div id="user-tools">
         {% if user.is_authenticated %}
             {% block welcome-msg %}Bienvenue <strong>{% firstof user.username %}</strong>.{% endblock %}
-            <a href="{% url 'home' %}">Site public</a>&nbsp;&nbsp;<a href="{% url 'admin:index' %}">Admin</a>
+            <a href="{% url 'logout' %}">Déconnexion</a>&nbsp;
         {% else %}
-            <a href="{% url 'admin:index' %}">Admin</a>
+            <a href="{% url 'login' %}">Login</a>
         {% endif %}
     </div>
 {% endblock %}
@@ -29,8 +29,8 @@
             <li><a href="{% url 'concept-detail' 1 %}">Concept pédagogique</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'concept-detail' 2 %}">Concept de formation</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'uploaddoc-list' %}">Téléchargements</a>&nbsp;&nbsp;</li>
-            {% if has_permission %}
-                <li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
+            {% if user.is_superuser %}
+                <li><a href="{% url 'admin:index' %}">Administration</a></li>
             {% endif %}
         </ul>
     </div>

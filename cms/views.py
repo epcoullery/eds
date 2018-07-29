@@ -6,7 +6,6 @@ Created on 4 déc. 2012
 import os
 import tempfile
 
-
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.views.generic import ListView, TemplateView, DetailView
