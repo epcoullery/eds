@@ -6,7 +6,6 @@ Created on 17 nov. 2012
 
 from django.db import models
 from django.utils.html import format_html
-
 from tinymce import models as tinymce_models
 
 

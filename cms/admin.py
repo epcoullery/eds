@@ -85,8 +85,7 @@ class ConceptAdmin(admin.ModelAdmin):
 
 class UploadAdmin(admin.ModelAdmin):
     form = UploadAdminForm
-    
-         
+
 admin.site.register(Enseignant)
 admin.site.register(Domaine, DomaineAdmin)
 admin.site.register(Competence, CompetenceAdmin)

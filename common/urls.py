@@ -2,15 +2,19 @@
 
 """
 import os
-from django.urls import path, include
-from django.contrib import admin
+
 from django.conf import settings
+from django.contrib import admin
+from django.contrib.auth.views import LoginView, logout
+from django.urls import path, include
 from django.views.static import serve
 
 from cms import views
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', logout, {'next_page': '/'}, name='logout'),
     path('plan_pdf/', views.print_plan_formation, name='plan-pdf'),
     path('admin/', admin.site.urls),
     path('domaine/<int:pk>/', views.DomaineDetailView.as_view(), name='domaine-detail'),
@@ -28,8 +32,11 @@ urlpatterns = [
     path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
     path('concept/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
     path('tinymce/', include('tinymce.urls'), name='tinymce-js'),
-    
+    path('intranet/', include('intranet.urls'), name='intranet'),
     # Serve docs by Django to allow LoginRequiredMiddleware to apply
+    path('media/intranet/<path:path>', serve,
+        {'document_root': os.path.join(settings.MEDIA_ROOT, 'intranet'), 'show_indexes': False}
+    ),
     path('media/doc/<path:path>', serve,
         {'document_root': os.path.join(settings.MEDIA_ROOT, 'doc'), 'show_indexes': False}
     ),

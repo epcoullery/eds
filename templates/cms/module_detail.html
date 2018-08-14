@@ -85,7 +85,10 @@
             <td>{{ object.processus.domaine.responsable.descr|safe }}</td>
         </tr>
     </table>
-    <p><a href="{% url 'module-pdf' object.id %}">Imprimer en PDF</a></p>
+    <p>
+        <a href="{% url 'module-pdf' object.id %}">Imprimer en PDF</a>
+        &nbsp;&nbsp; &nbsp;<a href="{% url 'intranet-list' %}">Documents de cours (login requis)</a>
+    </p>
 </div>
 {% endblock %}
 
