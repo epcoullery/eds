@@ -7,4 +7,5 @@ db.eds
 db.*
 *.sql
 scripts/*
+.idea/
 
