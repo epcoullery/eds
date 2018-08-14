@@ -1,16 +1,20 @@
-"""eds URL Configuration
-
+"""
+eds URL Configuration
 """
 import os
-from django.urls import path, include
-from django.contrib import admin
+
 from django.conf import settings
+from django.contrib import admin
+from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path, include
 from django.views.static import serve
 
 from cms import views
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('plan_pdf/', views.print_plan_formation, name='plan-pdf'),
     path('admin/', admin.site.urls),
     path('domaine/<int:pk>/', views.DomaineDetailView.as_view(), name='domaine-detail'),
