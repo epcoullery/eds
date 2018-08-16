@@ -29,9 +29,9 @@
             <li><a href="{% url 'concept-detail' 1 %}">Concept pédagogique</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'concept-detail' 2 %}">Concept de formation</a>&nbsp;&nbsp;</li>
             <li><a href="{% url 'uploaddoc-list' %}">Téléchargements</a>&nbsp;&nbsp;</li>
-            {% if has_permission %}
-                <li><a href="#">Calendrier</a>&nbsp;&nbsp;</li>
-            {% endif %}
+            {% if user.is_staff %}
+                <li><a href="{% url 'admin:index' %}">Administration</a></li>
+            {% endif %}v
         </ul>
     </div>
 {% endblock %}
