@@ -111,6 +111,9 @@ DOMAINE_COULEURS = {
     'D8': '#babdb6'
 }
 
+FABRIC_HOST = 'stages.pierre-coullery.ch'
+FABRIC_USERNAME = ''
+
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",
     'theme': "advanced",

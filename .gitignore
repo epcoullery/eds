@@ -6,6 +6,5 @@ common/local_settings.py
 db.eds
 db.*
 *.sql
-scripts/*
 .idea/
 
