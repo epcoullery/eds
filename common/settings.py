@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'tinymce',
     'cms',
+    'intranet',
 ]
 
 

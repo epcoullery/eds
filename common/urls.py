@@ -32,9 +32,13 @@ urlpatterns = [
     path('upload/', views.UploadDocListView.as_view(), name='uploaddoc-list'),
     path('concept/<int:pk>/', views.ConceptDetailView.as_view(), name='concept-detail'),
     path('tinymce/', include('tinymce.urls'), name='tinymce-js'),
+    path('intranet/', include('intranet.urls'), name='intranet'),
     
     # Serve docs by Django to allow LoginRequiredMiddleware to apply
     path('media/doc/<path:path>', serve,
         {'document_root': os.path.join(settings.MEDIA_ROOT, 'doc'), 'show_indexes': False}
+    ),
+    path('media/intranet/<path:path>', serve,
+        {'document_root': os.path.join(settings.MEDIA_ROOT, 'intranet'), 'show_indexes': False}
     ),
 ]
