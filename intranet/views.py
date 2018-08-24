@@ -15,9 +15,9 @@ class IntranetListView(LoginRequiredMixin, ListView):
         qs = IntranetDoc.objects.filter(published=True)
         if self.request.user.is_superuser:
             qs = qs.filter(authorization__in=[1,2,3])
-        if 'prof' in groups:
+        elif 'prof' in groups:
             qs = qs.filter(authorization__in=[1,2])
-        if 'Student_1_year' in groups or 'Student_2_year' in groups or 'Student_3_year' in groups:
+        elif 'Student_1_year' in groups or 'Student_2_year' in groups or 'Student_3_year' in groups:
             modules = Module.objects.all().order_by('code')
             modules_selected = []
             student_access = {
@@ -30,4 +30,5 @@ class IntranetListView(LoginRequiredMixin, ListView):
                     modules_selected.append(mod.code)
             qs = qs.filter(module__code__in=modules_selected, authorization=1)
         else:
-            return qs.none()
+            qs = qs.none()
+        return qs
