@@ -12,7 +12,7 @@ class IntranetListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         groups = self.request.user.groups.values_list('name',flat=True)
-        qs = IntranetDoc.objects.filter(published=True)
+        qs = IntranetDoc.objects.filter(published=True, module=self.kwargs['module'])
         if self.request.user.is_superuser:
             qs = qs.filter(authorization__in=[1,2,3])
         elif 'prof' in groups:

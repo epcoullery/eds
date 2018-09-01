@@ -3,5 +3,5 @@ from intranet import views
 
 
 urlpatterns = [
-    path('list/', views.IntranetListView.as_view(), name='intranet-list'),
+    path('list/<int:module>/', views.IntranetListView.as_view(), name='intranet-list'),
 ]
