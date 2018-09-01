@@ -87,7 +87,7 @@
     </table>
     <p>
         <a href="{% url 'module-pdf' object.id %}">Imprimer en PDF</a>
-        &nbsp;&nbsp; &nbsp;<a href="{% url 'intranet-list' %}">Documents de cours (connexion requise)</a>
+        &nbsp;&nbsp; &nbsp;<a href="{% url 'intranet-list' object.id %}">Documents de cours (connexion requise)</a>
     </p>
 </div>
 {% endblock %}
