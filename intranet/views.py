@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 
 from cms.models import Module
@@ -12,7 +13,7 @@ class IntranetListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         groups = self.request.user.groups.values_list('name',flat=True)
-        qs = IntranetDoc.objects.filter(published=True)
+        qs = IntranetDoc.objects.filter(module=self.kwargs['module'], published=True)
         if self.request.user.is_superuser:
             qs = qs.filter(authorization__in=[1,2,3])
         elif 'prof' in groups:
@@ -32,3 +33,8 @@ class IntranetListView(LoginRequiredMixin, ListView):
         else:
             qs = qs.none()
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['module'] = get_object_or_404(Module, pk=self.kwargs['module'])
+        return context

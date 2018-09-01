@@ -1,32 +1,38 @@
 {% extends "cms/base_site.html" %}
-{% load i18n static %}
-
-{% block extrastyle %}
-{{ block.super }}
-<style type="text/css">
-    ul li {float: none;}
-</style>
-{% endblock %}
+{% load i18n static intranet %}
 
 {% block content %}
 <div id="content-main">
-    <h1>Documents de cours</h1>
-    {% regroup object_list by module as module_list %}
-    <ul>
-    {% for module in module_list %}
-        <li><h3>{{ module.grouper }}</h3>
+    <h1>Module {{ module.url }} &mdash; Documents de cours</h1>
+    <div style="float: left; width: 500px">
+        <h3>Documents Étudiant</h3>
         <ol>
-            {% for doc in module.list %}
-              <li><a href="{{ doc.doc.url }}">{{ doc.doc.name }} ({{ doc.get_authorization_display }})</a></li>
+            {% for doc in object_list %}
+                {% if doc.get_authorization_display == 'étudiant' %}
+                    <li><a href="{{ doc.doc.url }}">{{ doc.doc.name }}</a></li>
+                {% endif %}
+            {% empty %}
+                <p><i>Aucun document disponible.</i></p>
             {% endfor %}
         </ol>
-        </li>
-    {% empty %}
-        <p><i>Désolé, aucun document disponible pour le moment.</i></p>
-    {% endfor %}
-    </ul>
+    </div>
+    {% if user|has_group:"prof" or user.is_staff %}
+        <div style="margin-left: 600px; width: 500px">
+            <h3>Documents ENSEIGNANT</h3>
+            <ol>
+                {% for doc in object_list %}
+                     {% if doc.get_authorization_display == 'prof' %}
+                        <li><a href="{{ doc.doc.url }}">{{ doc.doc.name }}</a></li>
+                     {% endif %}
+                {% empty %}
+                   <p><i>Aucun document disponible.</i></p>
+                {% endfor %}
+            </ol>
+        </div>
+    {% endif %}
+
     {% if user.is_staff %}
-        <hr>
+        <hr style="margin-top: 100px">
         <p><a href="{% url 'admin:intranet_intranetdoc_changelist' %}">Gestion des documents</a></p>
     {% endif %}
 </div>
