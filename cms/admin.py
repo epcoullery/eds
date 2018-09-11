@@ -46,6 +46,7 @@ class ModuleAdmin(admin.ModelAdmin):
               ('didactique', 'didactique_published'),
               ('evaluation', 'evaluation_published'),
               ('sem1', 'sem2', 'sem3', 'sem4', 'sem5', 'sem6'),
+              ('semestre',),
               ('total_presentiel', 'travail_perso', 'pratique_prof'),
               ('type', ),
               'processus',
