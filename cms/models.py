@@ -75,7 +75,7 @@ class Processus(models.Model):
     
 
 class Module(models.Model):
-    code = models.CharField(max_length=10, blank=False, default='Code')
+    code = models.CharField(max_length=10, blank=False, default='Code', unique=True)
     nom = models.CharField(max_length=100, blank=False, default='Nom du module')
     type = models.CharField(max_length=20, choices=CHOIX_TYPE_MODULE)
     situation = models.TextField()
