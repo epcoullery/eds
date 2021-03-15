@@ -111,18 +111,17 @@ DOMAINE_COULEURS = {
     'D8': '#babdb6'
 }
 
-FABRIC_HOST = 'stages.pierre-coullery.ch'
+FABRIC_HOST = 'gestion.pierre-coullery.ch'
 FABRIC_USERNAME = ''
 
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': "table,spellchecker,paste,searchreplace",
-    'theme': "advanced",
+    'theme': "silver",
     'cleanup_on_startup': True,
     'custom_undo_redo_levels': 10,
     'theme_advanced_resizing': True,
 }
 TINYMCE_SPELLCHECKER = True
-TINYMCE_COMPRESSOR = True
 
 
 PDF_FOOTER_TEXT = 'Ecole Santé-social Pierre-Coullery | Prévoyance 82 - 2300 La Chaux-de-Fonds | 032 886 33 00 | cifom-epc@rpn.ch'
